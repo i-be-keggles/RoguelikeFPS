@@ -28,11 +28,16 @@ public class Weapon : MonoBehaviour
     public ParticleSystem muzzleFlash;
     public GameObject hitFX;
 
+    public Rigidbody rb;
+    public float hitImpactForce;
+
     void Start()
     {
         curAmmo = magazineSize;
 
         totalAmmo += startingAmmo; //move to on pickup
+
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -62,11 +67,17 @@ public class Weapon : MonoBehaviour
         if(Physics.Raycast(player.cam.position, player.cam.forward, out hit, range, player.hitMask))
         {
             Enemy enemy = hit.collider.GetComponentInParent<Enemy>();
+            Rigidbody rb = hit.collider.GetComponentInParent<Rigidbody>();
             if (enemy != null) enemy.TakeDamage(damage);
             else
             {
                 GameObject _hitFX = Instantiate(hitFX, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(_hitFX, 2f);
+            }
+
+            if(rb != null)
+            {
+                rb.AddForce(player.cam.forward * hitImpactForce);
             }
         }
 
@@ -81,7 +92,7 @@ public class Weapon : MonoBehaviour
         if (totalAmmo < 1)
         {
             if (curAmmo < 1) player.DiscardWeapon();
-            else StopAllCoroutines();
+            StopAllCoroutines();
         }
 
         reloading = true;
