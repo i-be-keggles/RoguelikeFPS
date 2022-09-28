@@ -661,6 +661,7 @@ GameObject:
   - component: {fileID: 860484771}
   - component: {fileID: 860484770}
   - component: {fileID: 860484774}
+  - component: {fileID: 860484775}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -766,6 +767,22 @@ MonoBehaviour:
   pickupRange: 5
   weaponThrowForce: 1000
   weapons: []
+--- !u!114 &860484775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 860484769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcedd705e3530f141bf225845a21ec77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 1297650284}
+  cooldownTimer: 0
+  curCharges: 0
+  ability: {fileID: 11400000, guid: a41d73371ceaef1408ea9ed8d4ff4877, type: 2}
 --- !u!1 &1021386689
 GameObject:
   m_ObjectHideFlags: 0

@@ -45,7 +45,7 @@ public class PlayerWeaponHandler : MonoBehaviour
                 SwitchWeapon();
             }
 
-            if (Input.GetKeyDown(KeyCode.Q)) DropWeapon();
+            if (Input.GetKeyDown(KeyCode.X)) DropWeapon();
         }
 
         RaycastHit hit;
