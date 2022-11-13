@@ -19,6 +19,8 @@ public class PlayerWeaponHandler : MonoBehaviour
     public List<Weapon> weapons = new List<Weapon>();
     private int activeWeapon = 0;
 
+    public UIManager ui;
+
 
     private void Start()
     {
@@ -26,6 +28,7 @@ public class PlayerWeaponHandler : MonoBehaviour
         {
             weapons[i].gameObject.SetActive(i == 0);
         }
+        ui = FindObjectOfType<UIManager>();
     }
 
     public void Update()
@@ -57,7 +60,7 @@ public class PlayerWeaponHandler : MonoBehaviour
             {
                 //display text
                 print("Targeting weapon");
-                if (Input.GetKeyDown(KeyCode.E) && weapons.Count < 2)
+                if (Input.GetKeyDown(KeyCode.E))
                 {
                     PickupWeapon(weapon);
                 }
@@ -82,19 +85,41 @@ public class PlayerWeaponHandler : MonoBehaviour
             cur.StopAllCoroutines();
             cur.reloading = false;
         }
+        
 
-        if(weapons.Count > 1) activeWeapon = 1 - activeWeapon;
+        if (weapons.Count > 1) activeWeapon = 1 - activeWeapon;
         weapons[activeWeapon].gameObject.SetActive(true);
+
+        cur = weapons[activeWeapon];
+        ui.UpdateAmmoText(cur.curAmmo, cur.totalAmmo);
     }
 
     public void PickupWeapon(Weapon weapon)
     {
+        for(int i = 0; i < weapons.Count; i++)
+        {
+            if (weapons[i].name == weapon.name)
+            {
+                weapons[i].totalAmmo += weapon.totalAmmo;// + weapon.curAmmo;
+                if (i == activeWeapon) ui.UpdateAmmoText(weapons[i].curAmmo, weapons[i].totalAmmo);
+                Destroy(weapon.gameObject);
+                return;
+            }
+        }
+
+        if(weapons.Count == 2)
+        {
+            DropWeapon();
+        }
+
         weapon.anim.enabled = true;
 
         weapon.rb.isKinematic = true;
         weapon.transform.SetParent(weaponHolder);
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localEulerAngles = Vector3.zero;
+
+        weapon.weaponHandler = this;
 
         Collider[] cols = weapon.GetComponentsInChildren<Collider>();
 
@@ -103,7 +128,9 @@ public class PlayerWeaponHandler : MonoBehaviour
         if (weapons.Count > 1 && weapons[activeWeapon] != null) DropWeapon();
         weapons.Insert(0, weapon);
 
-        if(weapons.Count > 1)
+        ui.UpdateAmmoText(weapon.curAmmo, weapon.totalAmmo);
+
+        if (weapons.Count > 1)
         {
             activeWeapon++;
             SwitchWeapon();
@@ -131,6 +158,8 @@ public class PlayerWeaponHandler : MonoBehaviour
 
         weapons.RemoveAt(activeWeapon);
 
+        activeWeapon = 0;
         if (weapons.Count > 0) weapons[activeWeapon].gameObject.SetActive(true);
+        else ui.ClearAmmoText();
     }
 }

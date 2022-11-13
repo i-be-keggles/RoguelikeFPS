@@ -344,6 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb8b634eaaf2cb4408288d3b7f6c6997, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: SMG
   damage: 10
   fireRate: 10
   range: 150
@@ -359,6 +360,7 @@ MonoBehaviour:
   hitFX: {fileID: 8046975824046428721, guid: f5be76de59225034d9422613296d91ad, type: 3}
   rb: {fileID: 0}
   hitImpactForce: 1000
+  weaponHandler: {fileID: 0}
 --- !u!95 &6129107481177610189
 Animator:
   serializedVersion: 4

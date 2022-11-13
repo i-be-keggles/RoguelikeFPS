@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public string name;
+
     public int damage;
     public float fireRate;
     private float timeToFire;
@@ -30,6 +33,9 @@ public class Weapon : MonoBehaviour
 
     public Rigidbody rb;
     public float hitImpactForce;
+
+    [Space]
+    public PlayerWeaponHandler weaponHandler;
 
     void Start()
     {
@@ -62,6 +68,7 @@ public class Weapon : MonoBehaviour
         muzzleFlash.Play();
         //playSound;
         anim.SetTrigger("Shoot");
+        weaponHandler.ui.UpdateAmmoText(curAmmo, totalAmmo);
 
         RaycastHit hit;
         if(Physics.Raycast(player.cam.position, player.cam.forward, out hit, range, player.hitMask))
@@ -108,6 +115,8 @@ public class Weapon : MonoBehaviour
 
         reloading = false;
         anim.SetBool("Reloading", false);
+
+        weaponHandler.ui.UpdateAmmoText(curAmmo, totalAmmo);
     }
 
     public void OnDiscard()
