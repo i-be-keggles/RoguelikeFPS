@@ -19,6 +19,14 @@ public class Enemy : MonoBehaviour
 
     public float patrolRange;
 
+    public float walkSpeed;
+    public float runSpeed;
+
+    public float damage;
+    public float attackRange;
+    public float attackSpeed;
+    private float timeToAttack;
+
     [Header("Status")]
     public EnemyState enemyState;
 
@@ -51,6 +59,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if(timeToAttack > 0) timeToAttack -= Time.DeltaTime();
+
         Vector3 playerDir = player.position-transform.position;
         angleToPlayer = Vector3.Angle(transform.forward, playerDir);
 
@@ -74,28 +84,49 @@ public class Enemy : MonoBehaviour
 
         if (enemyState == EnemyState.wandering)
         {
-            if (Vector3.Distance(transform.position, moveLocation) <= agent.stoppingDistance)
-            {
-                NavMeshHit hit;
-                Vector3 point = Vector3.positiveInfinity;
-                while (!NavMesh.SamplePosition(point, out hit, agent.height*2, NavMesh.AllAreas)) point = Random.insideUnitSphere * patrolRange + transform.position;
-
-                moveLocation = hit.position;
-                agent.SetDestination(hit.position);
-            }
+            Wander();
         }
         else if (enemyState == EnemyState.chasing)
         {
-            if (canSeePlayer) moveLocation = player.position;
-            agent.SetDestination(moveLocation);
-
-            if (Vector3.Distance(transform.position, moveLocation) <= agent.stoppingDistance) enemyState = EnemyState.wandering;
+            Chase();
         }
         else if (enemyState == EnemyState.engaging)
         {
-            moveLocation = player.position;
-            agent.SetDestination(moveLocation);
+            Engage(playerDir);
         }
+    }
+
+    protected void Wander()
+    {
+        agent.speed = walkSpeed;
+        if (Vector3.Distance(transform.position, moveLocation) <= agent.stoppingDistance)
+        {
+            NavMeshHit hit;
+            Vector3 point = Vector3.positiveInfinity;
+            while (!NavMesh.SamplePosition(point, out hit, agent.height * 2, NavMesh.AllAreas)) point = Random.insideUnitSphere * patrolRange + transform.position;
+
+            moveLocation = hit.position;
+            agent.SetDestination(hit.position);
+        }
+    }
+
+    protected void Chase()
+    {
+        agent.speed = runSpeed;
+        if (canSeePlayer) moveLocation = player.position;
+        agent.SetDestination(moveLocation);
+
+        if (Vector3.Distance(transform.position, moveLocation) <= agent.stoppingDistance) enemyState = EnemyState.wandering;
+    }
+
+    protected void Engage(Vector3 playerDir)
+    {
+        agent.speed = runSpeed;
+
+        moveLocation = player.position;
+        agent.SetDestination(moveLocation);
+
+        if (playerDir.magnitude <= attackRange && timeToAttack <= 0) Attack();
     }
 
     private IEnumerator LoseSight()
@@ -112,6 +143,14 @@ public class Enemy : MonoBehaviour
 
 
         if (health <= 0) Die();
+    }
+
+    protected void Attack()
+    {
+        print("attacking");
+        timeToAttack += 1/attackSpeed;
+
+        player.TakeDamage(damage);
     }
 
     protected void Die()
