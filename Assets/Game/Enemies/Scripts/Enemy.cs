@@ -22,10 +22,10 @@ public class Enemy : MonoBehaviour
     public float walkSpeed;
     public float runSpeed;
 
-    public float damage;
+    public int damage;
     public float attackRange;
     public float attackSpeed;
-    private float timeToAttack;
+    protected float timeToAttack;
 
     [Header("Status")]
     public EnemyState enemyState;
@@ -38,11 +38,13 @@ public class Enemy : MonoBehaviour
 
     [Space]
     [Header("References")]
-    private NavMeshAgent agent;
+    protected NavMeshAgent agent;
 
-    public Transform player;
+    public PlayerLifeCycleHandler player;
 
     public LayerMask sightMask;
+
+    private Coroutine loseSight;
 
 
     public void Start()
@@ -50,27 +52,27 @@ public class Enemy : MonoBehaviour
         scale = transform.localScale;
 
         //TODO: pass in when spawning
-        player = FindObjectOfType<PlayerMovement>().transform;
+        player = FindObjectOfType<PlayerLifeCycleHandler>();
 
         agent = GetComponent<NavMeshAgent>();
 
         agent.SetDestination(moveLocation);
     }
 
-    private void Update()
+    protected void Update()
     {
-        if(timeToAttack > 0) timeToAttack -= Time.DeltaTime();
+        if(timeToAttack > 0) timeToAttack -= Time.deltaTime;
 
-        Vector3 playerDir = player.position-transform.position;
+        Vector3 playerDir = player.transform.position-transform.position;
         angleToPlayer = Vector3.Angle(transform.forward, playerDir);
 
         if(playerDir.magnitude <= sightRange * 1.1f)
         {
             RaycastHit hit;
             Physics.Raycast(transform.position, playerDir, out hit, sightRange, sightMask);
-            if (angleToPlayer <= sightAngle && hit.collider != null && hit.collider.transform == player)
+            if (angleToPlayer <= sightAngle && hit.collider != null && hit.collider.transform == player.transform)
             {
-                StopAllCoroutines();
+                if(loseSight != null) StopCoroutine(loseSight);
                 canSeePlayer = true;
                 enemyState = EnemyState.engaging;
             }
@@ -78,7 +80,7 @@ public class Enemy : MonoBehaviour
             {
                 print("lost sight");
                 enemyState = EnemyState.chasing;
-                StartCoroutine(LoseSight());
+                loseSight = StartCoroutine(LoseSight());
             }
         }
 
@@ -96,7 +98,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    protected void Wander()
+    protected virtual void Wander()
     {
         agent.speed = walkSpeed;
         if (Vector3.Distance(transform.position, moveLocation) <= agent.stoppingDistance)
@@ -110,20 +112,20 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    protected void Chase()
+    protected virtual void Chase()
     {
         agent.speed = runSpeed;
-        if (canSeePlayer) moveLocation = player.position;
+        if (canSeePlayer) moveLocation = player.transform.position;
         agent.SetDestination(moveLocation);
 
         if (Vector3.Distance(transform.position, moveLocation) <= agent.stoppingDistance) enemyState = EnemyState.wandering;
     }
 
-    protected void Engage(Vector3 playerDir)
+    protected virtual void Engage(Vector3 playerDir)
     {
         agent.speed = runSpeed;
 
-        moveLocation = player.position;
+        moveLocation = player.transform.position;
         agent.SetDestination(moveLocation);
 
         if (playerDir.magnitude <= attackRange && timeToAttack <= 0) Attack();
@@ -145,7 +147,7 @@ public class Enemy : MonoBehaviour
         if (health <= 0) Die();
     }
 
-    protected void Attack()
+    protected virtual void Attack()
     {
         print("attacking");
         timeToAttack += 1/attackSpeed;
@@ -153,7 +155,7 @@ public class Enemy : MonoBehaviour
         player.TakeDamage(damage);
     }
 
-    protected void Die()
+    protected virtual void Die()
     {
         Destroy(gameObject);
     }

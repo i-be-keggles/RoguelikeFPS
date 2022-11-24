@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveDir = Vector3.zero;
 
     public Transform groundCheck;
-    public float groundCheckDistance = 0.1f;
+    public float groundCheckDistance = 0.2f;
     public LayerMask groundMask;
 
     public CharacterController cc;

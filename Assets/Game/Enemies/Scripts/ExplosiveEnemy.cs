@@ -16,11 +16,22 @@ public class ExplosiveEnemy : Enemy
 
     public bool fuseLit;
 
+    private void Start()
+    {
+        fuseTime = fuseLength;
+        base.Start();
+    }
 
     private void Update()
     {
-        if (fuseLit) fuseTime -= Time.DeltaTime();
+        if (fuseLit) fuseTime -= Time.deltaTime;
+        else base.Update();
         if (fuseTime <= 0) Die();
+
+        if (Vector3.Distance(player.transform.position, transform.position) > explosionRadius * 0.75 && fuseLit && fuseTime > fuseLength - defuseLimit)
+        {
+            fuseLit = false;
+        }
     }
 
     protected override void Attack()
@@ -32,29 +43,23 @@ public class ExplosiveEnemy : Enemy
         //play animation
     }
 
-    protected override void Engage(Vector3 playerDir)
-    {
-        if(playerDir.magnitude > explosionRadius * 0.75 && fuseLit)
-        {
-            fuseLit = false;
-        }
-
-        super.Engage();
-    }
-
+    //just create standardized explosion object
     protected override void Die()
     {
+        print("exploded");
+        base.Die();
         //explode fx
 
-        GameObject[] objects = OverlapSphere(explosionRadius);
+        /*
+        GameObject[] objects = Physics.OverlapSphere(explosionRadius);
 
         foreach(GameObject go in objects)
         {
             Vector3 dir = go.transform.position - transform.position;
             float relativeMagnitude = (1 - dir.magnitude / explosionRadius);
 
-            RigidBody rb = go.getComponentInParent<RigidBody>();
-            if (rb != null) rb.addForce(dir.normalized * explosionForce  * relativeMagnitude, Physics.ExplosionForce);
+            Rigidbody rb = go.GetComponentInParent<Rigidbody>();
+            if (rb != null) rb.AddForce(dir.normalized * explosionForce  * relativeMagnitude, Physics.ExplosionForce);
 
             Enemy enemy = go.GetComponentInParent<Enemy>();
             if (enemy != null) enemy.TakeDamage(damage * relativeMagnitude);
@@ -62,5 +67,6 @@ public class ExplosiveEnemy : Enemy
             Player player = go.GetComponentInParent<Player>();
             if (player != null) player.TakeDamage(damage * relativeMagnitude);
         }
+        */
     }
 }
