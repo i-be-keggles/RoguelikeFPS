@@ -7,7 +7,7 @@ public class EnemySpawning : MonoBehaviour
 {
     public Dictionary<GameObject, float> spawnRatios;
 
-    public Transform[] spawnPoints; //procedurally generated
+    public Transform[] spawnPoints; //procedurally generated --> turn into Vector3s
 
     public float spawnInterval; //in seconds
     public float intervalVariation; //in seconds
