@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
         scale = transform.localScale;
 
         //TODO: pass in when spawning
-        player = FindObjectOfType<PlayerLifeCycleHandler>();
+        if(player == null) player = FindObjectOfType<PlayerLifeCycleHandler>();
 
         agent = GetComponent<NavMeshAgent>();
 
