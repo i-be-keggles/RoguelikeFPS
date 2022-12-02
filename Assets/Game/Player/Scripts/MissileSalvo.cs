@@ -15,6 +15,14 @@ public class MissileSalvo : PlayerAbility
 
     public float fireInterval;
 
+    [Space]
+    public float radius;
+    public float damage;
+    public float force;
+    public float falloff = 0.5f;
+
+    [Space]
+
     [Tooltip("Ability has been activated (and destination locked); waiting for release (for direction control)")]
     public bool locked;
     public Vector3? lockPosition;
@@ -36,7 +44,7 @@ public class MissileSalvo : PlayerAbility
     {
         for (int i = 0; i < numMissiles; i++)
         {
-            Instantiate(missile, handler.cam.position, handler.cam.rotation).GetComponent<Missile>().Init(lockPosition, missileSpeed, missileTurnSpeed);
+            Instantiate(missile, handler.cam.position, handler.cam.rotation).GetComponent<Missile>().Init(lockPosition, missileSpeed, missileTurnSpeed, radius, damage, force, falloff);
             yield return new WaitForSeconds(fireInterval);
         }
         locked = false;

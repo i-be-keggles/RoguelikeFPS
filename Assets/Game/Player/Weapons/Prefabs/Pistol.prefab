@@ -92,6 +92,8 @@ MonoBehaviour:
   reloadTime: 2
   reloading: 0
   anim: {fileID: 8534150822745692319}
+  recoilV: 3
+  recoilH: 2
   muzzleFlash: {fileID: 8534150823259216807}
   hitFX: {fileID: 8046975824046428721, guid: f5be76de59225034d9422613296d91ad, type: 3}
   rb: {fileID: 0}

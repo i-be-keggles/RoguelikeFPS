@@ -7,28 +7,34 @@ public class Explosion : MonoBehaviour
 {
     public LayerMask mask;
 
+    public Transform debugGizmo;//just for gizmo/balance purpose
+
     //falloff controls degree of function should be btwn 0 and 1. 0 = no damage reduction vs range, 1 = linear damage reduction vs distance
-    public void Init (float radius, float falloff = 0.5f, float damage, float force, Transform origin)
+    public void Init (float radius, float damage, float force, Transform origin, float falloff = 0.5f)
     {
+        debugGizmo.localScale *= radius;
+
         Collider[] cols = Physics.OverlapSphere(transform.position, radius, mask);
 
-        for(Collider col in cols)
+        foreach(Collider col in cols)
         {
-            if (origin != null && col.transform.isChildOf(origin)) continue;
+            if (origin != null && col.transform.IsChildOf(origin)) continue;
 
             //m = 1 - d^(1/falloff), d = distance/radius
-            float m = 1 - Math.pow((Vector3d.Distance(transform.position, col.transform.position) / radius), 1f / falloff);
+            float m = 1 - Mathf.Pow(Vector3.Distance(transform.position, col.transform.position) / radius, 1f / falloff);
 
             if (m <= 0) continue;
 
-            Player player = col.transform.GetComponentInParent<PlayerLifeCycleHandler>();
-            if (player != null) player.takeDamage(damage * m);
+            PlayerLifeCycleHandler player = col.transform.GetComponentInParent<PlayerLifeCycleHandler>();
+            if (player != null) player.TakeDamage((int)(damage * m));
 
             Enemy enemy = col.transform.GetComponentInParent<Enemy>();
-            if(enemy != null) enemy.takeDamage(damage * m);
+            if(enemy != null) enemy.TakeDamage((int)(damage * m));
 
             Rigidbody rb = col.transform.GetComponentInParent<Rigidbody>();
-            if(rb != null) rb.AddForce((col.transform.position - transform.position).magnitude * m, Physics.Explosion);
+            if(rb != null) rb.AddForce((col.transform.position - transform.position).normalized * m, ForceMode.Impulse);
         }
+        Destroy (gameObject, 3f);
     }
+
 }

@@ -16,6 +16,13 @@ public class Missile : MonoBehaviour
 
     private Rigidbody rb;
 
+    public GameObject explosion;
+
+    public LayerMask mask;
+
+    [Space]
+    float radius, damage, force, falloff;
+
     private void Start()
     {
         collider.enabled = false;
@@ -25,11 +32,17 @@ public class Missile : MonoBehaviour
         transform.localEulerAngles += new Vector3(Random.Range(-spread, spread), Random.Range(-spread, spread));
     }
 
-    public void Init(Vector3? t, float s, float ts)
+    public void Init(Vector3? t, float s, float ts, float _radius, float _damage, float _force, float _falloff)
     {
         target = t;
         speed = s;
         turnSpeed = ts;
+
+        radius = _radius;
+        damage = _damage;
+        force = _force;
+        falloff = _falloff;
+
         StartCoroutine(Arm());
     }
 
@@ -40,6 +53,12 @@ public class Missile : MonoBehaviour
         if(target != null)
         {
             transform.forward = Vector3.Slerp(transform.forward, target.Value - transform.position, turnSpeed * Time.fixedDeltaTime);
+        }
+
+        RaycastHit hit;
+        if(Physics.SphereCast(transform.position, 0.2f, transform.forward, out hit, 0.2f, mask))
+        {
+            Explode();
         }
     }
 
@@ -60,8 +79,9 @@ public class Missile : MonoBehaviour
     {
         print("boom.");
 
-        //spawn fx
-        //delete fx
+        Explosion e = Instantiate(explosion, transform.position, Quaternion.identity).GetComponent<Explosion>();
+        e.Init(radius, damage, force, transform, falloff);
+        Destroy(e, 3f);
 
         Destroy(gameObject);
     }

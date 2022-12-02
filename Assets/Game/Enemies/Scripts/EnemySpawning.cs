@@ -1,17 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.UIElements;
 using UnityEngine;
 
 public class EnemySpawning : MonoBehaviour
 {
-    public Dictionary<GameObject, float> spawnRatios;
+    [SerializeField] public SpawnRatio[] spawnRatios;
 
     public Transform[] spawnPoints; //procedurally generated --> turn into Vector3s
 
     public float spawnInterval; //in seconds
     public float intervalVariation; //in seconds
-    public float spawnRate; //chance of spawning on call (btwn 0, 1)
+    [Range(0,1)]public float spawnRate; //chance of spawning on call (btwn 0, 1)
 
     public float minRange; //minimum distance from player enemies can be spawned
     public float maxRange; //vice fucking versa
@@ -20,28 +21,42 @@ public class EnemySpawning : MonoBehaviour
 
     private float totalRatio = 0;
 
-    private PlayerLifecycleHandler player;
+    private PlayerLifeCycleHandler player;
 
     public float swarmInterval;
     public float swarmIntervalVariation;
 
-    public float swarmSpawnRate;
+    [Range(0,1)]public float swarmSpawnRate;
     public float swarmSpawnInterval;
 
     public float swarmLength;
     public float swarmLengthVariation;
 
-    public float swarmActive;
+    public bool swarmActive;
 
     private float timeToSwarm;
 
+    [System.Serializable]
+    public struct SpawnRatio
+    {
+        public GameObject enemy;
+        public float spawnRate;
+
+        public SpawnRatio(GameObject g, float r)
+        {
+            enemy = g;
+            spawnRate = r;
+        }
+    }
+
     private void Start()
     {
-        player = FindObjectOfType(PlayerLifeCycleHandler);
-        for(int i = 0; i < spawnRatios.Count; i++)
+        player = FindObjectOfType<PlayerLifeCycleHandler>();
+        foreach(SpawnRatio ratio in spawnRatios)
         {
-            totalRatio += spawnRatios[i];
+            totalRatio += ratio.spawnRate;
         }
+        timeToSwarm = swarmInterval + swarmIntervalVariation * Random.Range(-1f, 1f);
     }
 
     private void Update()
@@ -63,17 +78,17 @@ public class EnemySpawning : MonoBehaviour
     public void Spawn()
     {
         //                                                                  needs to be float                                               needs to be float
-        timeToSpawn = swarming? (swarmInterval + swarmIntervalVariation * Random.range(-1f, 1f)) : (spawnInterval + intervalVariation * Random.range(-1f, 1f));
+        timeToSpawn = swarmActive ? (swarmInterval + swarmIntervalVariation * Random.Range(-1f, 1f)) : (spawnInterval + intervalVariation * Random.Range(-1f, 1f));
 
-        for(int i = 0; i < spawnPoints; i++)
+        for(int i = 0; i < spawnPoints.Length; i++)
         {
             float d = Vector3.Distance(spawnPoints[i].position, player.transform.position);
             if (d < maxRange & d > minRange)
             { 
-                if(Random.range(0f,1f) <= spawnRate)
+                if(Random.Range(0f,1f) <= spawnRate)
                 {
-                    int n = GetRandomEnemy(spawnRatios);
-                    Instantiate(spawnRatios[n].Key);
+                    GameObject g = GetRandomEnemy(spawnRatios);
+                    if(g != null) Instantiate(g, spawnPoints[i].position, Quaternion.identity);
                 }
             }
         }
@@ -81,22 +96,22 @@ public class EnemySpawning : MonoBehaviour
 
     public void Swarm()
     {
-        timeToSwarm += swarmInterval + swarmIntervalVariation * Random.range(-1f, 1f);
+        timeToSwarm = swarmLength + swarmLengthVariation * Random.Range(-1f, 1f);
 
         //give player warning
         print("swarm approaching");
 
-        swarming = true;
+        swarmActive = true;
     }
 
-    public int GetRandomEnemy(Dictionary enemies)
+    public GameObject GetRandomEnemy(SpawnRatio[] enemies)
     {
-        float i = 0;
-        for(int i = Random.Range(0, spawnRatios); n > 0; i++)
+        float n = Random.Range(0, totalRatio);
+        foreach(SpawnRatio ratio in enemies)
         {
-            n -= enemies[i];
+            n -= ratio.spawnRate;
+            if (n <= 0f) return ratio.enemy;
         }
-
-        return i;
+        return null;
     }
 }

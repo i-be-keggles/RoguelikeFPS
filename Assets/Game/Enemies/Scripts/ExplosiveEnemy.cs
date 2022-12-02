@@ -16,6 +16,14 @@ public class ExplosiveEnemy : Enemy
 
     public bool fuseLit;
 
+    [Space]
+    public GameObject explosion;
+
+    public float radius;
+    public float force;
+    public float falloff = 0.5f;
+
+
     private void Start()
     {
         fuseTime = fuseLength;
@@ -47,26 +55,7 @@ public class ExplosiveEnemy : Enemy
     protected override void Die()
     {
         print("exploded");
+        Instantiate(explosion, transform.position, Quaternion.identity).GetComponent<Explosion>().Init(radius, damage, force, transform, falloff);
         base.Die();
-        //explode fx
-
-        /*
-        GameObject[] objects = Physics.OverlapSphere(explosionRadius);
-
-        foreach(GameObject go in objects)
-        {
-            Vector3 dir = go.transform.position - transform.position;
-            float relativeMagnitude = (1 - dir.magnitude / explosionRadius);
-
-            Rigidbody rb = go.GetComponentInParent<Rigidbody>();
-            if (rb != null) rb.AddForce(dir.normalized * explosionForce  * relativeMagnitude, Physics.ExplosionForce);
-
-            Enemy enemy = go.GetComponentInParent<Enemy>();
-            if (enemy != null) enemy.TakeDamage(damage * relativeMagnitude);
-
-            Player player = go.GetComponentInParent<Player>();
-            if (player != null) player.TakeDamage(damage * relativeMagnitude);
-        }
-        */
     }
 }

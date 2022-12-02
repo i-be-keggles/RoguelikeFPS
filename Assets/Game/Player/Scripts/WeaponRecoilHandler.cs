@@ -5,9 +5,9 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 
-public class PlayerRecoilHandler : MonoBehaviour
+public class WeaponRecoilHandler : MonoBehaviour
 {
-    private PlayerWeaponhandler handler;
+    private PlayerWeaponHandler handler;
     public Transform camHolder;
 
     public float heat;
@@ -15,6 +15,7 @@ public class PlayerRecoilHandler : MonoBehaviour
     public float camRotSpeed;
 
     public float recoilVariation;
+    public float heatDissipationBuffer; //time after firing last shot before resetting camera
 
     private Vector3 targetRot;
     
@@ -22,13 +23,17 @@ public class PlayerRecoilHandler : MonoBehaviour
     {
         if (heat <= 0) targetRot = Vector3.zero;
         else heat -= Time.deltaTime;
+
+        camHolder.localRotation = Quaternion.Lerp(camHolder.localRotation, Quaternion.Euler(targetRot), camRotSpeed * Time.deltaTime);
     }
+
 
     public void Recoil(Weapon weapon)
     {
-        heat = (1.5f/weapon.fireRate);                                   //float                                                                float                            int (either 0 or 1) --> left or right
-        targetRot += new Vector3(weapon.recoilV * (1f + Random.range(-recoilVariation, recoilVariation), weapon.recoilH * (1f + Random.range(-recoilVariation, recoilVariation) * (Random.Range(0,1) == 0? 1 : -1), 0);
-        cam.localEulerAngles = Math.lerp(cam.localEulerAngles, targetRot, camRotSpeed);
+        if (targetRot == Vector3.zero) targetRot = camHolder.localEulerAngles;
+
+        heat = 1f/weapon.fireRate;
+        targetRot += new Vector3(-weapon.recoilV * (1f + Random.Range(-recoilVariation, recoilVariation)), weapon.recoilH * (1f + Random.Range(-recoilVariation, recoilVariation)) * (Random.value > 0.5f? 1 : -1), 0);
     }
 
     public void ClearHeat()
