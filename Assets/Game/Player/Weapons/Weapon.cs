@@ -28,6 +28,11 @@ public class Weapon : MonoBehaviour
     public Animator anim;
 
     [Space]
+
+    public float recoilV;
+    public float recoilH;
+
+    [Space]
     public ParticleSystem muzzleFlash;
     public GameObject hitFX;
 
@@ -69,6 +74,7 @@ public class Weapon : MonoBehaviour
         //playSound;
         anim.SetTrigger("Shoot");
         weaponHandler.ui.UpdateAmmoText(curAmmo, totalAmmo);
+        weaponHandler.recoil.Recoil(this);
 
         RaycastHit hit;
         if(Physics.Raycast(player.cam.position, player.cam.forward, out hit, range, player.hitMask))

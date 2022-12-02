@@ -21,6 +21,8 @@ public class PlayerWeaponHandler : MonoBehaviour
 
     public UIManager ui;
 
+    public WeaponRecoilHandler recoil;
+
 
     private void Start()
     {
@@ -29,6 +31,8 @@ public class PlayerWeaponHandler : MonoBehaviour
             weapons[i].gameObject.SetActive(i == 0);
         }
         ui = FindObjectOfType<UIManager>();
+
+        recoil = GetComponent<WeaponRecoilHandler>();
     }
 
     public void Update()
@@ -92,6 +96,8 @@ public class PlayerWeaponHandler : MonoBehaviour
 
         cur = weapons[activeWeapon];
         ui.UpdateAmmoText(cur.curAmmo, cur.totalAmmo);
+
+        recoil.ClearHeat();
     }
 
     public void PickupWeapon(Weapon weapon)
