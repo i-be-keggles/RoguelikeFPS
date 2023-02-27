@@ -115,3 +115,17 @@ public class EnemySpawning : MonoBehaviour
         return null;
     }
 }
+
+public struct Swarm
+{
+    public int enemies;
+    public float duration;
+    public float startRatio = 0.1; //% of enemies that spawn immediately on activation. 0 = completely over time
+
+    public Swarm(int e, float t, float r = 0.1)
+    {
+        enemies = e;
+        duration = t;
+        startRatio = Mathf.Clamp(r, 0, 1)
+    }
+}
