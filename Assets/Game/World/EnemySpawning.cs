@@ -23,11 +23,15 @@ public class EnemySpawning : MonoBehaviour
 
     private PlayerLifeCycleHandler player;
 
+    [Header("Swarms")]
+
+    public Swarm activeSwarm;
+
     public float swarmInterval;
     public float swarmIntervalVariation;
 
-    [Range(0,1)]public float swarmSpawnRate;
-    public float swarmSpawnInterval;
+    public float swarmEnemies;
+    public float swarmEnemiesVariation;
 
     public float swarmLength;
     public float swarmLengthVariation;
@@ -71,6 +75,7 @@ public class EnemySpawning : MonoBehaviour
             else
             {
                 swarmActive = false;
+                timeToSwarm = swarmInterval + swarmIntervalVariation * Random.Range(-1f, 1f);
             }
         }
     }
@@ -78,30 +83,31 @@ public class EnemySpawning : MonoBehaviour
     public void Spawn()
     {
         //                                                                  needs to be float                                               needs to be float
-        timeToSpawn = swarmActive ? (swarmInterval + swarmIntervalVariation * Random.Range(-1f, 1f)) : (spawnInterval + intervalVariation * Random.Range(-1f, 1f));
+        timeToSpawn = swarmActive ? activeSwarm.duration/activeSwarm.enemies : (spawnInterval + intervalVariation * Random.Range(-1f, 1f));
 
-        for(int i = 0; i < spawnPoints.Length; i++)
+        if (swarmActive || Random.Range(0f, 1f) <= spawnRate)
         {
-            float d = Vector3.Distance(spawnPoints[i].position, player.transform.position);
-            if (d < maxRange & d > minRange)
-            { 
-                if(Random.Range(0f,1f) <= spawnRate)
-                {
-                    GameObject g = GetRandomEnemy(spawnRatios);
-                    if(g != null) Instantiate(g, spawnPoints[i].position, Quaternion.identity);
-                }
+            Vector3 point = GetRandomSpawnPoint(spawnPoints);
+            if (point != null)
+            {
+                GameObject g = GetRandomEnemy(spawnRatios);
+                if (g != null) Instantiate(g, spawnPoints[i].position, Quaternion.identity);
             }
         }
     }
 
     public void Swarm()
     {
-        timeToSwarm = swarmLength + swarmLengthVariation * Random.Range(-1f, 1f);
+        float enemies = swarmEnemies + swarmEnemiesVariation * Random.Range(-1f, 1f);
+        float duration = swarmLength + swarmLengthVariation * Random.Range(-1f, 1f);
+        activeSwarm = new Swarm(enemies, duration);
+
+        timeToSwarm = activeSwarm.duration;
+
+        swarmActive = true;
 
         //give player warning
         print("swarm approaching");
-
-        swarmActive = true;
     }
 
     public GameObject GetRandomEnemy(SpawnRatio[] enemies)
@@ -114,13 +120,32 @@ public class EnemySpawning : MonoBehaviour
         }
         return null;
     }
+
+    public Vector3 GetRandomSpawnPoint(Transform[] spawnPoints)
+    {
+        List<Vector3> points;
+        foreach(Transform p in spawnPoints)
+        {
+            points.Add(p.position);
+        }
+        
+        while(points.Count > 0)
+        {
+            Vector3 point = points[Random.RandInt(0, points.Count)];
+            float d = Vector3.Distance(point, player.transform.position);
+            if (d > minRange && d < maxRange) return point;
+            points.Remove(point);
+        }
+        Debug.logWarning("Spawning failed. No available spawn points in proper range of player.");
+        return null;
+    }
 }
 
 public struct Swarm
 {
     public int enemies;
-    public float duration;
-    public float startRatio = 0.1; //% of enemies that spawn immediately on activation. 0 = completely over time
+    public float duration;              //in seconds
+    public float startRatio = 0.1;      //% of enemies that spawn immediately on activation. 0 = completely over time
 
     public Swarm(int e, float t, float r = 0.1)
     {
