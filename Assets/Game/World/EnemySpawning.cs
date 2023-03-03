@@ -74,8 +74,9 @@ public class EnemySpawning : MonoBehaviour
             if(!swarmActive) Swarm();
             else
             {
-                swarmActive = false;
                 timeToSwarm = swarmInterval + swarmIntervalVariation * Random.Range(-1f, 1f);
+                activeSwarm = null;
+                swarmActive = false;
             }
         }
     }
@@ -96,11 +97,15 @@ public class EnemySpawning : MonoBehaviour
         }
     }
 
-    public void Swarm()
+    public void Swarm(Swarm swarm = null)
     {
-        float enemies = swarmEnemies + swarmEnemiesVariation * Random.Range(-1f, 1f);
-        float duration = swarmLength + swarmLengthVariation * Random.Range(-1f, 1f);
-        activeSwarm = new Swarm(enemies, duration);
+        activeSwarm = swarm;
+        if(activeSwarm == null)
+        {
+            float enemies = swarmEnemies + swarmEnemiesVariation * Random.Range(-1f, 1f);
+            float duration = swarmLength + swarmLengthVariation * Random.Range(-1f, 1f);
+            activeSwarm = new Swarm(enemies, duration);
+        }
 
         timeToSwarm = activeSwarm.duration;
 

@@ -21,7 +21,7 @@ public abstract class MissionManager : Monobehaviour
         print($"Objective '{objective.name}' complete! +{r} points!")
     }
 
-    public struct Objective
+    class Objective
     {
         public string name;
         public bool completed;
