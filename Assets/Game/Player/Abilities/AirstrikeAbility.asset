@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdcd48bc31ab0a44b9218569a0f65c2b, type: 3}
+  m_Name: AirstrikeAbility
+  m_EditorClassIdentifier: 
+  name: 
+  description: Call down the heavens
+  cooldown: 1
+  charges: 1
+  twoStage: 0
+  totalDamage: 500
+  nPayloads: 10
+  travelTime: 2
+  travelSpeed: 50
+  radius: 5
+  variance: 1
+  flarePrefab: {fileID: 1624472973381429852, guid: 106845f25b3bbfb47904de3a9817da09, type: 3}
+  payload: {fileID: 5081896834709668575, guid: 1178c848371893d42a1a0aafee802e03, type: 3}
+  throwForce: 30
+  pRadius: 4
+  pForce: 30
+  pFalloff: 0.15

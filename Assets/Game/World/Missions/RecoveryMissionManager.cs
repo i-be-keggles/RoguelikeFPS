@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class RecoveryMissionManager : MissionManager
@@ -5,24 +6,28 @@ public class RecoveryMissionManager : MissionManager
     public GameObject recoveryItem;
     public Transform dropOff;
 
-    class RecoveryObjective : MissionManager.Objective
+    class RecoveryObjective : Objective
     {
         Interactable item;        //physical object to pickup
         Interactable target;       //where it needs to be taken
 
         public bool carryingObject = false;
 
-        public RecoveryObjective(string s, bool c, float r, float t, Vector3 position, GameObject obj, Interactable tr)
+        public EnemySpawning spawnManager;
+
+        public RecoveryObjective(string s, bool c, float r, float t, Vector3 position, GameObject obj, Interactable tr, EnemySpawning sp) : base(s, c, r, t)
         {
             name = s;
             completed = c;
-            rewards r;
+            rewards = r;
             time = t;
             target = tr;
 
-            item = Instantiate(obj, position, Quaternion.Identity).GetComponent<Interactable>();
-            item.InteractedWith += Pickup;
-            target.InteractedWith += Place;
+            item = Instantiate(obj, position, Quaternion.identity).GetComponent<Interactable>();
+            item.interactedWith += Pickup;
+            target.interactedWith += Place;
+
+            spawnManager = sp;
         }
 
         public void Pickup(object sender, EventArgs e)
@@ -35,7 +40,7 @@ public class RecoveryMissionManager : MissionManager
             if (carryingObject)
             {
                 carryingObject = false;
-                Complete(e.t);
+                Complete(time, spawnManager);
             }
         }
     }

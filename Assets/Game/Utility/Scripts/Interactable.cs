@@ -1,18 +1,16 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class Interactable : Monobehaviour
+public class Interactable : MonoBehaviour
 {
-    public event EventHandler InteractedWith;
+    public event EventHandler interactedWith;
 
     public string promptText;
 
-    private void Start()
-    {
-        InteractedWith += Trigger;
-    }
-
     public void Trigger(object sender, EventArgs e)
     {
-
+        interactedWith.Invoke(sender, e);
     }
 }

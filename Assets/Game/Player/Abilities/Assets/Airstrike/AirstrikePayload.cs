@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEditor.UIElements;
 using UnityEngine;
 
-public class EnemySpawning : AirstrikePayload
+public class AirstrikePayload : MonoBehaviour
 {
     private float damage;
     private float radius;
@@ -14,9 +14,9 @@ public class EnemySpawning : AirstrikePayload
 
     public LayerMask mask;
 
-    public float activationRange = 0.2f; //range and radius of raycast to activate explosion
-    public float activationRadius = 0.2f;
+    public GameObject explosion;
 
+    public float timer;
 
     public void Init(float _damage, float _radius, float _speed, float _force, float _falloff)
     {
@@ -25,16 +25,21 @@ public class EnemySpawning : AirstrikePayload
         speed = _speed;
         force = _force;
         falloff = _falloff;
+
+        RaycastHit hit;
+        if (Physics.SphereCast(transform.position, 0.2f, -Vector3.up, out hit, speed * 10, mask))
+        {
+            timer = (transform.position.y - hit.point.y) / speed;
+        }
+        else timer = speed;
     }
 
     private void FixedUpdate()
     {
-        transform.position = transform.position - new Vector3(0, speed * Time.deltaTime, 0);
-        RaycastHit hit;
-        if(Physics.SphereCast(transform.position, activationRadius, -Vector3.up, out hit, activationRange, mask))
-        {
-            Explode();
-        }
+        transform.position = transform.position - new Vector3(0, speed * Time.fixedDeltaTime, 0);
+        
+        timer -= Time.fixedDeltaTime;
+        if (timer <= 0) Explode();
     }
 
     public void Explode()

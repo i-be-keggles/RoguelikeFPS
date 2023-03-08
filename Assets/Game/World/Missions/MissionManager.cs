@@ -1,6 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class MissionManager : Monobehaviour
+public abstract class MissionManager : MonoBehaviour
 {
     public float time; //amount of time passed since starting
 
@@ -17,11 +19,11 @@ public abstract class MissionManager : Monobehaviour
     public void CompleteObjective(int o)
     {
         Objective objective = objectives[o];
-        float r = objective.Complete(time)
-        print($"Objective '{objective.name}' complete! +{r} points!")
+        float r = objective.Complete(time, spawnManager);
+        print($"Objective '{objective.name}' complete! +{r} points!");
     }
 
-    class Objective
+    public class Objective
     {
         public string name;
         public bool completed;
@@ -36,11 +38,11 @@ public abstract class MissionManager : Monobehaviour
         {
             name = s;
             completed = c;
-            rewards r;
+            rewards = r;
             time = t;
         }
 
-        public float Complete(t)
+        public float Complete(float t, EnemySpawning spawnManager)
         {
             completed = true;
             time = t - time;
