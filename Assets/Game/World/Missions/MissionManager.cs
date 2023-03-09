@@ -6,7 +6,7 @@ public abstract class MissionManager : MonoBehaviour
 {
     public float time; //amount of time passed since starting
 
-    public Objective[] objectives;
+    public List<Objective> objectives;
 
     public EnemySpawning spawnManager;
 
@@ -33,13 +33,16 @@ public abstract class MissionManager : MonoBehaviour
 
         public Swarm? swarm; //optional swarm triggered on completion
 
+        protected MissionManager manager;
 
-        public Objective(string s, bool c, float r, float t)
+
+        public Objective(string s, bool c, float r, float t, MissionManager m)
         {
             name = s;
             completed = c;
             rewards = r;
             time = t;
+            manager = m;
         }
 
         public float Complete(float t, EnemySpawning spawnManager)

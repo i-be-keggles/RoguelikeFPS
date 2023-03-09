@@ -78,7 +78,6 @@ public class Enemy : MonoBehaviour
             }
             else if (canSeePlayer && !enemyState.Equals(EnemyState.chasing)) //should only trigger on frame where sight lost
             {
-                print("lost sight");
                 enemyState = EnemyState.chasing;
                 loseSight = StartCoroutine(LoseSight());
             }
@@ -149,7 +148,6 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Attack()
     {
-        print("attacking");
         timeToAttack += 1/attackSpeed;
 
         player.TakeDamage(damage);

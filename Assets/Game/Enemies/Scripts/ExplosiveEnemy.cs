@@ -54,7 +54,6 @@ public class ExplosiveEnemy : Enemy
     //just create standardized explosion object
     protected override void Die()
     {
-        print("exploded");
         Instantiate(explosion, transform.position, Quaternion.identity).GetComponent<Explosion>().Init(radius, damage, force, transform, falloff);
         base.Die();
     }
