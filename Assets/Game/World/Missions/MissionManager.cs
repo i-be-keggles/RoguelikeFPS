@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public abstract class MissionManager : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public abstract class MissionManager : MonoBehaviour
 
         protected MissionManager manager;
 
+        public EventHandler onCompleted;
 
         public Objective(string s, bool c, float r, float t, MissionManager m)
         {
@@ -51,6 +53,8 @@ public abstract class MissionManager : MonoBehaviour
             time = t - time;
 
             if (swarm.HasValue) spawnManager.Swarm(swarm.Value);
+
+            onCompleted.Invoke(this, EventArgs.Empty);
 
             return rewards;
         }

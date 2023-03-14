@@ -13,7 +13,7 @@ public class RecoveryMissionManager : MissionManager
     {
         foreach(Transform t in itemSpawns)
         {
-            objectives.Add(new RecoveryObjective("Collect item", false, 100, time, t.position, recoveryItem, dropOff, spawnManager));
+            objectives.Add(new RecoveryObjective("Collect item", false, 100, time, this, t.position, recoveryItem, dropOff));
         }
     }
 
