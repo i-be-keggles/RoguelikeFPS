@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections;
 using UnityEngine.AI;
 
 public class EscortMissionManager : MissionManager
@@ -46,20 +47,21 @@ public class EscortMissionManager : MissionManager
             {
                 print("Payload has suffered some serious damage. Calling down repair pod.");
                 //call in pod
-                RecoveryObject repair = new RecoveryObjective("Repair payload", false, mbox.time, m);
+                GameObject pod = null;
+                RecoveryMissionManager.RecoveryObjective repair = new RecoveryMissionManager.RecoveryObjective("Repair payload", false, 0, manager.time, manager, pod.transform.position, pod, pod.GetComponent<Interactable>());
                 repair.onCompleted += FinishRepair;
-                manager.objectves.Add(repair);
+                manager.objectives.Add(repair);
                 //pause payload
             }
             else print("Dropoff is just around the corner. Hang in there.");
         }
 
-        public IEnumerator FinishRepair(object sender, EventArgs e)
+        public void FinishRepair(object sender, EventArgs e)
         {
             //see if you can make this an ienumerator
-            yield return new WaitForSeconds(20f);
+            //yield return new WaitForSeconds(20f);
             print("Repaired!");
-            payload.curHealth += payload.maxHealth * 0.5f;
+            payload.curHealth += payload.maxHealth / 2;
             //resume payload
         }
     }

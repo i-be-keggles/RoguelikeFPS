@@ -23,7 +23,7 @@ public class EscortPayload : MonoBehaviour
     [Header("NAV")]
     public float speed;
     public float moving;
-    public NaveMeshAgent agent;
+    public NavMeshAgent agent;
     public NavMeshPath path;
 
     public EventHandler repairRequest;

@@ -33,7 +33,8 @@ public class Weapon : MonoBehaviour
     public float recoilH;
 
     [Space]
-    public ParticleSystem muzzleFlash;
+    public Transform muzzleFlashPoint;
+    public GameObject muzzleFlash;
     public GameObject hitFX;
 
     public Rigidbody rb;
@@ -70,7 +71,7 @@ public class Weapon : MonoBehaviour
 
         timeToFire = 1f / fireRate;
         curAmmo--;
-        muzzleFlash.Play();
+        Destroy(Instantiate(muzzleFlash, muzzleFlashPoint), 1.5f);
         //playSound;
         anim.SetTrigger("Shoot");
         weaponHandler.ui.UpdateAmmoText(curAmmo, totalAmmo);

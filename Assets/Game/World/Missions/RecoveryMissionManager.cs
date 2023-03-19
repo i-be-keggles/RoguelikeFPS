@@ -7,18 +7,16 @@ public class RecoveryMissionManager : MissionManager
     public Interactable dropOff;
 
     [Header("Testing only")]
-    Transform[] itemSpawns;
+    public Transform itemSpawns;
 
     private void Start()
     {
-        foreach(Transform t in itemSpawns)
-        {
-            objectives.Add(new RecoveryObjective("Collect item", false, 100, time, this, t.position, recoveryItem, dropOff));
-        }
+        int i = UnityEngine.Random.Range(0, itemSpawns.childCount);
+        objectives.Add(new RecoveryObjective("Collect item", false, 100, time, this, itemSpawns.GetChild(i).position, recoveryItem, dropOff));
     }
 
 
-    class RecoveryObjective : Objective
+    public class RecoveryObjective : Objective
     {
         Interactable item;          //physical object to pickup
         Interactable target;        //where it needs to be taken
@@ -50,7 +48,7 @@ public class RecoveryMissionManager : MissionManager
             {
                 carryingObject = false;
                 //Complete(time, spawnManager);
-                manager.CompleteObjective(manager.objectives.getIndexOf(this));
+                manager.CompleteObjective(manager.objectives.IndexOf(this));
             }
         }
     }
