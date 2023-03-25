@@ -24,6 +24,7 @@ public abstract class MissionManager : MonoBehaviour
         print($"Objective '{objective.name}' complete! +{r} points!");
     }
 
+    [Serializable]
     public class Objective
     {
         public string name;
@@ -36,7 +37,7 @@ public abstract class MissionManager : MonoBehaviour
 
         protected MissionManager manager;
 
-        public EventHandler onCompleted;
+        public event EventHandler onCompleted;
 
         public Objective(string s, bool c, float r, float t, MissionManager m)
         {
@@ -54,6 +55,7 @@ public abstract class MissionManager : MonoBehaviour
 
             if (swarm.HasValue) spawnManager.Swarm(swarm.Value);
 
+            if(onCompleted != null)
             onCompleted.Invoke(this, EventArgs.Empty);
 
             return rewards;

@@ -15,7 +15,12 @@ public class RecoveryMissionManager : MissionManager
         objectives.Add(new RecoveryObjective("Collect item", false, 100, time, this, itemSpawns.GetChild(i).position, recoveryItem, dropOff));
     }
 
+    private void Update()
+    {
+        time += Time.deltaTime;
+    }
 
+    [Serializable]
     public class RecoveryObjective : Objective
     {
         Interactable item;          //physical object to pickup
@@ -40,6 +45,7 @@ public class RecoveryMissionManager : MissionManager
         public void Pickup(object sender, EventArgs e)
         {
             carryingObject = true;
+            print("carrying");
         }
 
         public void Place(object sender, EventArgs e)

@@ -16,6 +16,10 @@ public class EscortMissionManager : MissionManager
         objectives.Add(new EscortObjective("Escort payload", false, 100, time, this, payloadPrefab, path.GetChild(0).position, path.GetChild(1).position));
     }
 
+    private void Update()
+    {
+        time += Time.deltaTime;
+    }
 
     class EscortObjective : Objective
     {

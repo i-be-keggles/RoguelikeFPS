@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI ammoText;
     public RectTransform healthBar;
+    public TextMeshProUGUI interactText;
 
     public void UpdateAmmoText(int cur, int tot)
     {
@@ -22,5 +23,10 @@ public class UIManager : MonoBehaviour
     public void UpdateHealthBar(int health)
     {
         healthBar.sizeDelta = new Vector2(health, healthBar.sizeDelta.y);
+    }
+
+    public void UpdateInteractText(string text = "")
+    {
+        interactText.text = text;
     }
 }

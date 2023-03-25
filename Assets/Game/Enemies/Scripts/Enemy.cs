@@ -142,6 +142,7 @@ public class Enemy : MonoBehaviour
         float s = 0.5f + ((float)health / (float)maxHealth)/2f;
         transform.localScale = scale * s;
 
+        moveLocation = player.transform.position;
 
         if (health <= 0) Die();
     }
