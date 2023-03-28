@@ -26,7 +26,7 @@ public class EscortPayload : MonoBehaviour
     public NavMeshAgent agent;
     public NavMeshPath path;
 
-    public EventHandler repairRequest;
+    public event EventHandler repairRequest;
 
     private void Update()
     {
