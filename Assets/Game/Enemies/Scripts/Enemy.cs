@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.System;
 
 public class Enemy : MonoBehaviour
 {
@@ -40,7 +41,8 @@ public class Enemy : MonoBehaviour
     [Header("References")]
     protected NavMeshAgent agent;
 
-    public PlayerLifeCycleHandler player;
+    public EnemyTarget player;
+    public EnemyTarget target;
 
     public LayerMask sightMask;
 
@@ -70,7 +72,7 @@ public class Enemy : MonoBehaviour
         {
             RaycastHit hit;
             Physics.Raycast(transform.position, playerDir, out hit, sightRange, sightMask);
-            if (angleToPlayer <= sightAngle && hit.collider != null && hit.collider.transform == player.transform)
+            if ((target == null || target == player) && angleToPlayer <= sightAngle && hit.collider != null && hit.collider.transform == player.transform)
             {
                 if(loseSight != null) StopCoroutine(loseSight);
                 canSeePlayer = true;
@@ -83,6 +85,11 @@ public class Enemy : MonoBehaviour
             }
         }
 
+        if(target != null)
+        {
+            enemyState = EnemyState.engaging;
+        }
+
         if (enemyState == EnemyState.wandering)
         {
             Wander();
@@ -93,7 +100,7 @@ public class Enemy : MonoBehaviour
         }
         else if (enemyState == EnemyState.engaging)
         {
-            Engage(playerDir);
+            Engage();
         }
     }
 
@@ -102,6 +109,8 @@ public class Enemy : MonoBehaviour
         agent.speed = walkSpeed;
         if (Vector3.Distance(transform.position, moveLocation) <= agent.stoppingDistance)
         {
+            if (EvaluateTarget() != null) return;
+
             NavMeshHit hit;
             Vector3 point = Vector3.positiveInfinity;
             while (!NavMesh.SamplePosition(point, out hit, agent.height * 2, NavMesh.AllAreas)) point = Random.insideUnitSphere * patrolRange + transform.position;
@@ -120,14 +129,14 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(transform.position, moveLocation) <= agent.stoppingDistance) enemyState = EnemyState.wandering;
     }
 
-    protected virtual void Engage(Vector3 playerDir)
+    protected virtual void Engage()
     {
         agent.speed = runSpeed;
 
-        moveLocation = player.transform.position;
+        moveLocation = target.transform.position;
         agent.SetDestination(moveLocation);
 
-        if (playerDir.magnitude <= attackRange && timeToAttack <= 0) Attack();
+        if (Vector3.distance(transform.position, target.position) <= attackRange && timeToAttack <= 0) Attack();
     }
 
     private IEnumerator LoseSight()
@@ -144,14 +153,54 @@ public class Enemy : MonoBehaviour
 
         moveLocation = player.transform.position;
 
+        EvaluateTarget();
+
         if (health <= 0) Die();
+    }
+
+    public EnemyTarget EvaluateTarget()
+    {
+        List<EnemyTarget> targets;
+        float totPriority = 0;
+
+        Collider[] cols = Physics.OverlapSphere(transform.position, sightRange);
+        
+        foreach(Collider col in cols)
+        {
+            EnemyTarget t = col.GetComponent<EnemyTarget>();
+            if (t != null)
+            {
+                targets.Add(t);
+                totPriority += t.priority;
+            }
+        }
+
+        float n = UnityEngine.Random.Range(0f, totPriority);
+
+        for(int i = 0; i < targets.Count; i++)
+        {
+            n -= targets[i].priority;
+            if(n < 0f)
+            {
+                target = targets[i];
+                return targets[i];
+            }
+        }
+
+        return null;
+    }
+
+    public void OnLoseTarget(object sender, EventArgs e)
+    {
+        enemyState = EnemyState.wandering;
+        EvaluateTarget();
     }
 
     protected virtual void Attack()
     {
         timeToAttack += 1/attackSpeed;
 
-        player.TakeDamage(damage);
+        target.TakeDamage(damage);
     }
 
     protected virtual void Die()

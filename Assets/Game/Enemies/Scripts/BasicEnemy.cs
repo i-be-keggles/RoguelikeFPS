@@ -21,24 +21,26 @@ public class BasicEnemy : Enemy
     [SerializeField]private bool dodging;
 
 
-    protected override void Engage(Vector3 playerDir)
+    protected override void Engage()
     {
         agent.speed = runSpeed;
         timeToDodge -= Time.deltaTime;
 
-        if(timeToDodge <= 0 && !distancing && !dodging && playerDir.magnitude > attackRange*3 && angleToPlayer < 45)
+        Vector3 dir = transform.position - player.transform.position;
+
+        if (timeToDodge <= 0 && !distancing && !dodging && dir.magnitude > attackRange*3 && angleToPlayer < 45)
         {
             StartCoroutine(Dodge());
         }
 
-        if(!distancing) moveLocation = player.transform.position;
+        if(!distancing) moveLocation = target.transform.position;
 
-        if(playerDir.magnitude <= attackRange && !distancing && timeToAttack <= 0)
+        if(dir.magnitude <= attackRange && !distancing && timeToAttack <= 0)
         {
             distancing = true;
             Attack();
             NavMeshHit hit;
-            moveLocation = player.transform.position + new Vector3(playerDir.normalized.x, 0, playerDir.normalized.z) * distancingMagnitude;
+            moveLocation = target.transform.position + new Vector3(dir.normalized.x, 0, dir.normalized.z) * distancingMagnitude;
             if (NavMesh.SamplePosition(moveLocation, out hit, agent.height * 2, NavMesh.AllAreas)) moveLocation = hit.position;
             else distancing = false;
 
@@ -56,7 +58,7 @@ public class BasicEnemy : Enemy
 
     protected override void Chase()
     {
-        if(distancing)Engage(player.transform.position - transform.position);
+        if(distancing)Engage();
         else base.Chase();
     }
 
