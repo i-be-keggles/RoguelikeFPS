@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class CompoundGenerator : Monobehaviour
+public class CompoundGenerator : MonoBehaviour
 {
     int size; //nhubs
     [Range(1,2)] float bufferSpace; //consider hubs x times bigger
@@ -38,31 +38,31 @@ public class CompoundGenerator : Monobehaviour
     public void Generate()
     {
         List<CompoundStructure> p_hubs = null;
-        List<CompoundStrcutre> p_connectors = null;
+        List<CompoundStructure> p_connectors = null;
         int n = -1;
 
         //spawn initial size 3
         while (n == -1)
         {
-            n = [UnityEngine.Random.Range(m_hubs.Count);
-            p_hubs = new List<CompoundStructure>() { m_hubs[n].GetComponent<CompoundStructure>() };
+            n = UnityEngine.Random.Range(0, m_hubs.Count);
+            p_hubs = new List<CompoundStructure>() { m_hubs[n] };
             if (p_hubs[0].size != maxHubSize) n = -1;
         }
 
-        CompoundStructure hub = Instantiate(g_hubs[n], transform).GetComponent<CompoundStructure>();
+        CompoundStructure hub = GameObject.Instantiate(g_hubs[n], transform).GetComponent<CompoundStructure>();
         hubs.Add(hub);
 
         //spawn individuals
         while(hubs.Count < size)
         {
-            if(p_hubs.Count == 0) p_hubs.Add(hubs.LastIndexOf());
+            if(p_hubs.Count == 0) p_hubs.Add(hubs[hubs.Count-1]);
             for (int i = 0; i < p_hubs.Count; i++)
             {
-                for (int j = 0; j < p_hubs[i].connectionPoints.Size; j++)
+                for (int j = 0; j < p_hubs[i].connectionPoints.Length; j++)
                 {
                     float desiredConnectors = 3;
                     desiredConnectors = Math.Min(desiredConnectors, p_hubs[i].connectionPoints.Length);
-                    if(p_hubs[i].connectedStructures[j] == null && UnityEngine.Random.random(/*0f-1f*/) > desiredConnectors / p_hubs[i].connectionPoints.Length)
+                    if(p_hubs[i].connectedStructures[j] == null && UnityEngine.Random.Range(0f, 1f) > desiredConnectors / p_hubs[i].connectionPoints.Length)
                     {
                         //spawn connector
                         n = m_connectors.IndexOf(GetConnecter());
@@ -74,18 +74,18 @@ public class CompoundGenerator : Monobehaviour
             }
             if (p_connectors.Count == 0) continue;
 
-            hub = GetHub();
-            n = m_hubs.IndexOf(hub)
+            hub = GetHub(0);
+            n = m_hubs.IndexOf(hub);
         }
     }
 
     public CompoundStructure GetHub(int connector)
     {
         CompoundStructure c = connectors[connector];
-        Vector3 c = c.connectedStructures[0] == null ? c.connectionPoints[0 : 1];
+        Vector3 point = c.connectionPoints[c.connectedStructures[0] == null ? 0 : 1];
 
-        int maxSize = maxHubSize; //change as necessary
-        for(maxSize; maxSize >= 0; maxSize--)
+        int maxSize; //change as necessary
+        for(maxSize = maxHubSize; maxSize >= 0; maxSize--)
         {
             if (maxSize == 0) return null;
 
@@ -95,7 +95,7 @@ public class CompoundGenerator : Monobehaviour
 
             for (int i = 0; i < hubs.Count; i++)
             {
-                if (Vector3.Distance(point, hubs[i].position) < hubSizeIncrement * bufferSpace * maxSize + hubSizeIncrement * bufferSpace * hubs[i].size)
+                if (Vector3.Distance(point, hubs[i].transform.position) < hubSizeIncrement * bufferSpace * maxSize + hubSizeIncrement * bufferSpace * hubs[i].size)
                 {
                     fits = false;
                     break;
@@ -105,13 +105,13 @@ public class CompoundGenerator : Monobehaviour
             if (fits) break;
         }
 
-        List<CompoundStructure> s_hubs;
-        foreach(CompoundStructure hub in m_hubs) if (hub.size <= maxSize) s_hubs.Add(hub);
+        List<CompoundStructure> s_hubs = new List<CompoundStructure>();
+        foreach(CompoundStructure h in m_hubs) if (h.size <= maxSize) s_hubs.Add(h);
 
         CompoundStructure hub = null;
         while (hub == null)
         {
-            hub = s_hubs[UnityEngine.Random.Range(s_hubs.Count)];
+            hub = s_hubs[UnityEngine.Random.Range(0, s_hubs.Count)];
 
             if(hub.maxPresent > 0)
             {
@@ -119,7 +119,7 @@ public class CompoundGenerator : Monobehaviour
 
                 foreach (CompoundStructure h in hubs)
                 {
-                    if (hub.name.equals(h.name)) present++;
+                    if (hub.name.Equals(h.name)) present++;
                 }
 
                 if (present > hub.maxPresent) hub = null;
@@ -133,14 +133,16 @@ public class CompoundGenerator : Monobehaviour
     {
         List<CompoundStructure> p_connectors = new List<CompoundStructure>();
 
-        size = Mathf.clamp(size, 0, maxConnectorSize);
+        size = Mathf.Clamp(size, 0, maxConnectorSize);
 
-        foreach(CompoundStructure c in m_connectors) if(size == 0 || size == c.size) p_connecetors.Add(c);
+        foreach(CompoundStructure c in m_connectors) if(size == 0 || size == c.size) p_connectors.Add(c);
+
+        return p_connectors[UnityEngine.Random.Range(0, p_connectors.Count)];
     }
 
     public void DeleteConnector(int n)
     {
-        CompoundStructre c = connectors[n]);
+        CompoundStructure c = connectors[n];
         connectors.Remove(c);
 
         for(int i = hubs.Count - 1; i >= 0; i--)

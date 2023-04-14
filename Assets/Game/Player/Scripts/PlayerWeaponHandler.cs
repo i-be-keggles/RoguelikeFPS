@@ -63,7 +63,6 @@ public class PlayerWeaponHandler : MonoBehaviour
             if(weapon != null)
             {
                 //display text
-                print("Targeting weapon");
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     PickupWeapon(weapon);

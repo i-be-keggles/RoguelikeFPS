@@ -1,11 +1,9 @@
 using UnityEngine;
-using System.Collections;
-using System.Generic;
 using System;
 
 public class EnemyTarget : MonoBehaviour
 {
-    public float priority;
+    [Min(1)] public float priority;
 
     public event EventHandler<float> onTakeDamage;
 
@@ -23,6 +21,6 @@ public class EnemyTarget : MonoBehaviour
 
     public void Die()
     {
-        died?.Invoke(self, EventArgs.Empty);
+        died?.Invoke(this, EventArgs.Empty);
     }
 }

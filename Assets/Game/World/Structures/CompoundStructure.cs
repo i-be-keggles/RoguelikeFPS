@@ -1,10 +1,11 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
-public class CompoundStructure : Monobehaviour
+public class CompoundStructure : MonoBehaviour
 {
-    public Enum CompoundStructureType { hub, connector };
+    public enum CompoundStructureType { hub, connector }
 
     public string name;
 

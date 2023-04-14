@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.System;
+using System;
 
 public class Enemy : MonoBehaviour
 {
@@ -54,8 +54,7 @@ public class Enemy : MonoBehaviour
         scale = transform.localScale;
 
         //TODO: pass in when spawning
-        if(player == null) player = FindObjectOfType<PlayerLifeCycleHandler>();
-
+        if(player == null) player = FindObjectOfType<PlayerLifeCycleHandler>().GetComponent<EnemyTarget>();
         agent = GetComponent<NavMeshAgent>();
 
         agent.SetDestination(moveLocation);
@@ -63,7 +62,9 @@ public class Enemy : MonoBehaviour
 
     protected void Update()
     {
-        if(timeToAttack > 0) timeToAttack -= Time.deltaTime;
+        if (player == null) return; //TODO: remove when properly passed (see start method)
+
+        if (timeToAttack > 0) timeToAttack -= Time.deltaTime;
 
         Vector3 playerDir = player.transform.position-transform.position;
         angleToPlayer = Vector3.Angle(transform.forward, playerDir);
@@ -76,12 +77,15 @@ public class Enemy : MonoBehaviour
             {
                 if(loseSight != null) StopCoroutine(loseSight);
                 canSeePlayer = true;
+                
+                target = player;
                 enemyState = EnemyState.engaging;
             }
             else if (canSeePlayer && !enemyState.Equals(EnemyState.chasing)) //should only trigger on frame where sight lost
             {
                 enemyState = EnemyState.chasing;
                 loseSight = StartCoroutine(LoseSight());
+                target = null;
             }
         }
 
@@ -106,14 +110,14 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Wander()
     {
+        if (EvaluateTarget() != null) return;
+
         agent.speed = walkSpeed;
         if (Vector3.Distance(transform.position, moveLocation) <= agent.stoppingDistance)
         {
-            if (EvaluateTarget() != null) return;
-
             NavMeshHit hit;
             Vector3 point = Vector3.positiveInfinity;
-            while (!NavMesh.SamplePosition(point, out hit, agent.height * 2, NavMesh.AllAreas)) point = Random.insideUnitSphere * patrolRange + transform.position;
+            while (!NavMesh.SamplePosition(point, out hit, agent.height * 2, NavMesh.AllAreas)) point = UnityEngine.Random.insideUnitSphere * patrolRange + transform.position;
 
             moveLocation = hit.position;
             agent.SetDestination(hit.position);
@@ -136,13 +140,14 @@ public class Enemy : MonoBehaviour
         moveLocation = target.transform.position;
         agent.SetDestination(moveLocation);
 
-        if (Vector3.distance(transform.position, target.position) <= attackRange && timeToAttack <= 0) Attack();
+        if (Vector3.Distance(transform.position, target.transform.position) <= attackRange && timeToAttack <= 0) Attack();
     }
 
     private IEnumerator LoseSight()
     {
         yield return new WaitForSeconds(loseSightTime);
         canSeePlayer = false;
+        EvaluateTarget();
     }
 
     public void TakeDamage(int damage)
@@ -160,7 +165,7 @@ public class Enemy : MonoBehaviour
 
     public EnemyTarget EvaluateTarget()
     {
-        List<EnemyTarget> targets;
+        List<EnemyTarget> targets = new List<EnemyTarget>();
         float totPriority = 0;
 
         Collider[] cols = Physics.OverlapSphere(transform.position, sightRange);
@@ -182,6 +187,7 @@ public class Enemy : MonoBehaviour
             n -= targets[i].priority;
             if(n < 0f)
             {
+                if (targets[i] == player && !canSeePlayer) break;
                 target = targets[i];
                 return targets[i];
             }

@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Generic;
 using System;
 
 public class OrbitalDrop : MonoBehaviour
@@ -19,7 +17,7 @@ public class OrbitalDrop : MonoBehaviour
         {
             targetHeight = hit.point.y;
         }
-        else targetHeight = transorm.position - speed * 20f;
+        else targetHeight = transform.position.y - speed * 20f;
     }
 
 
@@ -27,7 +25,7 @@ public class OrbitalDrop : MonoBehaviour
     {
         if (transform.position.y > targetHeight)
         {
-            transform.position = transform.position - new Vector3(0, Math.Min(transform.position.y - targetHeight, speed * time.fixedDeltaTime), 0);
+            transform.position = transform.position - new Vector3(0, Math.Min(transform.position.y - targetHeight, speed * Time.fixedDeltaTime), 0);
         }
         else
         {

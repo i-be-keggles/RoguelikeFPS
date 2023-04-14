@@ -1,11 +1,9 @@
 using UnityEngine;
-using System.Collections;
-using System.Generic;
 using System;
 
 public class CrystalDeposit : MonoBehaviour
 {
-    private Interacteable interacteable;
+    private Interactable interactable;
 
     public GameObject extractorPrefab;
     public GameObject extractor;
@@ -29,8 +27,8 @@ public class CrystalDeposit : MonoBehaviour
 
     private void Start()
     {
-        interacteable = GetComponent<Interacteable>();
-        interacteable.OnTriggered += HandlePhaseChange;
+        interactable = GetComponent<Interactable>();
+        interactable.interactedWith += HandlePhaseChange;
         lifecycle.onTakeDamage += TakeDamage;
         lifecycle.enabled = false;
     }
@@ -39,7 +37,7 @@ public class CrystalDeposit : MonoBehaviour
     {
         if(phase == 3)
         {
-            timeToStrike -= time.DeltaTime;
+            timeToStrike -= Time.deltaTime;
             if(timeToStrike <= 0)
             {
                 timeToStrike = strikeInterval;
@@ -48,7 +46,7 @@ public class CrystalDeposit : MonoBehaviour
 
             if (curValue <= 0)
             {
-                HandlePhaseChange();
+                HandlePhaseChange(this, EventArgs.Empty);
             }
         }
     }
@@ -57,14 +55,14 @@ public class CrystalDeposit : MonoBehaviour
     {
         if(phase == 0)
         {
-            interacteable.enabled = false;
+            interactable.enabled = false;
 
             CallPod();
         }
         else if(phase == 1)
         {
-            interacteable.enabled = true;
-            interacteable.promptText = "Start extraction";
+            interactable.enabled = true;
+            interactable.promptText = "Start extraction";
         }
         else if(phase == 2)
         {

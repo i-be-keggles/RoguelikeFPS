@@ -24,13 +24,13 @@ public class ExplosiveEnemy : Enemy
     public float falloff = 0.5f;
 
 
-    private void Start()
+    private new void Start()
     {
         fuseTime = fuseLength;
         base.Start();
     }
 
-    private void Update()
+    private new void Update()
     {
         if (fuseLit) fuseTime -= Time.deltaTime;
         else base.Update();

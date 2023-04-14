@@ -23,6 +23,8 @@ public class BasicEnemy : Enemy
 
     protected override void Engage()
     {
+        if (target == null) return;
+
         agent.speed = runSpeed;
         timeToDodge -= Time.deltaTime;
 
