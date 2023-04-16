@@ -9,6 +9,13 @@ public class EnemyTarget : MonoBehaviour
 
     public event EventHandler died;
 
+    public bool active;
+
+    private void Start()
+    {
+        active = true;
+    }
+
     public void TakeDamage(float damage)
     {
         onTakeDamage?.Invoke(this, damage);
@@ -22,5 +29,11 @@ public class EnemyTarget : MonoBehaviour
     public void Die()
     {
         died?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void Deactivate()
+    {
+        active = false;
+        Die();
     }
 }

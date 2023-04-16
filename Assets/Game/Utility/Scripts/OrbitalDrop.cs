@@ -5,12 +5,13 @@ public class OrbitalDrop : MonoBehaviour
 {
     public event EventHandler landed;
 
-    private float targetHeight;
+    public float targetHeight;
 
     public float speed;
     public LayerMask mask;
+    public AudioClip landSound;
 
-    private void Start()
+    private void Awake()
     {
         RaycastHit hit;
         if (Physics.Raycast(transform.position, -transform.up, out hit, mask))
@@ -31,7 +32,17 @@ public class OrbitalDrop : MonoBehaviour
         {
             landed?.Invoke(this, EventArgs.Empty);
             print("Landed");
+            AudioSource source = GetComponent<AudioSource>();
+            source.clip = landSound;
+            source.loop = false;
+            source.Play();
             this.enabled = false;
         }
+    }
+
+    public void PromptHeight(float height)
+    {
+        if(Math.Abs(height - targetHeight) > 2) targetHeight = height;
+        print("Height is now: " + targetHeight);
     }
 }

@@ -20,7 +20,7 @@ public class CrystalDeposit : MonoBehaviour
     public float strikeInterval;
     private float timeToStrike;
 
-    public EnemyTarget lifecycle;
+    private EnemyTarget lifecycle;
 
     public int phase = 0; //0 = idle, 1 = pod dropping, 2 = waiting for extract, 3 = extracting, 4 = depleted
 
@@ -29,8 +29,11 @@ public class CrystalDeposit : MonoBehaviour
     {
         interactable = GetComponent<Interactable>();
         interactable.interactedWith += HandlePhaseChange;
+        lifecycle = GetComponent<EnemyTarget>();
         lifecycle.onTakeDamage += TakeDamage;
         lifecycle.enabled = false;
+
+        curValue = maxValue;
     }
 
     private void Update()
@@ -71,6 +74,7 @@ public class CrystalDeposit : MonoBehaviour
         else if(phase == 3)
         {
             lifecycle.Die();
+            
         }
 
         phase++;
@@ -78,9 +82,10 @@ public class CrystalDeposit : MonoBehaviour
 
     private void CallPod()
     {
-        extractor = Instantiate(extractorPrefab, transform);
+        extractor = Instantiate(extractorPrefab, transform.position + new Vector3(0, extractorPrefab.GetComponent<OrbitalDrop>().speed * dropTime, 0), Quaternion.identity);
+        extractor.transform.SetParent(transform);
         OrbitalDrop pod = extractor.GetComponent<OrbitalDrop>();
-        extractor.transform.position += new Vector3(0, pod.speed * dropTime, 0);
+        pod.PromptHeight(transform.position.y);
         pod.landed += HandlePhaseChange;
     }
 
@@ -92,7 +97,7 @@ public class CrystalDeposit : MonoBehaviour
     private void Strike()
     {
         //play animation
-        curValue -= maxValue * strikeInterval / extractionTime;
+        curValue -= Math.Min(curValue, maxValue * strikeInterval / extractionTime);
     }
 
     public void TakeDamage(object sender, float damage)
