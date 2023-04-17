@@ -2,17 +2,18 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CompoundGenerator : MonoBehaviour
 {
-    int size; //nhubs
-    [Range(1,2)] float bufferSpace; //consider hubs x times bigger
+    [Min(1)] public int size = 10; //nhubs
+    [Range(1,2)] public float bufferSpace = 1.5f; //consider hubs x times bigger
 
     //change as necesseray to fit models
     public int maxHubSize = 3;
-    public int hubSizeIncrement = 15; //radius
+    public float hubSizeIncrement = 15; //radius
     public int maxConnectorSize = 3;
-    public int connecterSizeIncrement = 10;
+    public float connectorSizeIncrement = 10;
 
     public GameObject[] g_connectors;
     public GameObject[] g_hubs;
@@ -39,6 +40,8 @@ public class CompoundGenerator : MonoBehaviour
     {
         List<CompoundStructure> p_hubs = null;
         List<CompoundStructure> p_connectors = null;
+        hubs = new List<CompoundStructure>();
+        connectors = new List<CompoundStructure>();
         int n = -1;
 
         //spawn initial size 3
@@ -49,53 +52,107 @@ public class CompoundGenerator : MonoBehaviour
             if (p_hubs[0].size != maxHubSize) n = -1;
         }
 
-        CompoundStructure hub = GameObject.Instantiate(g_hubs[n], transform).GetComponent<CompoundStructure>();
+        CompoundStructure hub = Instantiate(g_hubs[n], transform).GetComponent<CompoundStructure>();
+        hub.transform.eulerAngles = new Vector3(0, UnityEngine.Random.Range(0f, 360f));
         hubs.Add(hub);
+        p_hubs = new List<CompoundStructure>() { hub };
 
+        int t = 0;
         //spawn individuals
         while(hubs.Count < size)
         {
+            t++;
+            if(t > size * 10)
+            {
+                Debug.LogError("Generation failed.");
+                return;
+            }
+
+
             if(p_hubs.Count == 0) p_hubs.Add(hubs[hubs.Count-1]);
+
+            p_connectors = new List<CompoundStructure>();
+
             for (int i = 0; i < p_hubs.Count; i++)
             {
                 for (int j = 0; j < p_hubs[i].connectionPoints.Length; j++)
                 {
                     float desiredConnectors = 3;
                     desiredConnectors = Math.Min(desiredConnectors, p_hubs[i].connectionPoints.Length);
-                    if(p_hubs[i].connectedStructures[j] == null && UnityEngine.Random.Range(0f, 1f) > desiredConnectors / p_hubs[i].connectionPoints.Length)
+                    if(p_hubs[i].connectedStructures[j] == null && UnityEngine.Random.Range(0f, 1f) < desiredConnectors / p_hubs[i].connectionPoints.Length)
                     {
                         //spawn connector
                         n = m_connectors.IndexOf(GetConnecter());
                         CompoundStructure connector = Instantiate(g_connectors[n], transform).GetComponent<CompoundStructure>();
                         connectors.Add(connector);
                         p_connectors.Add(connector);
+
+                        p_hubs[i].connectedStructures[j] = connector;
+                        connector.connectedStructures[0] = p_hubs[i];
+
+                        Vector3 dir = (p_hubs[i].transform.TransformPoint(p_hubs[i].connectionPoints[j]) - p_hubs[i].transform.position).normalized;
+                        dir.y = 0;
+
+                        connector.transform.position = p_hubs[i].transform.position + dir * (p_hubs[i].size * hubSizeIncrement + connector.size * connectorSizeIncrement);
+                        connector.transform.eulerAngles = Quaternion.LookRotation(p_hubs[i].transform.position - connector.transform.position).eulerAngles + new Vector3(0, -90, 0);
                     }
                 }
             }
             if (p_connectors.Count == 0) continue;
 
-            hub = GetHub(0);
-            n = m_hubs.IndexOf(hub);
+            p_hubs = new List<CompoundStructure>();
+            for(int i = 0; i < p_connectors.Count; i++)
+            {
+                hub = GetHub(connectors.IndexOf(p_connectors[i]));
+                if(hub == null)
+                {
+                    DeleteConnector(connectors.IndexOf(p_connectors[i]));
+                    continue;
+                }
+                n = m_hubs.IndexOf(hub);
+
+                print(n);
+                hub = Instantiate(g_hubs[n], transform).GetComponent<CompoundStructure>();
+                hubs.Add(hub);
+                p_hubs.Add(hub);
+
+                p_connectors[i].connectedStructures[1] = hub;
+                hub.connectedStructures[0] = p_connectors[i];
+
+                hub.transform.position = p_connectors[i].transform.position + -p_connectors[i].transform.right * (p_connectors[i].size * connectorSizeIncrement + hub.size * hubSizeIncrement);
+                //hub.transform.eulerAngles = new Vector3(0, -Vector3.SignedAngle(hub.transform.TransformPoint(hub.connectionPoints[0]) - hub.transform.position, p_connectors[i].transform.position - transform.position, Vector3.up));
+                hub.transform.eulerAngles = Quaternion.LookRotation(p_connectors[i].transform.position - transform.position).eulerAngles + new Vector3(0,+90,0);
+            }
+        }
+
+        //cleanup connectors ::::: bug here
+        p_connectors = connectors;
+        for (int i = 0; i < p_connectors.Count; i++)
+        {
+            if (p_connectors[i].connectedStructures[1] == null) DeleteConnector(i);
         }
     }
 
     public CompoundStructure GetHub(int connector)
     {
         CompoundStructure c = connectors[connector];
-        Vector3 point = c.connectionPoints[c.connectedStructures[0] == null ? 0 : 1];
+        Vector3 point = c.transform.TransformPoint(c.connectionPoints[c.connectedStructures[0] == null ? 0 : 1]);
 
         int maxSize; //change as necessary
         for(maxSize = maxHubSize; maxSize >= 0; maxSize--)
         {
+            print("maxSize: " + maxSize);
             if (maxSize == 0) return null;
 
-            int r = hubSizeIncrement * maxSize;
+            float r = hubSizeIncrement * maxSize;
 
             bool fits = true;
+            Vector3 p = c.transform.position + (point - c.transform.position).normalized * (c.size * connectorSizeIncrement + r);
 
             for (int i = 0; i < hubs.Count; i++)
             {
-                if (Vector3.Distance(point, hubs[i].transform.position) < hubSizeIncrement * bufferSpace * maxSize + hubSizeIncrement * bufferSpace * hubs[i].size)
+                print(Vector3.Distance(p, hubs[i].transform.position) + " vs " + (r * bufferSpace + hubSizeIncrement * bufferSpace * hubs[i].size));
+                if (Vector3.Distance(p, hubs[i].transform.position) < r * bufferSpace + hubSizeIncrement * bufferSpace * hubs[i].size)
                 {
                     fits = false;
                     break;
@@ -126,6 +183,7 @@ public class CompoundGenerator : MonoBehaviour
             }
         }
 
+        print("returning hub " + s_hubs.IndexOf(hub) + " _ " + m_hubs.IndexOf(hub));
         return hub;
     }
 
