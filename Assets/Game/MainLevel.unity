@@ -44613,7 +44613,7 @@ GameObject:
   - component: {fileID: 1857242486}
   - component: {fileID: 1857242487}
   m_Layer: 0
-  m_Name: Compound
+  m_Name: TestCompound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44646,12 +44646,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a691f9fd9590d141ae236aa11964c01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 10
-  bufferSpace: 1
+  size: 15
+  bufferSpace: 1.2
   maxHubSize: 3
-  hubSizeIncrement: 15
+  hubSizeIncrement: 7.5
   maxConnectorSize: 3
-  connectorSizeIncrement: 10
+  connectorSizeIncrement: 5
   g_connectors:
   - {fileID: 409605670291960871, guid: 8c129941fedddad49bba462c8e491c4d, type: 3}
   - {fileID: 6236152024520247341, guid: 3ba6a99fab8c18240aeccc28f263c61b, type: 3}

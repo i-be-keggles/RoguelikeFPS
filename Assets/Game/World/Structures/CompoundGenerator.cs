@@ -107,11 +107,11 @@ public class CompoundGenerator : MonoBehaviour
                 if(hub == null)
                 {
                     DeleteConnector(connectors.IndexOf(p_connectors[i]));
+                    print("Deleting connector");
                     continue;
                 }
                 n = m_hubs.IndexOf(hub);
 
-                print(n);
                 hub = Instantiate(g_hubs[n], transform).GetComponent<CompoundStructure>();
                 hubs.Add(hub);
                 p_hubs.Add(hub);
@@ -124,13 +124,6 @@ public class CompoundGenerator : MonoBehaviour
                 hub.transform.eulerAngles = Quaternion.LookRotation(p_connectors[i].transform.position - transform.position).eulerAngles + new Vector3(0,+90,0);
             }
         }
-
-        //cleanup connectors ::::: bug here
-        p_connectors = connectors;
-        for (int i = 0; i < p_connectors.Count; i++)
-        {
-            if (p_connectors[i].connectedStructures[1] == null) DeleteConnector(i);
-        }
     }
 
     public CompoundStructure GetHub(int connector)
@@ -141,7 +134,6 @@ public class CompoundGenerator : MonoBehaviour
         int maxSize; //change as necessary
         for(maxSize = maxHubSize; maxSize >= 0; maxSize--)
         {
-            print("maxSize: " + maxSize);
             if (maxSize == 0) return null;
 
             float r = hubSizeIncrement * maxSize;
@@ -151,7 +143,6 @@ public class CompoundGenerator : MonoBehaviour
 
             for (int i = 0; i < hubs.Count; i++)
             {
-                print(Vector3.Distance(p, hubs[i].transform.position) + " vs " + (r * bufferSpace + hubSizeIncrement * bufferSpace * hubs[i].size));
                 if (Vector3.Distance(p, hubs[i].transform.position) < r * bufferSpace + hubSizeIncrement * bufferSpace * hubs[i].size)
                 {
                     fits = false;
@@ -183,7 +174,6 @@ public class CompoundGenerator : MonoBehaviour
             }
         }
 
-        print("returning hub " + s_hubs.IndexOf(hub) + " _ " + m_hubs.IndexOf(hub));
         return hub;
     }
 
@@ -211,6 +201,8 @@ public class CompoundGenerator : MonoBehaviour
                 break;
             }
         }
+
+        Destroy(c.gameObject);
     }
 
     //place mandatory hub structures
