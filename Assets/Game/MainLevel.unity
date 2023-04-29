@@ -44649,9 +44649,9 @@ MonoBehaviour:
   size: 15
   bufferSpace: 1.2
   maxHubSize: 3
-  hubSizeIncrement: 7.5
+  hubSizeIncrement: 15
   maxConnectorSize: 3
-  connectorSizeIncrement: 5
+  connectorSizeIncrement: 10
   g_connectors:
   - {fileID: 409605670291960871, guid: 8c129941fedddad49bba462c8e491c4d, type: 3}
   - {fileID: 6236152024520247341, guid: 3ba6a99fab8c18240aeccc28f263c61b, type: 3}
