@@ -44660,6 +44660,7 @@ MonoBehaviour:
   - {fileID: 854714099215291801, guid: c42d0bd4ce262da4aa3799d07790f08d, type: 3}
   - {fileID: 8527682974514711769, guid: 460bf275ca8a76e48bd6a317a44ff15a, type: 3}
   - {fileID: 7192046422431623985, guid: e9b7782d1cfb6894bbd1d2f2de1530bd, type: 3}
+  - {fileID: 3619698002214007780, guid: fe9c93fddaca75647afef642cbe84ea7, type: 3}
 --- !u!1 &1857668696
 GameObject:
   m_ObjectHideFlags: 0
