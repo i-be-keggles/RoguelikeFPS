@@ -21432,12 +21432,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2d25315d89ac404baca1e97358cb339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 3
-  sprintSpeed: 6
-  airSpeed: 2
-  jumpHeight: 2
+  walkSpeed: 5
+  sprintSpeed: 8
+  airSpeed: 5
+  jumpHeight: 1.5
   groundCheck: {fileID: 475312134}
-  groundCheckDistance: 0.1
+  groundCheckDistance: 0.2
   groundMask:
     serializedVersion: 2
     m_Bits: 1
@@ -44661,6 +44661,8 @@ MonoBehaviour:
   - {fileID: 8527682974514711769, guid: 460bf275ca8a76e48bd6a317a44ff15a, type: 3}
   - {fileID: 7192046422431623985, guid: e9b7782d1cfb6894bbd1d2f2de1530bd, type: 3}
   - {fileID: 3619698002214007780, guid: fe9c93fddaca75647afef642cbe84ea7, type: 3}
+  - {fileID: 1513896212350297536, guid: 8f8beac673ba735489dadbd015382007, type: 3}
+  - {fileID: 8212342957786760671, guid: b2f73685601157d4b9af430b52f8d868, type: 3}
 --- !u!1 &1857668696
 GameObject:
   m_ObjectHideFlags: 0
