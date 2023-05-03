@@ -31,6 +31,7 @@ Transform:
   m_Children:
   - {fileID: 164582908866729285}
   - {fileID: 5921690638478040100}
+  - {fileID: 8453750178471995648}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -303,6 +304,68 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6239881831769578202, guid: e5635ae3ae84fa441bb79e243a93a3b2, type: 3}
+--- !u!1001 &5133433553742605974
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7594201425851370636}
+    m_Modifications:
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3633382770879874969, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+      propertyPath: m_Name
+      value: SpecimenTank
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+--- !u!4 &8453750178471995648 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3633382770879874966, guid: 54a57edf0279ac144a5859c7a0408f2d, type: 3}
+  m_PrefabInstance: {fileID: 5133433553742605974}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8423433607558940647
 PrefabInstance:
   m_ObjectHideFlags: 0
