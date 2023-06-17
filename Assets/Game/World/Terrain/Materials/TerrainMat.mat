@@ -65,6 +65,7 @@ Material:
     - _AlphaToMask: 0
     - _AlphaToMaskInspectorValue: 0
     - _BlendMode: 0
+    - _Cliff_Cutoff: 0.103
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 2
     - _CullModeForward: 2
@@ -108,7 +109,11 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
+    - _CliffA: {r: 0.21698102, g: 0.21698102, b: 0.21698102, a: 0}
+    - _CliffB: {r: 0.29245278, g: 0.29245278, b: 0.29245278, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _GradientPosition: {r: 0, g: 100, b: 0, a: 0}
+    - _GrassA: {r: 0.09517077, g: 0.45283014, b: 0, a: 1}
+    - _GrassB: {r: 0.22016257, g: 0.5471698, b: 0.17808828, a: 0}
   m_BuildTextureStacks: []
