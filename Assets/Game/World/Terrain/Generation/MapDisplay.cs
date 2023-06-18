@@ -11,24 +11,28 @@ public class MapDisplay : MonoBehaviour {
 	public Material material;
 	public Material noiseMaterial;
 
+    public MapGenerator generator;
+    public FoliageGenerator foliage;
+
     public void DrawTexture(Texture2D texture, int n)
     {
         chunks[n].gameObject.GetComponent<MeshRenderer>().material = noiseMaterial;
         chunks[n].gameObject.GetComponent<MeshRenderer>().material.mainTexture = texture;
     }
 
-    public void DrawMesh(MeshData meshData, Vector3 pos, int2 ids) {
+    public void DrawMesh(MeshData meshData, Vector3 pos, int2 ids, float[,] height) {
         Mesh mesh = meshData.CreateMesh();
         if (chunks.Count > ids.x)
         {
             if (chunks[0].gameObject == null || chunks[0].data == null || chunks[0].data.vertices.Length != meshData.vertices.Length)
             {
                 ClearChunks();
-                DrawMesh(meshData, pos, ids);
+                DrawMesh(meshData, pos, ids, height);
                 return;
             }
             chunks[ids.x].gameObject.GetComponent<MeshFilter>().sharedMesh = mesh;
             chunks[ids.x].gameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
+            foliage.GenerateGrass(height, chunks[ids.x].gameObject.transform, generator.meshHeightMultiplier, generator.meshHeightCurve);
         }
         else if (ids.x == ids.y)
         {
@@ -45,6 +49,7 @@ public class MapDisplay : MonoBehaviour {
             go.AddComponent<MeshRenderer>().material = material;
 
             chunks.Add(new TerrainChunk(meshData, go));
+            foliage.GenerateGrass(height, go.transform, generator.meshHeightMultiplier, generator.meshHeightCurve);
         }
     }
 
@@ -63,7 +68,6 @@ public class MapDisplay : MonoBehaviour {
 
     public void ClearChunks(int start = 0)
     {
-        print("Clearing chunks");
         for (int i = chunks.Count - 1; i >= start; i--)
         {
             if(chunks[i].gameObject != null) DestroyImmediate(chunks[i].gameObject);

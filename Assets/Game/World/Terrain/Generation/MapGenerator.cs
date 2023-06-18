@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Mathematics;
-using static UnityEngine.Rendering.HighDefinition.CloudLayer;
+using System;
+using System.Linq;
 
 public class MapGenerator : MonoBehaviour {
 
@@ -25,6 +27,8 @@ public class MapGenerator : MonoBehaviour {
     public MeshData[] chunks;
 
     public bool autoUpdate;
+    public FoliageGenerator foliage;
+
 
     private void Start()
     {
@@ -34,16 +38,18 @@ public class MapGenerator : MonoBehaviour {
     public void GenerateMap() {
         MapDisplay display = FindObjectOfType<MapDisplay>();
 
+        foliage.grassPositions = new List<Vector3>();
         for(int x = 0; x < mapSize; x++)
             for(int y = 0; y < mapSize; y++)
             {
                 float[,] noiseMap = Noise.GenerateNoiseMap(chunkSize, chunkSize, seed, noiseScale, octaves, persistance, lacunarity, offset + new Vector2(x * (chunkSize -1), y * (chunkSize -1)));
 
                 if (drawMode == DrawMode.Mesh)
-                    display.DrawMesh(GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), new Vector3(x * (chunkSize -1), 0, y * (chunkSize -1)), new int2(x * mapSize + y, mapSize * mapSize));
+                    display.DrawMesh(GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), new Vector3(x * (chunkSize -1), 0, y * (chunkSize -1)), new int2(x * mapSize + y, mapSize * mapSize), noiseMap);
                 else
                     display.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap), x * mapSize + y);
             }
+        foliage.GenerateMatrices();
     }
 
     public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve)
