@@ -10,6 +10,7 @@ Material:
   m_Name: GrassMat
   m_Shader: {fileID: -6465566751694194690, guid: 59a7f0924a9360448a15d1e3c1996194, type: 3}
   m_ValidKeywords:
+  - _ALPHATEST_ON
   - _DISABLE_SSR_TRANSPARENT
   - _DOUBLESIDED_ON
   m_InvalidKeywords:
@@ -17,9 +18,10 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 1
-  m_CustomRenderQueue: 2225
+  m_CustomRenderQueue: 2475
   stringTagMap:
     MotionVector: User
+    RenderType: TransparentCutout
   disabledShaderPasses:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
@@ -102,7 +104,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: aebd1e4e7f1934844a9569f185c8edc8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0930c56fe28083b429ea4f018b55f2fc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ThicknessMap:
@@ -133,7 +135,7 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlbedoAffectEmissive: 0
     - _AlphaCutoff: 0.5
-    - _AlphaCutoffEnable: 0
+    - _AlphaCutoffEnable: 1
     - _AlphaCutoffPostpass: 0.5
     - _AlphaCutoffPrepass: 0.5
     - _AlphaCutoffShadow: 0.5
@@ -148,6 +150,7 @@ Material:
     - _CullMode: 0
     - _CullModeForward: 0
     - _Cutoff: 0.5
+    - _Density: 0.1
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
@@ -170,17 +173,20 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
-    - _Frequency: 0.1
+    - _Frequency: 4
     - _Gradient_Offset: 0
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
+    - _HeightDensity: 1
     - _HeightMapParametrization: 0
     - _HeightMax: 1
     - _HeightMin: -1
+    - _HeightMultiplier: 1
     - _HeightOffset: 0
     - _HeightPoMAmplitude: 2
     - _HeightTessAmplitude: 2
     - _HeightTessCenter: 0.5
+    - _HeightVariance: 0.3
     - _InvTilingScale: 1
     - _Ior: 1.5
     - _IridescenceMask: 1
@@ -240,8 +246,11 @@ Material:
     - _UVEmissive: 0
     - _UseEmissiveIntensity: 0
     - _UseShadowThreshold: 0
+    - _WindDensity: 2
+    - _WindDisplacement: 0.3
+    - _WindFrequency: 0.1
     - _ZTestDepthEqualForOpaque: 3
-    - _ZTestGBuffer: 4
+    - _ZTestGBuffer: 3
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
@@ -249,8 +258,8 @@ Material:
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Colour: {r: 0.043137237, g: 0.36862746, b: 0, a: 1}
-    - _ColourA: {r: 0.5476667, g: 0.6132076, b: 0.08388218, a: 1}
-    - _ColourB: {r: 0.20024922, g: 0.5660378, b: 0.20562847, a: 1}
+    - _ColourA: {r: 0.8115829, g: 1, b: 0, a: 1}
+    - _ColourB: {r: 0.08188931, g: 0.7264151, b: 0, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

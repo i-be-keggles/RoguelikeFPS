@@ -76,6 +76,7 @@ Material:
     - _DstBlend: 0
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
+    - _NoiseScale: 1.01
     - _OpaqueCullMode: 2
     - _RayTracing: 0
     - _ReceivesSSR: 1
@@ -114,6 +115,6 @@ Material:
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _GradientPosition: {r: 0, g: 100, b: 0, a: 0}
-    - _GrassA: {r: 0.09517077, g: 0.45283014, b: 0, a: 1}
+    - _GrassA: {r: 0.015566946, g: 0.46226418, b: 0, a: 1}
     - _GrassB: {r: 0.22016257, g: 0.5471698, b: 0.17808828, a: 0}
   m_BuildTextureStacks: []

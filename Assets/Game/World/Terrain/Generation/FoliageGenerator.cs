@@ -59,7 +59,7 @@ public class FoliageGenerator : MonoBehaviour
         {
             if (addedMatrices < 1000)
             {
-                batches[batches.Count - 1].Add(Matrix4x4.TRS(grassPositions[i], Quaternion.Euler(new Vector3(0, Random.Range(0f, 360f), 90)), Vector3.one));
+                batches[batches.Count - 1].Add(Matrix4x4.TRS(grassPositions[i], Quaternion.Euler(new Vector3(-90, Random.Range(0f, 360f), 0)), Vector3.one));
                 addedMatrices++;
             }
             else
@@ -76,7 +76,7 @@ public class FoliageGenerator : MonoBehaviour
         {
             for(int i = 0; i < grass.subMeshCount; i++)
             {
-                Graphics.DrawMeshInstanced(grass, i, grassMaterial, batch);
+                Graphics.DrawMeshInstanced(grass, i, grassMaterial, batch, null, UnityEngine.Rendering.ShadowCastingMode.Off, false);
             }
         }
     }
