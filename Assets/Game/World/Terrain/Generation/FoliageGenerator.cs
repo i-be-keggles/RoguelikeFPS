@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
+using System;
 
 public class FoliageGenerator : MonoBehaviour
 {
@@ -17,6 +18,12 @@ public class FoliageGenerator : MonoBehaviour
 
     private bool playing = false;
 
+    public Texture2D grassDisplacement;
+
+    public MapGenerator map;
+    public Vector2 displacementOffset;
+    public Color[] displacementMap;
+
 
     private void Awake()
     {
@@ -26,6 +33,7 @@ public class FoliageGenerator : MonoBehaviour
     private void Update()
     {
         RenderGrassBatches();
+        displacementMap = grassDisplacement.GetPixels();
     }
 
     public void GenerateGrass(float[,] heightMap, Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
@@ -34,8 +42,8 @@ public class FoliageGenerator : MonoBehaviour
         for (int x = 0; x < density; x++)
             for(int y = 0; y < density; y++)
             {
-                float ax = Random.Range(x - displacement, x + displacement);
-                float ay = Random.Range(y - displacement, y + displacement);
+                float ax = UnityEngine.Random.Range(x - displacement, x + displacement);
+                float ay = UnityEngine.Random.Range(y - displacement, y + displacement);
 
                 Vector3 offset = new Vector3(-heightMap.GetLength(0) / 2f, 0, heightMap.GetLength(1) / 2f);
                 RaycastHit hit;
@@ -59,7 +67,7 @@ public class FoliageGenerator : MonoBehaviour
         {
             if (addedMatrices < 1000)
             {
-                batches[batches.Count - 1].Add(Matrix4x4.TRS(grassPositions[i], Quaternion.Euler(new Vector3(-90, Random.Range(0f, 360f), 0)), Vector3.one));
+                batches[batches.Count - 1].Add(Matrix4x4.TRS(grassPositions[i], Quaternion.Euler(new Vector3(-90, UnityEngine.Random.Range(0f, 360f), 0)), Vector3.one));
                 addedMatrices++;
             }
             else
@@ -76,8 +84,27 @@ public class FoliageGenerator : MonoBehaviour
         {
             for(int i = 0; i < grass.subMeshCount; i++)
             {
-                Graphics.DrawMeshInstanced(grass, i, grassMaterial, batch, null, UnityEngine.Rendering.ShadowCastingMode.Off, false);
+                Vector3 pos = batch[i].GetPosition();
+                MaterialPropertyBlock block = new MaterialPropertyBlock();
+                block.SetColor("_Displacement", SampleDisplacement(new Vector2(pos.x - map.transform.position.x + map.chunkSize/2, pos.z - map.transform.position.z + map.chunkSize / 2) + displacementOffset, new Vector2(map.chunkSize, map.chunkSize)));
+                Graphics.DrawMeshInstanced(grass, i, grassMaterial, batch, block, UnityEngine.Rendering.ShadowCastingMode.Off, false);
             }
+        }
+    }
+
+    public Color SampleDisplacement(Vector2 pos, Vector2 size)
+    {
+        try
+        {
+            int s = grassDisplacement.height;
+            float x = (pos.x / size.x) * s;
+            float y = (pos.y / size.y) * s;
+            return displacementMap[(int)(y*s + x)];
+        }
+        catch(Exception e)
+        {
+            //print(e.Message);
+            return Color.white;
         }
     }
 }
