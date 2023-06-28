@@ -18,11 +18,9 @@ public class FoliageGenerator : MonoBehaviour
 
     private bool playing = false;
 
-    public Texture2D grassDisplacement;
+    public Texture2D grassDisplacementMap;
 
     public MapGenerator map;
-    public Vector2 displacementOffset;
-    public Color[] displacementMap;
 
 
     private void Awake()
@@ -33,7 +31,6 @@ public class FoliageGenerator : MonoBehaviour
     private void Update()
     {
         RenderGrassBatches();
-        displacementMap = grassDisplacement.GetPixels();
     }
 
     public void GenerateGrass(float[,] heightMap, Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
@@ -84,27 +81,12 @@ public class FoliageGenerator : MonoBehaviour
         {
             for(int i = 0; i < grass.subMeshCount; i++)
             {
-                Vector3 pos = batch[i].GetPosition();
                 MaterialPropertyBlock block = new MaterialPropertyBlock();
-                block.SetColor("_Displacement", SampleDisplacement(new Vector2(pos.x - map.transform.position.x + map.chunkSize/2, pos.z - map.transform.position.z + map.chunkSize / 2) + displacementOffset, new Vector2(map.chunkSize, map.chunkSize)));
+                block.SetVector("_ParentPos", transform.position);
+                block.SetFloat("_ParentSize", map.chunkSize);
+                block.SetTexture("_DisplacementMap", grassDisplacementMap);
                 Graphics.DrawMeshInstanced(grass, i, grassMaterial, batch, block, UnityEngine.Rendering.ShadowCastingMode.Off, false);
             }
-        }
-    }
-
-    public Color SampleDisplacement(Vector2 pos, Vector2 size)
-    {
-        try
-        {
-            int s = grassDisplacement.height;
-            float x = (pos.x / size.x) * s;
-            float y = (pos.y / size.y) * s;
-            return displacementMap[(int)(y*s + x)];
-        }
-        catch(Exception e)
-        {
-            //print(e.Message);
-            return Color.white;
         }
     }
 }

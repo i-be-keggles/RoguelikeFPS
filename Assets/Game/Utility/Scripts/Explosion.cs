@@ -21,7 +21,7 @@ public class Explosion : MonoBehaviour
             if (origin != null && col.transform.IsChildOf(origin)) continue;
 
             //m = 1 - d^(1/falloff), d = distance/radius
-            float m = 1 - Mathf.Pow(Vector3.Distance(transform.position, col.transform.position) / radius, 1f / falloff);
+            float m = GetFalloff(Vector3.Distance(transform.position, col.transform.position), radius, falloff);
 
             if (m <= 0) continue;
 
@@ -37,4 +37,10 @@ public class Explosion : MonoBehaviour
         Destroy (gameObject, 3f);
     }
 
+
+    public static float GetFalloff(float distance, float radius, float falloff = 0.5f)
+    {
+        float m = 1 - Mathf.Pow(distance / radius, 1f / falloff);
+        return Mathf.Clamp(m,0,1);
+    }
 }
