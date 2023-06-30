@@ -189,7 +189,7 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
-    - _ForceDisplacementMultiplier: 1.57
+    - _ForceDisplacementMultiplier: 0.7
     - _ForceDisplacementOffset: 0.52
     - _Frequency: 4
     - _Gradient_Offset: 0
@@ -267,7 +267,7 @@ Material:
     - _WindDensity: 2
     - _WindDisplacement: 0.3
     - _WindFrequency: 0.1
-    - _WindOverride: 0
+    - _WindOverride: 0.05
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 3
     - _ZTestTransparent: 4

@@ -11,6 +11,8 @@ public class FoliageDisplacementHandler : MonoBehaviour
 
     public float springiness;
 
+    public PlayerMovement player;
+
     private void Start()
     {
         displacement = new Texture2D(resolution, resolution, TextureFormat.ARGB32, false);
@@ -26,7 +28,9 @@ public class FoliageDisplacementHandler : MonoBehaviour
 
     private void Update()
     {
-        return;
+        if (player.grounded) Impact(player.transform.position, 0.5f);
+
+        //return;
         Color[] pixels = displacement.GetPixels();
         for(int i = 0; i < pixels.Length; i++)
         {
@@ -49,12 +53,9 @@ public class FoliageDisplacementHandler : MonoBehaviour
                 float dy = y - pos.y;
                 float d = Mathf.Sqrt(Mathf.Pow(dx, 2) + Mathf.Pow(dy, 2));
                 float m = Explosion.GetFalloff(radius-d, radius);
-                float r = Mathf.Sqrt(Mathf.Pow(d, 2) - Mathf.Pow(dx, 2)) * m;
-                float b = Mathf.Sqrt(Mathf.Pow(d, 2) - Mathf.Pow(dy, 2)) * m;
-                r = dx/radius / m;
-                b = dy/radius / m;
-                displacement.SetPixel(x, y, new Color(r,0,b));
-                //displacement.SetPixel(x, y, new Color((m / dy), 0, (m / dx)));
+                float r = 1 - Mathf.Abs(dy/radius);
+                float b = 1 - Mathf.Abs(dx/radius);
+                displacement.SetPixel(x, y, new Color(r,dx > 0? 0 : 1, b, dy > 0? 0 : 1));
             }
         displacement.Apply();
     }

@@ -16,7 +16,9 @@ public class Explosion : MonoBehaviour
 
         Collider[] cols = Physics.OverlapSphere(transform.position, radius, mask);
 
-        foreach(Collider col in cols)
+        FindObjectOfType<FoliageDisplacementHandler>().Impact(transform.position, radius);
+
+        foreach (Collider col in cols)
         {
             if (origin != null && col.transform.IsChildOf(origin)) continue;
 

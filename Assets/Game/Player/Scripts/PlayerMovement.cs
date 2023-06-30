@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController cc;
     public Transform cam;
 
+    public bool grounded;
+
     void Start()
     {
         if(cc == null) cc = GetComponent<CharacterController>();
@@ -27,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        bool grounded = Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundMask);
+        grounded = Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundMask);
 
         if (grounded)
         {
