@@ -6,15 +6,14 @@ using System;
 
 public class FoliageGenerator : MonoBehaviour
 {
-    public Mesh grass;
-    public Material grassMaterial;
+    public Plant[] plants;
     public float density;
     public float angleCutoff;
     public float displacement;
 
-    public List<Vector3> grassPositions = new List<Vector3>();
+    public List<List<Vector3>> grassPositions = new List<List<Vector3>>();
 
-    private List<List<Matrix4x4>> batches = new List<List<Matrix4x4>>();
+    public List<List<List<Matrix4x4>>> batches = new List<List<List<Matrix4x4>>>();
 
     private bool playing = false;
 
@@ -36,6 +35,13 @@ public class FoliageGenerator : MonoBehaviour
     public void GenerateGrass(float[,] heightMap, Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
     {
         if (!playing) return;
+
+        foreach (Plant plant in plants)
+        {
+            grassPositions.Add(new List<Vector3>());
+            batches.Add(new List<List<Matrix4x4>>());
+        }
+        
         for (int x = 0; x < density; x++)
             for(int y = 0; y < density; y++)
             {
@@ -47,7 +53,8 @@ public class FoliageGenerator : MonoBehaviour
                 if(Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / density, heightMultiplier * 2, -ay * heightMap.GetLength(1) / density), -Vector3.up, out hit)){
                     if (Vector3.Dot(hit.normal, Vector3.up) > angleCutoff)
                     {
-                        grassPositions.Add(hit.point);
+                        int grassType = UnityEngine.Random.Range(0, plants.Length);
+                        grassPositions[grassType].Add(hit.point);
                     }
                 }
             }
@@ -57,36 +64,60 @@ public class FoliageGenerator : MonoBehaviour
     {
         if (!playing) return;
 
-        int addedMatrices = 0;
-        batches.Add(new List<Matrix4x4>());
-
+        print(grassPositions[0].Count + "   " + grassPositions[1].Count);
         for (int i = 0; i < grassPositions.Count; i++)
         {
-            if (addedMatrices < 1000)
+            int addedMatrices = 0;
+            batches[i].Add(new List<Matrix4x4>());
+            for (int j = 0; j < grassPositions[i].Count; j++)
             {
-                batches[batches.Count - 1].Add(Matrix4x4.TRS(grassPositions[i], Quaternion.Euler(new Vector3(-90, UnityEngine.Random.Range(0f, 360f), 0)), Vector3.one));
-                addedMatrices++;
-            }
-            else
-            {
-                batches.Add(new List<Matrix4x4>());
-                addedMatrices = 0;
+                if (addedMatrices < 1000)
+                {
+                    //print(i + " / " + batches.Count + ",  " + (batches[i].Count - 1) + " / " + batches[i].Count);
+                    batches[i][batches[i].Count - 1].Add(Matrix4x4.TRS(grassPositions[i][j] + plants[i].baseOffset, Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0f, 360f), 0) + plants[i].baseRotation), Vector3.one));
+                    addedMatrices++;
+                }
+                else
+                {
+                    batches[i].Add(new List<Matrix4x4>());
+                    addedMatrices = 0;
+                }
             }
         }
     }
 
     private void RenderGrassBatches()
     {
-        foreach(var batch in batches)
+        for(int i = 0; i < plants.Length; i++)
+        foreach(var batch in batches[i])
         {
-            for(int i = 0; i < grass.subMeshCount; i++)
+            for(int j = 0; j < plants[0].mesh.subMeshCount; j++)
             {
                 MaterialPropertyBlock block = new MaterialPropertyBlock();
                 block.SetVector("_ParentPos", transform.position);
                 block.SetFloat("_ParentSize", map.chunkSize);
                 block.SetTexture("_DisplacementMap", grassDisplacementMap);
-                Graphics.DrawMeshInstanced(grass, i, grassMaterial, batch, block, UnityEngine.Rendering.ShadowCastingMode.Off, false);
+                Graphics.DrawMeshInstanced(plants[i].mesh, j, plants[i].material, batch, block, UnityEngine.Rendering.ShadowCastingMode.Off, false);
             }
         }
+    }
+}
+
+[Serializable]
+public struct Plant
+{
+    public String name;
+    public Mesh mesh;
+    public Material material;
+    public Vector3 baseRotation;
+    public Vector3 baseOffset;
+
+    public Plant(String s, Mesh m, Vector3 r, Vector3 d, Material t = null)
+    {
+        name = s;
+        mesh = m;
+        baseRotation = r;
+        baseOffset = d;
+        material = t;
     }
 }

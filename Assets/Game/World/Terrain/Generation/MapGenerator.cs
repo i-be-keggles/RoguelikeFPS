@@ -38,7 +38,9 @@ public class MapGenerator : MonoBehaviour {
     public void GenerateMap() {
         MapDisplay display = FindObjectOfType<MapDisplay>();
 
-        foliage.grassPositions = new List<Vector3>();
+        foliage.grassPositions = new List<List<Vector3>>();
+        foliage.batches = new List<List<List<Matrix4x4>>>();
+
         for(int x = 0; x < mapSize; x++)
             for(int y = 0; y < mapSize; y++)
             {
