@@ -10,7 +10,7 @@ void GrassDisplacement_float(float3 Pos, float3 ParentPos, float ParentSize, Uni
     float x = (pos.x / ParentSize);
     float y = (pos.y / ParentSize);
     if (x / s > 1 || x / s < 0 || y / s > 1 || y / s < 0) {
-        Out = float4(1, 1, 1, 1);
+        Out = float4(0, 0, 0, 0);
         return;
     }
 

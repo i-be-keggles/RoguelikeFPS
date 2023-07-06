@@ -54,6 +54,7 @@ public class FoliageGenerator : MonoBehaviour
                     if (Vector3.Dot(hit.normal, Vector3.up) > angleCutoff)
                     {
                         int grassType = UnityEngine.Random.Range(0, plants.Length);
+                        grassType = 0;
                         grassPositions[grassType].Add(hit.point);
                     }
                 }
