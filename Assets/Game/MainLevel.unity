@@ -9850,25 +9850,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plants:
-  - name: Grass
-    mesh: {fileID: 4579454407841743219, guid: a5c9439725b7b9745abb13deb6393656, type: 3}
-    material: {fileID: 2100000, guid: 44bbf77252ebc194894cea54f52be331, type: 2}
-    baseRotation: {x: -90, y: 0, z: 0}
-    baseOffset: {x: 0, y: 0, z: 0}
-  - name: Wheat
-    mesh: {fileID: 4579454407841743219, guid: ab43d7874e7e5ae48b4e4c308261d96e, type: 3}
-    material: {fileID: 2100000, guid: d813505dab38923448547410f8fb1bc4, type: 2}
-    baseRotation: {x: 90, y: 0, z: 0}
-    baseOffset: {x: 0, y: 0.4, z: 0}
-  - name: Bush
-    mesh: {fileID: 4579454407841743219, guid: 8e927a0c558d96544befd4e3085c3094, type: 3}
-    material: {fileID: 2100000, guid: d268075cdae86c84a99e45be058f1206, type: 2}
-    baseRotation: {x: 90, y: 0, z: 0}
-    baseOffset: {x: 0, y: 0.4, z: 0}
+  - {fileID: 11400000, guid: 791be2b8fa6581f4ca134a7ffd3005fd, type: 2}
+  - {fileID: 11400000, guid: 7756421fb262b534f8a87d4236c955ad, type: 2}
   density: 200
-  angleCutoff: 0.95
   displacement: 2
   grassDisplacementMap: {fileID: 2800000, guid: 9f0b6c6a0d32e1e46a28ac135ecde9a0, type: 3}
+  folaigeDensityMap: {fileID: 0}
+  foliageDensityMapResolution: 256
   map: {fileID: 381774428}
 --- !u!114 &381774433
 MonoBehaviour:

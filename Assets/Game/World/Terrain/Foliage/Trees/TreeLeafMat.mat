@@ -191,6 +191,7 @@ Material:
     - _DetailSmoothnessScale: 1
     - _DiffusionProfile: 0
     - _DiffusionProfileHash: 0
+    - _Displacement: 1
     - _DisplacementLockObjectScale: 1
     - _DisplacementLockTilingScale: 1
     - _DisplacementMode: 0
@@ -206,6 +207,7 @@ Material:
     - _EnableFogOnTransparent: 0
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
+    - _Frequency: 0.1
     - _Glossiness: 0.5
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
@@ -242,7 +244,7 @@ Material:
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
     - _RenderQueueType: 1
-    - _RequireSplitLighting: 0
+    - _RequireSplitLighting: 1
     - _Smoothness: 1
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
@@ -251,10 +253,10 @@ Material:
     - _SpecularOcclusionMode: 1
     - _SquashAmount: 1
     - _SrcBlend: 1
-    - _StencilRef: 0
+    - _StencilRef: 4
     - _StencilRefDepth: 8
     - _StencilRefDistortionVec: 4
-    - _StencilRefGBuffer: 10
+    - _StencilRefGBuffer: 14
     - _StencilRefMV: 40
     - _StencilWriteMask: 6
     - _StencilWriteMaskDepth: 8

@@ -6,9 +6,8 @@ using System;
 
 public class FoliageGenerator : MonoBehaviour
 {
-    public Plant[] plants;
+    public PlantFoliage[] plants;
     public float density;
-    public float angleCutoff;
     public float displacement;
 
     public List<List<Vector3>> grassPositions = new List<List<Vector3>>();
@@ -18,8 +17,11 @@ public class FoliageGenerator : MonoBehaviour
     private bool playing = false;
 
     public Texture2D grassDisplacementMap;
+    public Texture2D foliageDensityMap;
+    public int foliageDensityMapResolution = 512;
 
     public MapGenerator map;
+
 
 
     private void Awake()
@@ -32,33 +34,74 @@ public class FoliageGenerator : MonoBehaviour
         RenderGrassBatches();
     }
 
+    private void DrawToDensity(Foliage foliage, Vector3 position)
+    {
+        float radius = foliage.densityRadius / map.chunkSize * foliageDensityMapResolution;
+        Vector2 pos = new Vector2(position.x - (transform.position.x - map.chunkSize / 2), position.z - (transform.position.z - map.chunkSize / 2)) / map.chunkSize * foliageDensityMapResolution;
+        for (int x = Mathf.Max(Mathf.FloorToInt(pos.x - radius) - 1, 0); x < Mathf.Min(Mathf.FloorToInt(pos.x + radius) + 1, foliageDensityMapResolution); x++)
+            for (int y = Mathf.Max(Mathf.FloorToInt(pos.y - radius) - 1, 0); y < Mathf.Min(Mathf.FloorToInt(pos.y + radius) + 1, foliageDensityMapResolution); y++)
+            {
+                float dx = x - pos.x;
+                float dy = y - pos.y;
+                float d = Mathf.Sqrt(Mathf.Pow(dx, 2) + Mathf.Pow(dy, 2));
+                float m = 1 - Explosion.GetFalloff(radius - d, radius);
+                Color c = foliageDensityMap.GetPixel(x, y);
+                foliageDensityMap.SetPixel(x, y, c + new Color(foliage.GetType() == typeof(PlantFoliage)? m : 0, foliage.GetType() == typeof(TreeFoliage) ? m : 0, foliage.GetType() == typeof(RockFoliage) ? m : 0));
+            }
+        foliageDensityMap.Apply();
+    }
+
+    private Color GetDensityAtPosition(Vector3 position)
+    {
+        Vector2 pos = new Vector2(position.x - (transform.position.x - map.chunkSize / 2), position.z - (transform.position.z - map.chunkSize / 2)) / map.chunkSize * foliageDensityMapResolution;
+        return foliageDensityMap.GetPixel((int)pos.x, (int)pos.y);
+    }
+
     public void GenerateGrass(float[,] heightMap, Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
     {
         if (!playing) return;
 
-        foreach (Plant plant in plants)
+        foliageDensityMap = new Texture2D(foliageDensityMapResolution, foliageDensityMapResolution, TextureFormat.ARGB32, false);
+        for (int x = 0; x < foliageDensityMapResolution; x++)
+            for (int y = 0; y < foliageDensityMapResolution; y++)
+            {
+                foliageDensityMap.SetPixel(x, y, new Color(0, 0, 0));
+            }
+
+        foreach (PlantFoliage plant in plants)
         {
             grassPositions.Add(new List<Vector3>());
             batches.Add(new List<List<Matrix4x4>>());
         }
         
-        for (int x = 0; x < density; x++)
-            for(int y = 0; y < density; y++)
-            {
-                float ax = UnityEngine.Random.Range(x - displacement, x + displacement);
-                float ay = UnityEngine.Random.Range(y - displacement, y + displacement);
+        for(int i = 0; i < plants.Length; i++)
+        {
+            /*
+            List<int> plantIndexes = new List<int>();
+            for(int j = 0; j < plants.Length; j++)
+                if (plants[j].spawnPass == i) plantIndexes.Add(j);
+            */
 
-                Vector3 offset = new Vector3(-heightMap.GetLength(0) / 2f, 0, heightMap.GetLength(1) / 2f);
-                RaycastHit hit;
-                if(Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / density, heightMultiplier * 2, -ay * heightMap.GetLength(1) / density), -Vector3.up, out hit)){
-                    if (Vector3.Dot(hit.normal, Vector3.up) > angleCutoff)
-                    {
-                        int grassType = UnityEngine.Random.Range(0, plants.Length);
-                        grassType = 0;
-                        grassPositions[grassType].Add(hit.point);
+            for (int x = 0; x < density; x++)
+                for(int y = 0; y < density; y++)
+                {
+                    float ax = UnityEngine.Random.Range(x - displacement, x + displacement);
+                    float ay = UnityEngine.Random.Range(y - displacement, y + displacement);
+
+                    Vector3 offset = new Vector3(-heightMap.GetLength(0) / 2f, 0, heightMap.GetLength(1) / 2f);
+                    RaycastHit hit;
+                    if(Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / density, heightMultiplier * 2, -ay * heightMap.GetLength(1) / density), -Vector3.up, out hit)){
+                        float angle = Vector3.Angle(hit.normal, Vector3.up);
+                        PlantFoliage plant = plants[i];
+                        if (UnityEngine.Random.Range(0f,1f) < plant.slopeProbability(angle) * plant.density * (1 - Math.Clamp(GetDensityAtPosition(hit.point).r, 0, 1)))
+                        {
+                            grassPositions[i].Add(hit.point);
+                            DrawToDensity(plant, hit.point);
+                        }
                     }
                 }
-            }
+        }
+
     }
 
     public void GenerateMatrices()
@@ -101,24 +144,5 @@ public class FoliageGenerator : MonoBehaviour
                 Graphics.DrawMeshInstanced(plants[i].mesh, j, plants[i].material, batch, block, UnityEngine.Rendering.ShadowCastingMode.Off, false);
             }
         }
-    }
-}
-
-[Serializable]
-public struct Plant
-{
-    public String name;
-    public Mesh mesh;
-    public Material material;
-    public Vector3 baseRotation;
-    public Vector3 baseOffset;
-
-    public Plant(String s, Mesh m, Vector3 r, Vector3 d, Material t = null)
-    {
-        name = s;
-        mesh = m;
-        baseRotation = r;
-        baseOffset = d;
-        material = t;
     }
 }
