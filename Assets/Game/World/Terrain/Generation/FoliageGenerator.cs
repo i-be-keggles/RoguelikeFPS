@@ -46,7 +46,8 @@ public class FoliageGenerator : MonoBehaviour
                 float d = Mathf.Sqrt(Mathf.Pow(dx, 2) + Mathf.Pow(dy, 2));
                 float m = 1 - Explosion.GetFalloff(radius - d, radius);
                 Color c = foliageDensityMap.GetPixel(x, y);
-                foliageDensityMap.SetPixel(x, y, c + new Color(foliage.GetType() == typeof(PlantFoliage)? m : 0, foliage.GetType() == typeof(TreeFoliage) ? m : 0, foliage.GetType() == typeof(RockFoliage) ? m : 0));
+                int id = foliage.GetID();
+                foliageDensityMap.SetPixel(x, y, c + new Color(id == 0? m : 0, id == 1 ? m : 0, id == 2 ? m : 0));
             }
         foliageDensityMap.Apply();
     }
@@ -76,13 +77,15 @@ public class FoliageGenerator : MonoBehaviour
         
         for(int i = 0; i < plants.Length; i++)
         {
-            /*
-            List<int> plantIndexes = new List<int>();
-            for(int j = 0; j < plants.Length; j++)
-                if (plants[j].spawnPass == i) plantIndexes.Add(j);
-            */
-
-            for (int x = 0; x < density; x++)
+            if (plants[i].clusterSize > 0)
+            {
+                for (int j = 0; j < plants[i].density * map.chunkSize; j++)
+                {
+                    Vector3 position = chunk.position + new Vector3(UnityEngine.Random.Range(-map.chunkSize, map.chunkSize)/2f, heightMultiplier * 2, UnityEngine.Random.Range(-map.chunkSize, map.chunkSize)/2f);
+                    GenerateFoliageCluster(plants[i], position, i);
+                }
+            }
+            else for (int x = 0; x < density; x++)
                 for(int y = 0; y < density; y++)
                 {
                     float ax = UnityEngine.Random.Range(x - displacement, x + displacement);
@@ -91,17 +94,37 @@ public class FoliageGenerator : MonoBehaviour
                     Vector3 offset = new Vector3(-heightMap.GetLength(0) / 2f, 0, heightMap.GetLength(1) / 2f);
                     RaycastHit hit;
                     if(Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / density, heightMultiplier * 2, -ay * heightMap.GetLength(1) / density), -Vector3.up, out hit)){
-                        float angle = Vector3.Angle(hit.normal, Vector3.up);
-                        PlantFoliage plant = plants[i];
-                        if (UnityEngine.Random.Range(0f,1f) < plant.slopeProbability(angle) * plant.density * (1 - Math.Clamp(GetDensityAtPosition(hit.point).r, 0, 1)))
-                        {
-                            grassPositions[i].Add(hit.point);
-                            DrawToDensity(plant, hit.point);
-                        }
+                        TryPlacePlant(plants[i], hit.point, hit.normal, i);
                     }
                 }
         }
 
+    }
+
+    public void GenerateFoliageCluster(PlantFoliage plant, Vector3 position, int plantIndex)
+    {
+        int n = Mathf.RoundToInt(SizeVariation.RandomSize(plant.clusterSize * plant.clusterDensity, plant.clusterVariance));
+        for (int i = 0; i < n; i++)
+        {
+            RaycastHit hit;
+            Vector2 pos = UnityEngine.Random.insideUnitCircle * plant.clusterSize;
+            if (Physics.Raycast(new Vector3(position.x + pos.x, position.y, position.z + pos.y), -Vector3.up, out hit))
+            {
+                TryPlacePlant(plants[plantIndex], hit.point, hit.normal, plantIndex, false);
+            }
+        }
+    }
+
+    public bool TryPlacePlant(PlantFoliage plant, Vector3 position, Vector3 normal, int plantIndex, bool selfDensity=true, bool othersDensity=true)
+    {
+        float angle = Vector3.Angle(normal, Vector3.up);
+        if (UnityEngine.Random.Range(0f, 1f) < plant.SlopeProbability(angle) * (selfDensity? plant.density : 1) * (othersDensity?(1 - Math.Clamp(GetDensityAtPosition(position).r, 0, 1)) : 1))
+        {
+            grassPositions[plantIndex].Add(position);
+            DrawToDensity(plant, position);
+            return true;
+        }
+        else return false;
     }
 
     public void GenerateMatrices()

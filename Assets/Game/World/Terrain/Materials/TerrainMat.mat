@@ -44,6 +44,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _GrassTex:
+        m_Texture: {fileID: 2800000, guid: 5c7d3c2948e6cfe41a696f5cddf67115, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_18938edab816467bb590469ff6a2245f_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 95004eee6956f3f409a9e122d7661f80, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -65,7 +73,7 @@ Material:
     - _AlphaToMask: 0
     - _AlphaToMaskInspectorValue: 0
     - _BlendMode: 0
-    - _Cliff_Cutoff: 0.103
+    - _Cliff_Cutoff: 0.33
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 2
     - _CullModeForward: 2
@@ -76,7 +84,7 @@ Material:
     - _DstBlend: 0
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
-    - _NoiseScale: 1.01
+    - _NoiseScale: 8
     - _OpaqueCullMode: 2
     - _RayTracing: 0
     - _ReceivesSSR: 1
@@ -97,6 +105,7 @@ Material:
     - _StencilWriteMaskMV: 40
     - _SupportDecals: 1
     - _SurfaceType: 0
+    - _TextureSize: 8.48
     - _TransparentBackfaceEnable: 0
     - _TransparentCullMode: 2
     - _TransparentDepthPostpassEnable: 0
@@ -115,6 +124,6 @@ Material:
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _GradientPosition: {r: 0, g: 100, b: 0, a: 0}
-    - _GrassA: {r: 0.015566946, g: 0.46226418, b: 0, a: 1}
-    - _GrassB: {r: 0.22016257, g: 0.5471698, b: 0.17808828, a: 0}
+    - _GrassA: {r: 0.015566945, g: 0.46226412, b: 0, a: 1}
+    - _GrassB: {r: 0.22430804, g: 0.4627451, b: 0.066666655, a: 0}
   m_BuildTextureStacks: []

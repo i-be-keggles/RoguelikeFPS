@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18cfa3f2199b2d84894fe625897dbeda, type: 3}
-  m_Name: WheatFoliage
+  m_Name: FlowerFoliage
   m_EditorClassIdentifier: 
-  name: Wheat
-  density: 0.161
+  name: Flowers
+  density: 0.123
   densityRadius: 0.1
-  slopeCutoff: 12.6
+  slopeCutoff: 51.4
   slopeAversion: 0
-  material: {fileID: 2100000, guid: d813505dab38923448547410f8fb1bc4, type: 2}
-  baseRotation: {x: -90, y: 0, z: 0}
-  baseOffset: {x: 0, y: 0, z: 0}
-  mesh: {fileID: 4579454407841743219, guid: a5c9439725b7b9745abb13deb6393656, type: 3}
+  material: {fileID: 2100000, guid: 798419c9e06d7e14294336ef56a9adda, type: 2}
+  baseRotation: {x: 0, y: 0, z: 0}
+  baseOffset: {x: 0, y: 0.1, z: 0}
+  mesh: {fileID: -462981019419857548, guid: ca4e5cc9cb603ca44a13fedb8611f9b7, type: 3}
   spawnPass: 0
-  clusterSize: 0
-  clusterDensity: 0
-  clusterVariance: 0
+  clusterSize: 3
+  clusterDensity: 10
+  clusterVariance: 1

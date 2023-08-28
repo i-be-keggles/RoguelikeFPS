@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BasicGrassFoliage
   m_EditorClassIdentifier: 
   name: Basic Grass
-  density: 0.365
+  density: 1
   densityRadius: 0.1
   slopeCutoff: 18.3
   slopeAversion: 0.217
@@ -22,3 +22,6 @@ MonoBehaviour:
   baseOffset: {x: 0, y: 0, z: 0}
   mesh: {fileID: 4579454407841743219, guid: a5c9439725b7b9745abb13deb6393656, type: 3}
   spawnPass: 0
+  clusterSize: 0
+  clusterDensity: 0
+  clusterVariance: 0

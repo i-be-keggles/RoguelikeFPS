@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18cfa3f2199b2d84894fe625897dbeda, type: 3}
-  m_Name: WheatFoliage
+  m_Name: BushFoliage
   m_EditorClassIdentifier: 
-  name: Wheat
-  density: 0.161
-  densityRadius: 0.1
-  slopeCutoff: 12.6
+  name: Bush
+  density: 0.17
+  densityRadius: 0.2
+  slopeCutoff: 50.5
   slopeAversion: 0
-  material: {fileID: 2100000, guid: d813505dab38923448547410f8fb1bc4, type: 2}
+  material: {fileID: 2100000, guid: d268075cdae86c84a99e45be058f1206, type: 2}
   baseRotation: {x: -90, y: 0, z: 0}
   baseOffset: {x: 0, y: 0, z: 0}
-  mesh: {fileID: 4579454407841743219, guid: a5c9439725b7b9745abb13deb6393656, type: 3}
+  mesh: {fileID: 4579454407841743219, guid: 8e927a0c558d96544befd4e3085c3094, type: 3}
   spawnPass: 0
-  clusterSize: 0
-  clusterDensity: 0
-  clusterVariance: 0
+  clusterSize: 1
+  clusterDensity: 3
+  clusterVariance: 1
