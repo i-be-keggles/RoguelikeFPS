@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Rock
   density: 1
   densityRadius: 2
-  slopeCutoff: 0
+  slopeCutoff: 90
   slopeAversion: 0
   material: {fileID: 0}
   baseRotation: {x: 0, y: 0, z: 0}

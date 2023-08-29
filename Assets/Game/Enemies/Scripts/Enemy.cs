@@ -28,6 +28,8 @@ public class Enemy : MonoBehaviour
     public float attackSpeed;
     protected float timeToAttack;
 
+    public int scoreValue;
+
     [Header("Status")]
     public EnemyState enemyState;
 
@@ -47,6 +49,7 @@ public class Enemy : MonoBehaviour
     public LayerMask sightMask;
 
     private Coroutine loseSight;
+    public ScoreManager scoreManager;
 
 
     public void Start()
@@ -58,6 +61,12 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 
         agent.SetDestination(moveLocation);
+    }
+
+    public void Init(EnemyTarget p, ScoreManager s)
+    {
+        player = p;
+        scoreManager = s;
     }
 
     protected void Update()
@@ -211,6 +220,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
+        scoreManager.AddScore(scoreValue);
         Destroy(gameObject);
     }
 }

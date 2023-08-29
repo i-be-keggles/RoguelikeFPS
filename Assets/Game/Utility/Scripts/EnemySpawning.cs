@@ -21,6 +21,7 @@ public class EnemySpawning : MonoBehaviour
 
     private float totalRatio = 0;
 
+    private ScoreManager scoreManager;
     private PlayerLifeCycleHandler player;
 
     [Header("Swarms")]
@@ -40,6 +41,7 @@ public class EnemySpawning : MonoBehaviour
 
     private float timeToSwarm;
 
+
     [System.Serializable]
     public struct SpawnRatio
     {
@@ -56,6 +58,7 @@ public class EnemySpawning : MonoBehaviour
     private void Start()
     {
         player = FindObjectOfType<PlayerLifeCycleHandler>();
+        scoreManager = GetComponent<ScoreManager>();
         foreach(SpawnRatio ratio in spawnRatios)
         {
             totalRatio += ratio.spawnRate;
@@ -92,7 +95,10 @@ public class EnemySpawning : MonoBehaviour
             if (point != null)
             {
                 GameObject g = GetRandomEnemy(spawnRatios);
-                if (g != null) Instantiate(g, point.Value, Quaternion.identity);
+                if (g != null)
+                {
+                    Instantiate(g, point.Value, Quaternion.identity).GetComponent<Enemy>().Init(player.GetComponent<EnemyTarget>(), scoreManager);
+                }
             }
         }
     }

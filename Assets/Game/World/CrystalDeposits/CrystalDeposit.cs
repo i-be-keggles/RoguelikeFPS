@@ -22,6 +22,9 @@ public class CrystalDeposit : MonoBehaviour
 
     private EnemyTarget lifecycle;
 
+    public float initialScoreValue = 100;
+    public ScoreManager scoreManager;
+
     public int phase = 0; //0 = idle, 1 = pod dropping, 2 = waiting for extract, 3 = extracting, 4 = depleted
 
 
@@ -61,6 +64,8 @@ public class CrystalDeposit : MonoBehaviour
             interactable.enabled = false;
 
             CallPod();
+
+            scoreManager.AddScore(initialScoreValue);
         }
         else if(phase == 1)
         {
@@ -97,7 +102,9 @@ public class CrystalDeposit : MonoBehaviour
     private void Strike()
     {
         //play animation
-        curValue -= Math.Min(curValue, maxValue * strikeInterval / extractionTime);
+        float c = Math.Min(curValue, maxValue * strikeInterval / extractionTime);
+        curValue -= c;
+        scoreManager.AddCrystal(c);
     }
 
     public void TakeDamage(object sender, float damage)

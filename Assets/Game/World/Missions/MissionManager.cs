@@ -10,6 +10,7 @@ public abstract class MissionManager : MonoBehaviour
     public List<Objective> objectives;
 
     public EnemySpawning spawnManager;
+    public ScoreManager scoreManager;
 
 
     private void Update()
@@ -21,6 +22,7 @@ public abstract class MissionManager : MonoBehaviour
     {
         Objective objective = objectives[o];
         float r = objective.Complete(time, spawnManager);
+        scoreManager.AddScore(r);
         print($"Objective '{objective.name}' complete! +{r} points!");
     }
 
