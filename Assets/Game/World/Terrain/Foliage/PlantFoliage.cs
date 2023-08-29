@@ -7,10 +7,4 @@ public class PlantFoliage : Foliage
 {
     public Mesh mesh;
     [Range(0, 2)] public int spawnPass;
-
-    [Space]
-    [Tooltip("0 = no clusters.")]
-    public int clusterSize;
-    public float clusterDensity;
-    public float clusterVariance;
 }

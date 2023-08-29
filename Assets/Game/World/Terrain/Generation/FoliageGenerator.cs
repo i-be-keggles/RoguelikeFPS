@@ -6,16 +6,32 @@ using System;
 
 public class FoliageGenerator : MonoBehaviour
 {
+    public LayerMask terrainMask;
+
     public PlantFoliage[] plants;
-    public float density;
+    public float plantDensity;
     public float displacement;
 
+    [Space]
+    public TreeFoliage[] trees;
+    public float treeDensity;
+    public float treeNoiseScale;
+    public float[,] treeNoiseMap;
+    public Texture2D treeNoiseMapTex;
+    private List<GameObject> spawnedTrees;
+
+    [Space]
+    public RockFoliage[] rocks;
+    public float rockDensity;
+
+    [Space]
     public List<List<Vector3>> grassPositions = new List<List<Vector3>>();
 
     public List<List<List<Matrix4x4>>> batches = new List<List<List<Matrix4x4>>>();
 
     private bool playing = false;
 
+    [Space]
     public Texture2D grassDisplacementMap;
     public Texture2D foliageDensityMap;
     public int foliageDensityMapResolution = 512;
@@ -23,10 +39,10 @@ public class FoliageGenerator : MonoBehaviour
     public MapGenerator map;
 
 
-
     private void Awake()
     {
         playing = true;
+        spawnedTrees = new List<GameObject>();
     }
 
     private void Update()
@@ -82,46 +98,137 @@ public class FoliageGenerator : MonoBehaviour
                 for (int j = 0; j < plants[i].density * map.chunkSize; j++)
                 {
                     Vector3 position = chunk.position + new Vector3(UnityEngine.Random.Range(-map.chunkSize, map.chunkSize)/2f, heightMultiplier * 2, UnityEngine.Random.Range(-map.chunkSize, map.chunkSize)/2f);
-                    GenerateFoliageCluster(plants[i], position, i);
+                    GenerateFoliageCluster(plants[i], position, i, chunk);
                 }
             }
-            else for (int x = 0; x < density; x++)
-                for(int y = 0; y < density; y++)
+            else for (int x = 0; x < plantDensity; x++)
+                for(int y = 0; y < plantDensity; y++)
                 {
                     float ax = UnityEngine.Random.Range(x - displacement, x + displacement);
                     float ay = UnityEngine.Random.Range(y - displacement, y + displacement);
 
                     Vector3 offset = new Vector3(-heightMap.GetLength(0) / 2f, 0, heightMap.GetLength(1) / 2f);
                     RaycastHit hit;
-                    if(Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / density, heightMultiplier * 2, -ay * heightMap.GetLength(1) / density), -Vector3.up, out hit)){
-                        TryPlacePlant(plants[i], hit.point, hit.normal, i);
+                    if(Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / plantDensity, heightMultiplier * 2, -ay * heightMap.GetLength(1) / plantDensity), -Vector3.up, out hit, heightMultiplier*5, terrainMask)){
+                        TryPlaceFoliage(plants[i], hit.point, hit.normal, i, chunk);
                     }
                 }
         }
-
     }
 
-    public void GenerateFoliageCluster(PlantFoliage plant, Vector3 position, int plantIndex)
+    public void GenerateTrees(float[,] heightMap, Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
     {
-        int n = Mathf.RoundToInt(SizeVariation.RandomSize(plant.clusterSize * plant.clusterDensity, plant.clusterVariance));
+        if (!playing) return;
+
+        foreach (GameObject tree in spawnedTrees) Destroy(tree);
+        spawnedTrees = new List<GameObject>();
+
+        int noiseSize = (int) treeDensity * map.chunkSize / 10;
+        treeNoiseMap = Noise.GenerateNoiseMap(noiseSize, noiseSize, map.seed, treeNoiseScale, 2, 0.2f, 1.5f, new Vector2(0.234234f, 0.12412f));
+        //treeNoiseMap = new float[noiseSize, noiseSize];
+
+        treeNoiseMapTex = new Texture2D(noiseSize, noiseSize, TextureFormat.ARGB32, false);
+        for (int x = 0; x < noiseSize; x++)
+            for (int y = 0; y < noiseSize; y++)
+            {
+                //treeNoiseMap[x, y] = Mathf.PerlinNoise(x * treeNoiseScale, y * treeNoiseScale);
+                float r = treeNoiseMap[x, y];
+                treeNoiseMapTex.SetPixel(x, y, new Color(r,r,r));
+            }
+        treeNoiseMapTex.Apply();
+
+        for (int i = 0; i < trees.Length; i++)
+        {
+            if (trees[i].clusterSize > 0)
+            {
+                for (int j = 0; j < trees[i].density * map.chunkSize; j++)
+                {
+                    Vector3 position = chunk.position + new Vector3(UnityEngine.Random.Range(-map.chunkSize, map.chunkSize) / 2f, heightMultiplier * 2, UnityEngine.Random.Range(-map.chunkSize, map.chunkSize) / 2f);
+                    GenerateFoliageCluster(trees[i], position, i, chunk);
+                }
+            }
+            else for (int x = 0; x < treeDensity; x++)
+                    for (int y = 0; y < treeDensity; y++)
+                    {
+                        float ax = UnityEngine.Random.Range(x - displacement, x + displacement);
+                        float ay = UnityEngine.Random.Range(y - displacement, y + displacement);
+
+                        Vector3 offset = new Vector3(-heightMap.GetLength(0) / 2f, 0, heightMap.GetLength(1) / 2f);
+                        RaycastHit hit;
+                        if (Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / treeDensity, heightMultiplier * 2, -ay * heightMap.GetLength(1) / treeDensity), -Vector3.up, out hit, heightMultiplier * 5, terrainMask))
+                        {
+                            TryPlaceFoliage(trees[i], hit.point, hit.normal, i, chunk);
+                        }
+                    }
+        }
+    }
+
+    public void GenerateRocks(float[,] heightMap, Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
+    {
+        if (!playing) return;
+
+        for (int i = 0; i < rocks.Length; i++)
+        {
+            if (rocks[i].clusterSize > 0)
+            {
+                for (int j = 0; j < rocks[i].density * map.chunkSize; j++)
+                {
+                    Vector3 position = chunk.position + new Vector3(UnityEngine.Random.Range(-map.chunkSize, map.chunkSize) / 2f, heightMultiplier * 2, UnityEngine.Random.Range(-map.chunkSize, map.chunkSize) / 2f);
+                    GenerateFoliageCluster(rocks[i], position, i, chunk);
+                }
+            }
+            else for (int x = 0; x < rockDensity; x++)
+                    for (int y = 0; y < rockDensity; y++)
+                    {
+                        float ax = UnityEngine.Random.Range(x - displacement, x + displacement);
+                        float ay = UnityEngine.Random.Range(y - displacement, y + displacement);
+
+                        Vector3 offset = new Vector3(-heightMap.GetLength(0) / 2f, 0, heightMap.GetLength(1) / 2f);
+                        RaycastHit hit;
+                        if (Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / rockDensity, heightMultiplier * 2, -ay * heightMap.GetLength(1) / rockDensity), -Vector3.up, out hit, heightMultiplier * 5, terrainMask))
+                        {
+                            TryPlaceFoliage(rocks[i], hit.point, hit.normal, i, chunk);
+                        }
+                    }
+        }
+    }
+
+    public void GenerateFoliageCluster(Foliage foliage, Vector3 position, int plantIndex, Transform chunk)
+    {
+        int n = Mathf.RoundToInt(SizeVariation.RandomSize(foliage.clusterSize * foliage.clusterDensity, foliage.clusterVariance));
         for (int i = 0; i < n; i++)
         {
             RaycastHit hit;
-            Vector2 pos = UnityEngine.Random.insideUnitCircle * plant.clusterSize;
-            if (Physics.Raycast(new Vector3(position.x + pos.x, position.y, position.z + pos.y), -Vector3.up, out hit))
+            Vector2 pos = UnityEngine.Random.insideUnitCircle * foliage.clusterSize;
+            if (Physics.Raycast(new Vector3(position.x + pos.x, position.y, position.z + pos.y), -Vector3.up, out hit, 200, terrainMask))
             {
-                TryPlacePlant(plants[plantIndex], hit.point, hit.normal, plantIndex, false);
+                TryPlaceFoliage(foliage, hit.point, hit.normal, plantIndex, chunk, foliage.GetID() != 0);
             }
         }
     }
 
-    public bool TryPlacePlant(PlantFoliage plant, Vector3 position, Vector3 normal, int plantIndex, bool selfDensity=true, bool othersDensity=true)
+    public bool TryPlaceFoliage(Foliage foliage, Vector3 position, Vector3 normal, int plantIndex, Transform chunk, bool selfDensity=true, bool othersDensity=true)
     {
         float angle = Vector3.Angle(normal, Vector3.up);
-        if (UnityEngine.Random.Range(0f, 1f) < plant.SlopeProbability(angle) * (selfDensity? plant.density : 1) * (othersDensity?(1 - Math.Clamp(GetDensityAtPosition(position).r, 0, 1)) : 1))
+        float spawnChance = foliage.SlopeProbability(angle) * (selfDensity ? foliage.density : 1) * (othersDensity ? (1 - Math.Clamp(GetDensityAtPosition(position).r, 0, 1)) : 1);
+
+        if (foliage.GetID() == 1)
         {
-            grassPositions[plantIndex].Add(position);
-            DrawToDensity(plant, position);
+            //Vector2 treeNoisePos = new Vector2(position.x - (transform.position.x - map.chunkSize / 2), position.z - (transform.position.z - map.chunkSize / 2)) / map.chunkSize * (treeDensity * map.chunkSize / 10);
+            Vector2 treeNoisePos = new Vector2(position.x - (chunk.position.x - map.chunkSize / 2), position.z - (chunk.position.z - map.chunkSize / 2)) / map.chunkSize * (treeDensity * map.chunkSize / 10);
+            spawnChance = foliage.SlopeProbability(angle) * treeNoiseMap[(int)treeNoisePos.x, (int)treeNoisePos.y];
+        }
+        
+        if ((foliage.GetID() != 1? UnityEngine.Random.Range(0f, 1f) : 1 - foliage.density) < spawnChance)
+        {
+            if (foliage.GetID() == 0) grassPositions[plantIndex].Add(position);
+            else
+            {
+                GameObject go = Instantiate(foliage.GetPrefab(), position + foliage.baseOffset, Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0f, 360f), 0) + foliage.baseRotation), chunk);
+                go.transform.localScale = go.transform.localScale * SizeVariation.RandomSize(1, 0.1f);
+                spawnedTrees.Add(go);
+            }
+            DrawToDensity(foliage, position);
             return true;
         }
         else return false;
@@ -131,7 +238,6 @@ public class FoliageGenerator : MonoBehaviour
     {
         if (!playing) return;
 
-        print(grassPositions[0].Count + "   " + grassPositions[1].Count);
         for (int i = 0; i < grassPositions.Count; i++)
         {
             int addedMatrices = 0;

@@ -33,6 +33,8 @@ public class MapDisplay : MonoBehaviour {
             chunks[ids.x].gameObject.GetComponent<MeshFilter>().sharedMesh = mesh;
             chunks[ids.x].gameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
             foliage.GenerateGrass(height, chunks[ids.x].gameObject.transform, generator.meshHeightMultiplier, generator.meshHeightCurve);
+            foliage.GenerateTrees(height, chunks[ids.x].gameObject.transform, generator.meshHeightMultiplier, generator.meshHeightCurve);
+            foliage.GenerateRocks(height, chunks[ids.x].gameObject.transform, generator.meshHeightMultiplier, generator.meshHeightCurve);
         }
         else if (ids.x == ids.y)
         {
@@ -44,12 +46,16 @@ public class MapDisplay : MonoBehaviour {
             go.transform.SetParent(transform);
             go.transform.localPosition = pos;
 
+            go.layer = 9;
+
             go.AddComponent<MeshFilter>().sharedMesh = mesh;
             go.AddComponent<MeshCollider>().sharedMesh = mesh;
             go.AddComponent<MeshRenderer>().material = material;
 
             chunks.Add(new TerrainChunk(meshData, go));
             foliage.GenerateGrass(height, go.transform, generator.meshHeightMultiplier, generator.meshHeightCurve);
+            foliage.GenerateTrees(height, go.transform, generator.meshHeightMultiplier, generator.meshHeightCurve);
+            foliage.GenerateRocks(height, go.transform, generator.meshHeightMultiplier, generator.meshHeightCurve);
         }
     }
 

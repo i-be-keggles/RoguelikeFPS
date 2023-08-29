@@ -6,4 +6,10 @@ using UnityEngine;
 public class TreeFoliage : Foliage
 {
     public GameObject mesh;
+    public float sizeVariation;
+
+    public override GameObject GetPrefab()
+    {
+        return mesh;
+    }
 }

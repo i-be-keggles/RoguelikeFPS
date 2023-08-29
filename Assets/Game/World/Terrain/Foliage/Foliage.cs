@@ -17,6 +17,11 @@ public abstract class Foliage : ScriptableObject
     public Vector3 baseRotation;
     public Vector3 baseOffset;
 
+    [Space]
+    [Tooltip("0 = no clusters.")]
+    public int clusterSize;
+    public float clusterDensity;
+    public float clusterVariance;
 
     [Tooltip("Calculates probability of plant spawning at given steepness.")]
     public float SlopeProbability(float angle)
@@ -29,5 +34,10 @@ public abstract class Foliage : ScriptableObject
     {
         Type t = GetType();
         return t == typeof(PlantFoliage) ? 0 : t == typeof(TreeFoliage) ? 1 : 2;
+    }
+
+    public virtual GameObject GetPrefab()
+    {
+        return null;
     }
 }

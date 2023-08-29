@@ -5,6 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GrassObject", menuName = "Foliage/Rock")]
 public class RockFoliage : Foliage
 {
-    public Mesh mesh;
-    [Range(0, 2)] public int spawnPass;
+    public GameObject mesh;
+
+    public override GameObject GetPrefab()
+    {
+        return mesh;
+    }
 }
