@@ -182,7 +182,7 @@ public class Enemy : MonoBehaviour
         foreach(Collider col in cols)
         {
             EnemyTarget t = col.GetComponent<EnemyTarget>();
-            if (t != null && t.isActiveAndEnabled)
+            if (t != null && t.isActiveAndEnabled && t.active)
             {
                 targets.Add(t);
                 totPriority += t.priority;

@@ -29,6 +29,8 @@ public class EnemyTarget : MonoBehaviour
     public void Die()
     {
         died?.Invoke(this, EventArgs.Empty);
+        active = false;
+        enabled = false;
     }
 
     public void Deactivate()

@@ -378,7 +378,7 @@ MonoBehaviour:
   magazineSize: 24
   curAmmo: 0
   totalAmmo: 0
-  startingAmmo: 80
+  startingAmmo: 200
   reloadTime: 3
   reloading: 0
   anim: {fileID: 6129107481177610189}

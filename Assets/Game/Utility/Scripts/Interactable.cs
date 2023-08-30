@@ -8,6 +8,12 @@ public class Interactable : MonoBehaviour
     public event EventHandler interactedWith;
 
     public string promptText;
+    public bool active;
+
+    private void Awake()
+    {
+        active = true;
+    }
 
     public void Trigger(object sender, EventArgs e)
     {

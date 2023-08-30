@@ -119,12 +119,12 @@ MonoBehaviour:
   magazineSize: 16
   curAmmo: 0
   totalAmmo: 0
-  startingAmmo: 80
+  startingAmmo: 150
   reloadTime: 2
   reloading: 0
   anim: {fileID: 8534150822745692319}
-  recoilV: 3
-  recoilH: 2
+  recoilV: 2
+  recoilH: 1
   muzzleFlashPoint: {fileID: 2375915864042975721}
   muzzleFlash: {fileID: 2791568626359921022, guid: 35fde8b019bb1244d9776eb6b920537b, type: 3}
   hitFX: {fileID: 8046975824046428721, guid: f5be76de59225034d9422613296d91ad, type: 3}

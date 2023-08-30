@@ -49,11 +49,6 @@ public class CrystalDeposit : MonoBehaviour
                 timeToStrike = strikeInterval;
                 Strike();
             }
-
-            if (curValue <= 0)
-            {
-                HandlePhaseChange(this, EventArgs.Empty);
-            }
         }
     }
 
@@ -61,6 +56,7 @@ public class CrystalDeposit : MonoBehaviour
     {
         if(phase == 0)
         {
+            interactable.active = false;
             interactable.enabled = false;
 
             CallPod();
@@ -69,17 +65,21 @@ public class CrystalDeposit : MonoBehaviour
         }
         else if(phase == 1)
         {
+            interactable.active = true;
             interactable.enabled = true;
             interactable.promptText = "Start extraction";
         }
         else if(phase == 2)
         {
+            interactable.active = false;
+            interactable.enabled = false;
+
             StartExtraction();
         }
         else if(phase == 3)
         {
-            lifecycle.Die();
-            
+            lifecycle.Deactivate();
+            enabled = false;
         }
 
         phase++;
@@ -103,12 +103,13 @@ public class CrystalDeposit : MonoBehaviour
     {
         //play animation
         float c = Math.Min(curValue, maxValue * strikeInterval / extractionTime);
-        curValue -= c;
+        TakeDamage(this, c);
         scoreManager.AddCrystal(c);
     }
 
     public void TakeDamage(object sender, float damage)
     {
         curValue -= damage * damageValueMultiplier;
+        if (curValue <= 0) HandlePhaseChange(this, EventArgs.Empty);
     }
 }

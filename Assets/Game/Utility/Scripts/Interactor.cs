@@ -27,7 +27,7 @@ public class Interactor : MonoBehaviour
         }
         else target = null;
 
-        if (target != null)
+        if (target != null && target.active)
         {
             uiManager.UpdateInteractText("[" + interactKey.ToString() + "] " + target.promptText);
             if (Input.GetKeyDown(interactKey))
