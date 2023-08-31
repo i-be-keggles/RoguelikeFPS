@@ -74,7 +74,7 @@ public class FoliageGenerator : MonoBehaviour
         return foliageDensityMap.GetPixel((int)pos.x, (int)pos.y);
     }
 
-    public void GenerateGrass(float[,] heightMap, Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
+    public void GenerateGrass(Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
     {
         if (!playing) return;
 
@@ -107,16 +107,16 @@ public class FoliageGenerator : MonoBehaviour
                     float ax = UnityEngine.Random.Range(x - displacement, x + displacement);
                     float ay = UnityEngine.Random.Range(y - displacement, y + displacement);
 
-                    Vector3 offset = new Vector3(-heightMap.GetLength(0) / 2f, 0, heightMap.GetLength(1) / 2f);
+                    Vector3 offset = new Vector3(-map.chunkSize / 2f, 0, map.chunkSize / 2f);
                     RaycastHit hit;
-                    if(Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / plantDensity, heightMultiplier * 2, -ay * heightMap.GetLength(1) / plantDensity), -Vector3.up, out hit, heightMultiplier*5, terrainMask)){
-                        TryPlaceFoliage(plants[i], hit.point, hit.normal, i, chunk);
+                    if(Physics.Raycast(chunk.position + offset + new Vector3(ax * map.chunkSize / plantDensity, heightMultiplier * 2, -ay * map.chunkSize / plantDensity), -Vector3.up, out hit, heightMultiplier*5, terrainMask)){
+                        if(hit.transform == chunk) TryPlaceFoliage(plants[i], hit.point, hit.normal, i, chunk);
                     }
                 }
         }
     }
 
-    public void GenerateTrees(float[,] heightMap, Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
+    public void GenerateTrees(Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
     {
         if (!playing) return;
 
@@ -153,17 +153,17 @@ public class FoliageGenerator : MonoBehaviour
                         float ax = UnityEngine.Random.Range(x - displacement, x + displacement);
                         float ay = UnityEngine.Random.Range(y - displacement, y + displacement);
 
-                        Vector3 offset = new Vector3(-heightMap.GetLength(0) / 2f, 0, heightMap.GetLength(1) / 2f);
+                        Vector3 offset = new Vector3(-map.chunkSize / 2f, 0, map.chunkSize / 2f);
                         RaycastHit hit;
-                        if (Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / treeDensity, heightMultiplier * 2, -ay * heightMap.GetLength(1) / treeDensity), -Vector3.up, out hit, heightMultiplier * 5, terrainMask))
+                        if (Physics.Raycast(chunk.position + offset + new Vector3(ax * map.chunkSize / treeDensity, heightMultiplier * 2, -ay * map.chunkSize / treeDensity), -Vector3.up, out hit, heightMultiplier * 5, terrainMask))
                         {
-                            TryPlaceFoliage(trees[i], hit.point, hit.normal, i, chunk);
+                            if (hit.transform == chunk) TryPlaceFoliage(trees[i], hit.point, hit.normal, i, chunk);
                         }
                     }
         }
     }
 
-    public void GenerateRocks(float[,] heightMap, Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
+    public void GenerateRocks(Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
     {
         if (!playing) return;
 
@@ -183,11 +183,11 @@ public class FoliageGenerator : MonoBehaviour
                         float ax = UnityEngine.Random.Range(x - displacement, x + displacement);
                         float ay = UnityEngine.Random.Range(y - displacement, y + displacement);
 
-                        Vector3 offset = new Vector3(-heightMap.GetLength(0) / 2f, 0, heightMap.GetLength(1) / 2f);
+                        Vector3 offset = new Vector3(-map.chunkSize / 2f, 0, map.chunkSize / 2f);
                         RaycastHit hit;
-                        if (Physics.Raycast(chunk.position + offset + new Vector3(ax * heightMap.GetLength(0) / rockDensity, heightMultiplier * 2, -ay * heightMap.GetLength(1) / rockDensity), -Vector3.up, out hit, heightMultiplier * 5, terrainMask))
+                        if (Physics.Raycast(chunk.position + offset + new Vector3(ax * map.chunkSize / rockDensity, heightMultiplier * 2, -ay * map.chunkSize / rockDensity), -Vector3.up, out hit, heightMultiplier * 5, terrainMask))
                         {
-                            TryPlaceFoliage(rocks[i], hit.point, hit.normal, i, chunk);
+                            if (hit.transform == chunk) TryPlaceFoliage(rocks[i], hit.point, hit.normal, i, chunk);
                         }
                     }
         }
@@ -202,7 +202,7 @@ public class FoliageGenerator : MonoBehaviour
             Vector2 pos = UnityEngine.Random.insideUnitCircle * foliage.clusterSize;
             if (Physics.Raycast(new Vector3(position.x + pos.x, position.y, position.z + pos.y), -Vector3.up, out hit, 200, terrainMask))
             {
-                TryPlaceFoliage(foliage, hit.point, hit.normal, plantIndex, chunk, foliage.GetID() != 0);
+                if (hit.transform == chunk) TryPlaceFoliage(foliage, hit.point, hit.normal, plantIndex, chunk, foliage.GetID() != 0);
             }
         }
     }

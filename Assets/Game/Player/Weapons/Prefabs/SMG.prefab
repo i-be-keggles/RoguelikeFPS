@@ -390,6 +390,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   hitImpactForce: 1000
   weaponHandler: {fileID: 0}
+  interactable: {fileID: 0}
 --- !u!95 &6129107481177610189
 Animator:
   serializedVersion: 4

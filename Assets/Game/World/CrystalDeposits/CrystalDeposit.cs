@@ -23,13 +23,15 @@ public class CrystalDeposit : MonoBehaviour
     private EnemyTarget lifecycle;
 
     public float initialScoreValue = 100;
-    public ScoreManager scoreManager;
+    private ScoreManager scoreManager;
 
     public int phase = 0; //0 = idle, 1 = pod dropping, 2 = waiting for extract, 3 = extracting, 4 = depleted
 
 
     private void Start()
     {
+        scoreManager = FindObjectOfType<ScoreManager>();
+
         interactable = GetComponent<Interactable>();
         interactable.interactedWith += HandlePhaseChange;
         lifecycle = GetComponent<EnemyTarget>();
@@ -102,12 +104,12 @@ public class CrystalDeposit : MonoBehaviour
     private void Strike()
     {
         //play animation
-        float c = Math.Min(curValue, maxValue * strikeInterval / extractionTime);
+        int c = Mathf.RoundToInt(Math.Min(curValue, maxValue * strikeInterval / extractionTime));
         TakeDamage(this, c);
         scoreManager.AddCrystal(c);
     }
 
-    public void TakeDamage(object sender, float damage)
+    public void TakeDamage(object sender, int damage)
     {
         curValue -= damage * damageValueMultiplier;
         if (curValue <= 0) HandlePhaseChange(this, EventArgs.Empty);

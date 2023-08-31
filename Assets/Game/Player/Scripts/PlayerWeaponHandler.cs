@@ -65,7 +65,7 @@ public class PlayerWeaponHandler : MonoBehaviour
                 //display text
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    PickupWeapon(weapon);
+                    //PickupWeapon(weapon);
                 }
             }
         }
@@ -99,7 +99,7 @@ public class PlayerWeaponHandler : MonoBehaviour
         recoil.ClearHeat();
     }
 
-    public void PickupWeapon(Weapon weapon)
+    public void PickupWeapon(object sender, Weapon weapon)
     {
         for(int i = 0; i < weapons.Count; i++)
         {
@@ -123,8 +123,6 @@ public class PlayerWeaponHandler : MonoBehaviour
         weapon.transform.SetParent(weaponHolder);
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localEulerAngles = Vector3.zero;
-
-        weapon.weaponHandler = this;
 
         Collider[] cols = weapon.GetComponentsInChildren<Collider>();
 

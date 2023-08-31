@@ -42,6 +42,7 @@ public class Weapon : MonoBehaviour
 
     [Space]
     public PlayerWeaponHandler weaponHandler;
+    public Interactable interactable;
 
     void Start()
     {
@@ -50,6 +51,11 @@ public class Weapon : MonoBehaviour
         totalAmmo += startingAmmo; //move to on pickup
 
         rb = GetComponent<Rigidbody>();
+
+        weaponHandler = FindObjectOfType<PlayerWeaponHandler>();
+        interactable = gameObject.AddComponent<Interactable>();
+        interactable.promptText = "Pickup " + name;
+        interactable.interactedWith += OnPickup;
     }
 
     void Update()
@@ -57,6 +63,11 @@ public class Weapon : MonoBehaviour
         if (!enabled) return;
 
         if (timeToFire > 0) timeToFire -= Time.deltaTime;
+    }
+
+    public void OnPickup(object sender, System.EventArgs e)
+    {
+        weaponHandler.PickupWeapon(this, this);
     }
 
     public void Fire(PlayerWeaponHandler player)

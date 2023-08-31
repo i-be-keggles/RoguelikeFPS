@@ -28,7 +28,7 @@ public class Explosion : MonoBehaviour
             if (m <= 0) continue;
 
             PlayerLifeCycleHandler player = col.transform.GetComponentInParent<PlayerLifeCycleHandler>();
-            if (player != null) player.TakeDamage((int)(damage * m));
+            if (player != null) player.TakeDamage(this, (int)(damage * m));
 
             Enemy enemy = col.transform.GetComponentInParent<Enemy>();
             if(enemy != null) enemy.TakeDamage((int)(damage * m));

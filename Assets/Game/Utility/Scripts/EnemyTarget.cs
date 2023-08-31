@@ -5,7 +5,7 @@ public class EnemyTarget : MonoBehaviour
 {
     [Min(1)] public float priority;
 
-    public event EventHandler<float> onTakeDamage;
+    public event EventHandler<int> onTakeDamage;
 
     public event EventHandler died;
 
@@ -16,7 +16,7 @@ public class EnemyTarget : MonoBehaviour
         active = true;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
         onTakeDamage?.Invoke(this, damage);
     }

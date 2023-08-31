@@ -28,6 +28,7 @@ public class MapGenerator : MonoBehaviour {
 
     public bool autoUpdate;
     public FoliageGenerator foliage;
+    public LevelGenerator level;
 
 
     private void Start()
@@ -51,7 +52,15 @@ public class MapGenerator : MonoBehaviour {
                 else
                     display.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap), x * mapSize + y);
             }
+        level.Generate();
+        foreach(MapDisplay.TerrainChunk chunk in display.chunks)
+        {
+            foliage.GenerateGrass(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
+            foliage.GenerateTrees(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
+            foliage.GenerateRocks(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
+        }
         foliage.GenerateMatrices();
+
     }
 
     public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve)
@@ -120,10 +129,4 @@ public class MeshData
         return mesh;
     }
 
-}
-
-public class Chunk
-{
-    int width;
-    int height;
 }

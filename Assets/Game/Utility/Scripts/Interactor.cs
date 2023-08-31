@@ -13,12 +13,13 @@ public class Interactor : MonoBehaviour
 
     [Space]
     public float range;
+    public float pickupRadius;
     public LayerMask mask;
 
     void Update()
     {
         RaycastHit hit;
-        if (Physics.Raycast(cam.position, cam.forward, out hit, range, mask))
+        if (Physics.SphereCast(cam.position, pickupRadius, cam.forward, out hit, range, mask))
         {
             if (target == null || !hit.transform.IsChildOf(target.transform))
             {

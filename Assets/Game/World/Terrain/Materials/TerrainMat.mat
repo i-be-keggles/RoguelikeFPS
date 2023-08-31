@@ -124,6 +124,6 @@ Material:
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _GradientPosition: {r: 0, g: 100, b: 0, a: 0}
-    - _GrassA: {r: 0.015566945, g: 0.46226412, b: 0, a: 1}
+    - _GrassA: {r: 0.015030402, g: 0.4433962, b: 0, a: 1}
     - _GrassB: {r: 0.22430804, g: 0.4627451, b: 0.066666655, a: 0}
   m_BuildTextureStacks: []

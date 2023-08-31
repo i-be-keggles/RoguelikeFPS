@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerLifeCycleHandler : MonoBehaviour
 {
@@ -13,9 +14,10 @@ public class PlayerLifeCycleHandler : MonoBehaviour
     {
         curHealth = maxHealth;
         ui = FindObjectOfType<UIManager>();
+        GetComponent<EnemyTarget>().onTakeDamage += TakeDamage;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(object sender, int damage)
     {
         curHealth -= damage;
         ui.UpdateHealthBar(curHealth);
