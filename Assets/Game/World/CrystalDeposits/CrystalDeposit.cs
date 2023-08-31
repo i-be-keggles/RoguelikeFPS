@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.Animations;
 
 public class CrystalDeposit : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class CrystalDeposit : MonoBehaviour
     private ScoreManager scoreManager;
 
     public int phase = 0; //0 = idle, 1 = pod dropping, 2 = waiting for extract, 3 = extracting, 4 = depleted
+
+    private Animator anim;
 
 
     private void Start()
@@ -94,6 +97,7 @@ public class CrystalDeposit : MonoBehaviour
         OrbitalDrop pod = extractor.GetComponent<OrbitalDrop>();
         pod.PromptHeight(transform.position.y);
         pod.landed += HandlePhaseChange;
+        anim = pod.GetComponent<Animator>();
     }
 
     private void StartExtraction()
@@ -107,6 +111,7 @@ public class CrystalDeposit : MonoBehaviour
         int c = Mathf.RoundToInt(Math.Min(curValue, maxValue * strikeInterval / extractionTime));
         TakeDamage(this, c);
         scoreManager.AddCrystal(c);
+        anim.SetTrigger("Strike");
     }
 
     public void TakeDamage(object sender, int damage)

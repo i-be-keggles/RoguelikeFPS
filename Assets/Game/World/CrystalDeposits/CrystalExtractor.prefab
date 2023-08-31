@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 132615717066096403}
   - component: {fileID: 8962349337480959404}
   - component: {fileID: 8009816742632187334}
+  - component: {fileID: 5688524696305142817}
   m_Layer: 0
   m_Name: CrystalExtractor
   m_TagString: Untagged
@@ -204,6 +205,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &5688524696305142817
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333076250139885449}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 19eaea388f5f7f242b4ecb7aefbc47bc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5838680456563290606
 GameObject:
   m_ObjectHideFlags: 0
