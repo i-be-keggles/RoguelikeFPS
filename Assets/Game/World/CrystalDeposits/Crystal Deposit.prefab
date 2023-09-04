@@ -121,7 +121,6 @@ MonoBehaviour:
   extractionTime: 15
   strikeInterval: 3
   initialScoreValue: 100
-  scoreManager: {fileID: 0}
   phase: 0
 --- !u!114 &9171394846710551374
 MonoBehaviour:
