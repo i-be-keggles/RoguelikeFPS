@@ -23,7 +23,6 @@ public class UIManager : MonoBehaviour
     public GameObject podSelector;
     public DropPodHandler podHandler;
     private RectTransform[] segments;
-    private int selectedSegment;
 
 
     private void Start()
@@ -74,14 +73,6 @@ public class UIManager : MonoBehaviour
             segment.GetChild(0).GetComponent<TextMeshProUGUI>().text = podHandler.pods[i].name;
             segments[i] = segment;
 
-            /*
-            EventTrigger.Entry entry = new EventTrigger.Entry();
-            entry.eventID = EventTriggerType.PointerEnter;
-            int j = i;
-            entry.callback.AddListener((eventData) => { OnSelectUpdate(j); });
-            EventTrigger trigger = segment.gameObject.AddComponent<EventTrigger>();
-            trigger.triggers.Add(entry);*/
-
         }
         Destroy(podSelector.transform.GetChild(0).GetChild(0).gameObject);
     }
@@ -106,15 +97,17 @@ public class UIManager : MonoBehaviour
             if(angle > 360) angle = angle - 360;
 
             int selected = Mathf.FloorToInt(segments.Length * angle / 360f);
-            if(selected != selectedSegment) OnSelectUpdate(selected);
+            if(selected != podHandler.selectedPod) OnSelectUpdate(selected);
         }
     }
 
     public void OnSelectUpdate(int index)
     {
         print("Selecting " + index);
-        segments[selectedSegment].GetChild(0).GetComponent<TextMeshProUGUI>().text = podHandler.pods[selectedSegment].name;
-        selectedSegment = index;
-        segments[selectedSegment].GetChild(0).GetComponent<TextMeshProUGUI>().text = podHandler.pods[selectedSegment].description;
+        int s = podHandler.selectedPod;
+        segments[s].GetChild(0).GetComponent<TextMeshProUGUI>().text = podHandler.pods[s].name;
+        podHandler.selectedPod = index;
+        s = index;
+        segments[s].GetChild(0).GetComponent<TextMeshProUGUI>().text = podHandler.pods[s].description;
     }
 }

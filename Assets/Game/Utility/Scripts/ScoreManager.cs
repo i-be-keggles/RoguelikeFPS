@@ -19,4 +19,10 @@ public class ScoreManager : MonoBehaviour
         crystal += c;
         uiManager.UpdateScoreText(score, crystal);
     }
+
+    public void UseCrystal(float c)
+    {
+        crystal -= c;
+        uiManager.UpdateScoreText(score, crystal);
+    }
 }

@@ -45,4 +45,9 @@ public class OrbitalDrop : MonoBehaviour
         if(Math.Abs(height - targetHeight) > 2) targetHeight = height;
         print("Height is now: " + targetHeight);
     }
+
+    public float HeightFromTime(float time)
+    {
+        return speed * time;
+    }
 }

@@ -50,10 +50,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetHeight: 0
-  speed: 30
+  speed: 50
   mask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 513
   landSound: {fileID: 8300000, guid: bebc5917b0440e34c891a4a0354878fc, type: 3}
 --- !u!82 &8009816742632187334
 AudioSource:
