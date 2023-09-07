@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 9171394846710551371}
   - component: {fileID: 9171394846710551368}
   - component: {fileID: 9171394846710551375}
-  - component: {fileID: 9171394846710551374}
   - component: {fileID: 9171394846710551372}
   m_Layer: 0
   m_Name: Crystal Deposit
@@ -122,20 +121,6 @@ MonoBehaviour:
   strikeInterval: 3
   initialScoreValue: 100
   phase: 0
---- !u!114 &9171394846710551374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9171394846710551369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9edb7f90c5eef7e4a80d11d26310d188, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  promptText: Call extraction pod
-  active: 0
 --- !u!114 &9171394846710551372
 MonoBehaviour:
   m_ObjectHideFlags: 0

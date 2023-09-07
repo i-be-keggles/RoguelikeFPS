@@ -26,7 +26,7 @@ public class CrystalDeposit : MonoBehaviour
     public float initialScoreValue = 100;
     private ScoreManager scoreManager;
 
-    public int phase = 0; //0 = idle, 1 = pod dropping, 2 = waiting for extract, 3 = extracting, 4 = depleted
+    public int phase = 0; //0 = idle, 1 = waiting for extract, 2 = extracting, 3 = depleted
 
     private Animator anim;
 
@@ -35,8 +35,8 @@ public class CrystalDeposit : MonoBehaviour
     {
         scoreManager = FindObjectOfType<ScoreManager>();
 
-        interactable = GetComponent<Interactable>();
-        interactable.interactedWith += HandlePhaseChange;
+        //interactable = GetComponent<Interactable>();
+        //interactable.interactedWith += HandlePhaseChange;
         lifecycle = GetComponent<EnemyTarget>();
         lifecycle.onTakeDamage += TakeDamage;
         lifecycle.enabled = false;
@@ -46,7 +46,7 @@ public class CrystalDeposit : MonoBehaviour
 
     private void Update()
     {
-        if(phase == 3)
+        if(phase == 1)
         {
             timeToStrike -= Time.deltaTime;
             if(timeToStrike <= 0)
@@ -59,29 +59,14 @@ public class CrystalDeposit : MonoBehaviour
 
     private void HandlePhaseChange(object sender, EventArgs e)
     {
-        if(phase == 0)
-        {
-            interactable.active = false;
-            interactable.enabled = false;
-
-            CallPod();
-
-            scoreManager.AddScore(initialScoreValue);
-        }
-        else if(phase == 1)
-        {
-            interactable.active = true;
-            interactable.enabled = true;
-            interactable.promptText = "Start extraction";
-        }
-        else if(phase == 2)
+        if (phase == 0)
         {
             interactable.active = false;
             interactable.enabled = false;
 
             StartExtraction();
         }
-        else if(phase == 3)
+        else if(phase == 1)
         {
             lifecycle.Deactivate();
             enabled = false;
@@ -118,5 +103,12 @@ public class CrystalDeposit : MonoBehaviour
     {
         curValue -= damage * damageValueMultiplier;
         if (curValue <= 0) HandlePhaseChange(this, EventArgs.Empty);
+    }
+
+    public void ExtractorLanded(Interactable e)
+    {
+        interactable = e;
+        interactable.interactedWith += HandlePhaseChange;
+        anim = e.GetComponent<Animator>();
     }
 }

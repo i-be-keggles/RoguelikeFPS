@@ -31,7 +31,6 @@ public class OrbitalDrop : MonoBehaviour
         else
         {
             landed?.Invoke(this, EventArgs.Empty);
-            print("Landed");
             AudioSource source = GetComponent<AudioSource>();
             source.clip = landSound;
             source.loop = false;
@@ -43,7 +42,6 @@ public class OrbitalDrop : MonoBehaviour
     public void PromptHeight(float height)
     {
         if(Math.Abs(height - targetHeight) > 2) targetHeight = height;
-        print("Height is now: " + targetHeight);
     }
 
     public float HeightFromTime(float time)

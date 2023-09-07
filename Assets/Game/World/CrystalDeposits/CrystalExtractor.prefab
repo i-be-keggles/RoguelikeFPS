@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8962349337480959404}
   - component: {fileID: 8009816742632187334}
   - component: {fileID: 5688524696305142817}
+  - component: {fileID: -3229674887791194210}
+  - component: {fileID: -6159582044893620560}
   m_Layer: 0
   m_Name: CrystalExtractor
   m_TagString: Untagged
@@ -225,6 +227,33 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-3229674887791194210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333076250139885449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6a0db22e7c978d4ca5cf8d454971b2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 5
+--- !u!114 &-6159582044893620560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333076250139885449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9edb7f90c5eef7e4a80d11d26310d188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptText: Start extraction
+  active: 0
 --- !u!1 &5838680456563290606
 GameObject:
   m_ObjectHideFlags: 0

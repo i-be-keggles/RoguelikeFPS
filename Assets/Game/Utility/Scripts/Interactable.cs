@@ -9,6 +9,7 @@ public class Interactable : MonoBehaviour
 
     public string promptText;
     public bool active;
+    public bool promptOnly;
 
     private void Awake()
     {

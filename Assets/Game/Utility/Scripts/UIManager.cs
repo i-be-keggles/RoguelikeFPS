@@ -103,7 +103,7 @@ public class UIManager : MonoBehaviour
 
     public void OnSelectUpdate(int index)
     {
-        print("Selecting " + index);
+        //print("Selecting " + index);
         int s = podHandler.selectedPod;
         segments[s].GetChild(0).GetComponent<TextMeshProUGUI>().text = podHandler.pods[s].name;
         podHandler.selectedPod = index;

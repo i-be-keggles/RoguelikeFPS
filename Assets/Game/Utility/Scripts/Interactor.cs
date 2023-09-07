@@ -23,19 +23,24 @@ public class Interactor : MonoBehaviour
         {
             if (target == null || !hit.transform.IsChildOf(target.transform))
             {
-                target = hit.transform.GetComponent<Interactable>();
+                target = hit.transform.GetComponentInParent<Interactable>();
             }
         }
         else target = null;
 
         if (target != null && target.active)
         {
-            uiManager.UpdateInteractText("[" + interactKey.ToString() + "] " + target.promptText);
-            if (Input.GetKeyDown(interactKey))
+            if (target.promptOnly) uiManager.UpdateInteractText(target.promptText);
+            else
             {
-                print("Triggered");
-                target.Trigger(this, EventArgs.Empty);
+                uiManager.UpdateInteractText("[" + interactKey.ToString() + "] " + target.promptText);
+                if (Input.GetKeyDown(interactKey))
+                {
+                    print("Triggered");
+                    target.Trigger(this, EventArgs.Empty);
+                }
             }
+
         }
         else uiManager.UpdateInteractText();
     }
