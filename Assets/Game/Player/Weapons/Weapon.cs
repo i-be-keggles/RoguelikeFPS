@@ -122,8 +122,7 @@ public class Weapon : MonoBehaviour
 
         reloading = true;
 
-        anim.SetBool("Reloading", true);
-        //set anim speed to match reload time
+        anim.SetTrigger("Reload");
 
         yield return new WaitForSeconds(reloadTime);
 
@@ -132,7 +131,6 @@ public class Weapon : MonoBehaviour
         totalAmmo -= ammo;
 
         reloading = false;
-        anim.SetBool("Reloading", false);
 
         weaponHandler.ui.UpdateAmmoText(curAmmo, totalAmmo);
     }
