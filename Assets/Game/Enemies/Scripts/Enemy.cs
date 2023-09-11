@@ -39,6 +39,8 @@ public class Enemy : MonoBehaviour
     public Vector3 moveLocation;
     public Vector3 scale;
 
+    public EventHandler died;
+
     [Space]
     [Header("References")]
     protected NavMeshAgent agent;
@@ -205,6 +207,11 @@ public class Enemy : MonoBehaviour
         return null;
     }
 
+    public Vector3 CentrePoint()
+    {
+        return new Vector3(transform.position.x, transform.position.y + transform.localScale.y * agent.height / 2f, transform.position.z);
+    }
+
     public void OnLoseTarget(object sender, EventArgs e)
     {
         enemyState = EnemyState.wandering;
@@ -222,5 +229,6 @@ public class Enemy : MonoBehaviour
     {
         scoreManager.AddScore(scoreValue);
         Destroy(gameObject);
+        died?.Invoke(this, EventArgs.Empty);
     }
 }
