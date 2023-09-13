@@ -91,7 +91,8 @@ public class DropPodHandler : MonoBehaviour
         {
             throw new System.NotImplementedException("Pod prefab missing.");
         }
-        Instantiate(pods[selectedPod].prefab, podMarker.transform.position + new Vector3(0, pods[selectedPod].prefab.GetComponent<OrbitalDrop>().HeightFromTime(dropTime)), Quaternion.Euler(0,UnityEngine.Random.Range(0f,360f),0), podMarker.transform.parent);
+        GameObject pod = Instantiate(pods[selectedPod].prefab, podMarker.transform.position + new Vector3(0, pods[selectedPod].prefab.GetComponent<OrbitalDrop>().HeightFromTime(dropTime)), Quaternion.Euler(0,UnityEngine.Random.Range(0f,360f),0));
+        pod.transform.SetParent(podMarker.transform.parent, true);
         scoreManager.UseCrystal(pods[selectedPod].cost);
     }
 }

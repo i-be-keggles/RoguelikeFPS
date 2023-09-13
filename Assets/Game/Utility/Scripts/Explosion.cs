@@ -34,7 +34,7 @@ public class Explosion : MonoBehaviour
             if(enemy != null) enemy.TakeDamage((int)(damage * m));
 
             Rigidbody rb = col.transform.GetComponentInParent<Rigidbody>();
-            if(rb != null) rb.AddForce((col.transform.position - transform.position).normalized * m, ForceMode.Impulse);
+            if(rb != null) rb.AddForce((col.transform.position - transform.position).normalized * m * force, ForceMode.Impulse);
         }
         Destroy (gameObject, 3f);
     }

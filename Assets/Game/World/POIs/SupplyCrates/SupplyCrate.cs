@@ -8,6 +8,9 @@ public class SupplyCrate : MonoBehaviour
     public ItemSpawnMatrix matrix;
     public Transform[] spawnPoints;
 
+    public int crystal;
+    private ScoreManager scoreManager;
+
     public enum SpawnBehaviour { spawnOnAwake, spawnOnInteract, spawnManually };
     public SpawnBehaviour spawnBehaviour;
 
@@ -15,6 +18,7 @@ public class SupplyCrate : MonoBehaviour
 
     public void Awake()
     {
+        if (crystal > 0) scoreManager = FindObjectOfType<ScoreManager>();
         if (spawnBehaviour == SpawnBehaviour.spawnOnAwake) Spawn();
         else if (spawnBehaviour == SpawnBehaviour.spawnOnInteract)
         {
@@ -24,6 +28,7 @@ public class SupplyCrate : MonoBehaviour
 
     private void OnInteracted(object sender, EventArgs e)
     {
+        if (crystal > 0) scoreManager.AddCrystal(crystal);
         Spawn();
         Destroy(GetComponent<Interactable>());
     }

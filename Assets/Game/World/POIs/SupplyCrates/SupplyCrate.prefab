@@ -51,6 +51,7 @@ MonoBehaviour:
   - {fileID: 6554164593200225615}
   - {fileID: 4777220355401575353}
   - {fileID: 6986595166591603917}
+  crystal: 10
   spawnBehaviour: 0
 --- !u!1 &19292025236264266
 GameObject:

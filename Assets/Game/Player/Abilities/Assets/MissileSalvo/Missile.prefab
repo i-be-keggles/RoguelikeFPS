@@ -493,7 +493,7 @@ MonoBehaviour:
   explosion: {fileID: 7155609983616437391, guid: 84fa4778db9bc5945844dc776278f2d1, type: 3}
   mask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 1601
 --- !u!1 &7002476115854053795
 GameObject:
   m_ObjectHideFlags: 0

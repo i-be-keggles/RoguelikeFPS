@@ -8,6 +8,12 @@ public class ScoreManager : MonoBehaviour
     public float crystal;
     public UIManager uiManager;
 
+
+    private void Start()
+    {
+        uiManager.UpdateScoreText(score, crystal);
+    }
+
     public void AddScore(float s)
     {
         score += s;

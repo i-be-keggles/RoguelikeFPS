@@ -24416,7 +24416,7 @@ MonoBehaviour:
   weaponHolder: {fileID: 1134310502}
   hitMask:
     serializedVersion: 2
-    m_Bits: 193
+    m_Bits: 1729
   weaponMask:
     serializedVersion: 2
     m_Bits: 129
@@ -24523,23 +24523,23 @@ MonoBehaviour:
   - name: Extractor Pod
     description: Used to mine crystal deposits
     prefab: {fileID: 1333076250139885449, guid: b5ec16c8c0558244baaa278d550535e8, type: 3}
-    cost: 0
+    cost: 10
   - name: Supply Pod
     description: Carries weapons and supplies
     prefab: {fileID: 2117047786244610033, guid: b7a4b93bdaf674842ba4f3dd1e7b2fef, type: 3}
-    cost: 0
+    cost: 200
   - name: Survey Pod
     description: Locates nearby points of interest
     prefab: {fileID: 0}
-    cost: 0
+    cost: 100
   - name: Defense Pod
     description: Acts as a stationary turret
     prefab: {fileID: 1109883830788555848, guid: 4a7bea2e62a75c84dbe1b4cbe8d33e98, type: 3}
-    cost: 0
+    cost: 400
   - name: Attack Pod
     description: Deploys a drone to help you fight
-    prefab: {fileID: 0}
-    cost: 0
+    prefab: {fileID: 8264028930805327624, guid: 488b00da7445d6041a2bce27ede38be4, type: 3}
+    cost: 400
   podKey: 118
   dropTime: 6
   uiManager: {fileID: 1100998067}
@@ -52482,7 +52482,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1862115587}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7871d441e21b3e84aa7831e94e7d2ec6, type: 3}
   m_Name: 
@@ -52570,7 +52570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  crystal: 0
+  crystal: 10000
   uiManager: {fileID: 1100998067}
 --- !u!1 &1862913280
 GameObject:
@@ -61854,21 +61854,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8551088226886960734, guid: 4a7bea2e62a75c84dbe1b4cbe8d33e98, type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8551088226886960734, guid: 4a7bea2e62a75c84dbe1b4cbe8d33e98, type: 3}
-      propertyPath: xLimit.x
-      value: -45
-      objectReference: {fileID: 0}
-    - target: {fileID: 8551088226886960734, guid: 4a7bea2e62a75c84dbe1b4cbe8d33e98, type: 3}
-      propertyPath: xLimit.y
-      value: 45
-      objectReference: {fileID: 0}
-    - target: {fileID: 8995547279971243913, guid: 4a7bea2e62a75c84dbe1b4cbe8d33e98, type: 3}
-      propertyPath: m_Icon
-      value: 
+    - target: {fileID: 7059794639482107152, guid: 4a7bea2e62a75c84dbe1b4cbe8d33e98, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a7bea2e62a75c84dbe1b4cbe8d33e98, type: 3}
@@ -61944,9 +61932,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 534290040}
     m_Modifications:
+    - target: {fileID: -4679458759833610522, guid: b7a4b93bdaf674842ba4f3dd1e7b2fef, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2117047786244610033, guid: b7a4b93bdaf674842ba4f3dd1e7b2fef, type: 3}
       propertyPath: m_Name
-      value: SupplyCrate
+      value: SupplyPod
       objectReference: {fileID: 0}
     - target: {fileID: 5233269219494555797, guid: b7a4b93bdaf674842ba4f3dd1e7b2fef, type: 3}
       propertyPath: m_RootOrder
@@ -61990,6 +61982,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5233269219494555797, guid: b7a4b93bdaf674842ba4f3dd1e7b2fef, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358460018134132393, guid: b7a4b93bdaf674842ba4f3dd1e7b2fef, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 5688524696305142817}
   - component: {fileID: -3229674887791194210}
   - component: {fileID: -6159582044893620560}
-  m_Layer: 0
-  m_Name: CrystalExtractor
+  m_Layer: 10
+  m_Name: ExtractionPod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,6 +254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   promptText: Start extraction
   active: 0
+  promptOnly: 0
 --- !u!1 &5838680456563290606
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,7 +264,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8231982664932944621}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
@@ -336,9 +337,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 63dc6f84181338144afefa24341e686b, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -516098083770646512, guid: 63dc6f84181338144afefa24341e686b, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 63dc6f84181338144afefa24341e686b, type: 3}
       propertyPath: m_Name
       value: CrystalExtractor
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 63dc6f84181338144afefa24341e686b, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 63dc6f84181338144afefa24341e686b, type: 3}
       propertyPath: m_IsActive
@@ -414,9 +427,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 1bbdcda9f31d9c4448abfb4e5eb9696d, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7146521406498821007, guid: 1bbdcda9f31d9c4448abfb4e5eb9696d, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -516098083770646512, guid: 1bbdcda9f31d9c4448abfb4e5eb9696d, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 1bbdcda9f31d9c4448abfb4e5eb9696d, type: 3}
       propertyPath: m_Name
       value: CrystalExtractor1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1bbdcda9f31d9c4448abfb4e5eb9696d, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416272007918961125, guid: 1bbdcda9f31d9c4448abfb4e5eb9696d, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bbdcda9f31d9c4448abfb4e5eb9696d, type: 3}

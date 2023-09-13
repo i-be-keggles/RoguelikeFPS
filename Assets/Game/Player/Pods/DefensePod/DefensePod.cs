@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class DefensePod : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class DefensePod : MonoBehaviour
 
     public float turnSpeed;
     public float fireAngle;
-    private float timeToFire;
+    protected float timeToFire;
 
     public Vector2 xLimit;
     public LayerMask enemyMask;
@@ -26,7 +25,7 @@ public class DefensePod : MonoBehaviour
     public Enemy target;
 
     public GameObject tracer;
-    private Interactable interactable;
+    protected Interactable interactable;
 
     private void Start()
     {
@@ -95,7 +94,7 @@ public class DefensePod : MonoBehaviour
         return angleX >= xLimit.x && angleX <= xLimit.y && Vector3.Distance(p, arms.position) <= viewRange;
     }
 
-    private void Fire()
+    protected void Fire()
     {
         ammo--;
         timeToFire += 1 / fireRate;

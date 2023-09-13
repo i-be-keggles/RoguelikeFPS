@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7059794639482107152}
   - component: {fileID: 8551088226886960734}
   - component: {fileID: 680754620229208167}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DefensePod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,8 +27,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1109883830788555848}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.6902213, y: 2.95549, z: 10.477908}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -219,6 +219,7 @@ MonoBehaviour:
   damage: 20
   fireRate: 2
   maxAmmo: 300
+  ammo: 0
   viewRange: 15
   turnSpeed: 2
   fireAngle: 5
@@ -261,7 +262,7 @@ GameObject:
   - component: {fileID: 2153084769693731280}
   - component: {fileID: 8322549572442514637}
   - component: {fileID: 6641840053308925066}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -358,7 +359,7 @@ GameObject:
   - component: {fileID: 7306933643039888287}
   - component: {fileID: 7961137012636823664}
   - component: {fileID: 62011198659549172}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,7 +456,7 @@ GameObject:
   - component: {fileID: 6218441470862901541}
   - component: {fileID: 2352763587598388692}
   - component: {fileID: 4828620115015211845}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +553,7 @@ GameObject:
   - component: {fileID: 2682520825297573780}
   - component: {fileID: 806437430421021713}
   - component: {fileID: 707056602293109025}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -650,7 +651,7 @@ GameObject:
   - component: {fileID: 6822920260465981376}
   - component: {fileID: 3627664938114013605}
   - component: {fileID: 2408318604949438232}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -747,7 +748,7 @@ GameObject:
   - component: {fileID: 3901407199364248501}
   - component: {fileID: 6245028918655498588}
   - component: {fileID: 6241937527740980257}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -844,7 +845,7 @@ GameObject:
   - component: {fileID: 7234305835298324251}
   - component: {fileID: 6051732277370906807}
   - component: {fileID: 1407825852869519978}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -938,7 +939,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2983859595441964267}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -972,7 +973,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3443067329770955069}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1003,7 +1004,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6542591290736545338}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1043,7 +1044,7 @@ GameObject:
   - component: {fileID: 4055424108386716277}
   - component: {fileID: 1952956590862778090}
   - component: {fileID: 1330326580252525920}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
