@@ -10,6 +10,8 @@ public class LevelGenerator : MonoBehaviour
 
     public LayerMask terrainMask;
 
+    public List<GameObject> POIs;
+
 
     private void Start()
     {
@@ -43,7 +45,7 @@ public class LevelGenerator : MonoBehaviour
                         GameObject go = Instantiate(obj.prefab, hit.point, Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0f, 360f), 0)), hit.transform);
                         instances[i].Add(go);
                         spawned++;
-                        print("Spawning " + obj.name);
+                        if (obj.poi) POIs.Add(go);
                     }
                 }
             }
@@ -63,8 +65,9 @@ public class LevelGenerator : MonoBehaviour
         public GameObject prefab;
         public float space;
         [Range(0,90)] public float angleCutoff;
+        public bool poi;
 
-        public LevelObject (string n, int i, float s, GameObject g, float r, float a)
+        public LevelObject (string n, int i, float s, GameObject g, float r, float a, bool p)
         {
             name = n;
             instances = i;
@@ -72,6 +75,7 @@ public class LevelGenerator : MonoBehaviour
             prefab = g;
             space = r;
             angleCutoff = a;
+            poi = p;
         }
     }
 }

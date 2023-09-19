@@ -36,6 +36,18 @@ public class MapGenerator : MonoBehaviour {
         GenerateMap();
     }
 
+    T CopyComponent<T>(T original, GameObject destination) where T : Component
+    {
+        System.Type type = original.GetType();
+        Component copy = destination.AddComponent(type);
+        System.Reflection.FieldInfo[] fields = type.GetFields();
+        foreach (System.Reflection.FieldInfo field in fields)
+        {
+            field.SetValue(copy, field.GetValue(original));
+        }
+        return copy as T;
+    }
+
     public void GenerateMap() {
         MapDisplay display = FindObjectOfType<MapDisplay>();
 
@@ -55,9 +67,11 @@ public class MapGenerator : MonoBehaviour {
         level.Generate();
         foreach(MapDisplay.TerrainChunk chunk in display.chunks)
         {
-            foliage.GenerateGrass(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
-            foliage.GenerateTrees(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
-            foliage.GenerateRocks(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
+            Vector2 chunkPos = new Vector2(chunk.gameObject.transform.GetSiblingIndex() % mapSize, chunk.gameObject.transform.GetSiblingIndex() / mapSize);
+            FoliageGenerator f = CopyComponent(foliage, chunk.gameObject);
+            f.GenerateGrass(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
+            f.GenerateTrees(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve, chunkPos);
+            f.GenerateRocks(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
         }
         foliage.GenerateMatrices();
 

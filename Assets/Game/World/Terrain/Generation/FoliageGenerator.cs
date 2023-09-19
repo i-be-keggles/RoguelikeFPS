@@ -114,9 +114,11 @@ public class FoliageGenerator : MonoBehaviour
                     }
                 }
         }
+
+        RenderGrassBatches();
     }
 
-    public void GenerateTrees(Transform chunk, float heightMultiplier, AnimationCurve heightCurve)
+    public void GenerateTrees(Transform chunk, float heightMultiplier, AnimationCurve heightCurve, Vector2 chunkPos)
     {
         if (!playing) return;
 
@@ -124,7 +126,7 @@ public class FoliageGenerator : MonoBehaviour
         spawnedTrees = new List<GameObject>();
 
         int noiseSize = (int) treeDensity * map.chunkSize / 10;
-        treeNoiseMap = Noise.GenerateNoiseMap(noiseSize, noiseSize, map.seed, treeNoiseScale, 2, 0.2f, 1.5f, new Vector2(0.234234f, 0.12412f));
+        treeNoiseMap = Noise.GenerateNoiseMap(noiseSize, noiseSize, map.seed, treeNoiseScale, 2, 0.2f, 1.5f, new Vector2(noiseSize*chunkPos.x, noiseSize*chunkPos.y));
         //treeNoiseMap = new float[noiseSize, noiseSize];
 
         treeNoiseMapTex = new Texture2D(noiseSize, noiseSize, TextureFormat.ARGB32, false);
@@ -215,7 +217,8 @@ public class FoliageGenerator : MonoBehaviour
         if (foliage.GetID() == 1)
         {
             //Vector2 treeNoisePos = new Vector2(position.x - (transform.position.x - map.chunkSize / 2), position.z - (transform.position.z - map.chunkSize / 2)) / map.chunkSize * (treeDensity * map.chunkSize / 10);
-            Vector2 treeNoisePos = new Vector2(position.x - (chunk.position.x - map.chunkSize / 2), position.z - (chunk.position.z - map.chunkSize / 2)) / map.chunkSize * (treeDensity * map.chunkSize / 10);
+            Vector2 treeNoisePos = new Vector2(position.x - (chunk.position.x - map.chunkSize / 2), position.z - (chunk.position.z - map.chunkSize / 2)) / map.chunkSize * treeNoiseMap.GetLength(0);
+            print(treeNoisePos + " in bounds (" + treeNoiseMap.GetLength(0) + ", " + treeNoiseMap.GetLength(1) + ")");
             spawnChance = foliage.SlopeProbability(angle) * treeNoiseMap[(int)treeNoisePos.x, (int)treeNoisePos.y];
         }
         
@@ -267,9 +270,9 @@ public class FoliageGenerator : MonoBehaviour
             for(int j = 0; j < plants[0].mesh.subMeshCount; j++)
             {
                 MaterialPropertyBlock block = new MaterialPropertyBlock();
-                block.SetVector("_ParentPos", transform.position);
-                block.SetFloat("_ParentSize", map.chunkSize);
-                block.SetTexture("_DisplacementMap", grassDisplacementMap);
+                //block.SetVector("_ParentPos", transform.position);
+                //block.SetFloat("_ParentSize", map.chunkSize);
+                //block.SetTexture("_DisplacementMap", grassDisplacementMap);
                 Graphics.DrawMeshInstanced(plants[i].mesh, j, plants[i].material, batch, block, UnityEngine.Rendering.ShadowCastingMode.Off, false);
             }
         }
