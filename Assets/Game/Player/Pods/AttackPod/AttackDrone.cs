@@ -33,6 +33,8 @@ public class AttackDrone : DefensePod
         {
             EvaluateTarget();
             Orbit(player.position);
+
+            transform.forward = Vector3.Lerp(transform.forward, rb.velocity, turnSpeed * Time.deltaTime);
         }
         else
         {
@@ -65,7 +67,7 @@ public class AttackDrone : DefensePod
         RaycastHit hit;
         if(Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity, hitMask))
         {
-            curHeight = transform.position.y - hit.point.y;
+            curHeight = transform.position.y - Math.Max(hit.point.y, target==null? player.position.y : target.CentrePoint().y);
         }
 
         rb.AddForce(Vector3.up * (hoverHeight - curHeight) * vSpeed * 10 * Time.deltaTime, ForceMode.Force);

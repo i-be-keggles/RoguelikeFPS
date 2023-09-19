@@ -61967,6 +61967,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DefensePod
       objectReference: {fileID: 0}
+    - target: {fileID: 3245234704202204511, guid: 4a7bea2e62a75c84dbe1b4cbe8d33e98, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6531930749850641196, guid: 4a7bea2e62a75c84dbe1b4cbe8d33e98, type: 3}
       propertyPath: m_RootOrder
       value: 7

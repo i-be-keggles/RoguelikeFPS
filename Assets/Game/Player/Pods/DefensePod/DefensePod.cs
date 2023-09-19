@@ -46,7 +46,8 @@ public class DefensePod : MonoBehaviour
             if (angleTo > fireAngle / 3)
             {
                 head.eulerAngles = Vector3.Lerp(head.eulerAngles, new Vector3(head.eulerAngles.x, head.eulerAngles.y + Vector3.SignedAngle(head.forward, dir, Vector3.up), head.eulerAngles.z), turnSpeed * Time.deltaTime);
-                arms.eulerAngles = Vector3.Lerp(arms.eulerAngles, new Vector3(Mathf.Clamp(arms.eulerAngles.x + Vector3.SignedAngle(arms.forward, dir, arms.right), xLimit.x, xLimit.y), arms.eulerAngles.y, arms.eulerAngles.z), turnSpeed * Time.deltaTime);
+                arms.eulerAngles += new Vector3(Vector3.SignedAngle(arms.forward, dir, arms.right), 0) * turnSpeed * Time.deltaTime;
+                arms.eulerAngles = new Vector3(Mathf.Clamp(arms.eulerAngles.x, xLimit.x, xLimit.y), head.eulerAngles.y, 0);
             }
 
             if (timeToFire <= 0 && angleTo <= fireAngle)
@@ -98,10 +99,13 @@ public class DefensePod : MonoBehaviour
     {
         ammo--;
         timeToFire += 1 / fireRate;
-        Destroy(Instantiate(tracer, arms.position + arms.forward * 1.5f, arms.rotation), 2f);
+        Vector3 s = Random.insideUnitSphere * spread / 100;
+        GameObject go = Instantiate(tracer, arms.position + arms.forward * 1.5f, arms.rotation);
+        go.transform.forward += s;
+        Destroy(go, 2f);
 
         RaycastHit hit;
-        if (Physics.Raycast(arms.position + arms.forward * 1.5f, arms.forward, out hit, viewRange * 1.5f, hitMask))
+        if (Physics.Raycast(arms.position + arms.forward * 1.5f, arms.forward + s, out hit, viewRange * 1.5f, hitMask))
         {
             Enemy enemy = hit.collider.GetComponentInParent<Enemy>();
             if(enemy != null)

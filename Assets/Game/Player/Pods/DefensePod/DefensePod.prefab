@@ -221,6 +221,7 @@ MonoBehaviour:
   maxAmmo: 300
   ammo: 0
   viewRange: 15
+  spread: 5
   turnSpeed: 2
   fireAngle: 5
   xLimit: {x: -45, y: 45}
