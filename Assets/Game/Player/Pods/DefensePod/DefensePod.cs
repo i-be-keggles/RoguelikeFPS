@@ -9,6 +9,7 @@ public class DefensePod : MonoBehaviour
     public int maxAmmo;
     public int ammo;
     public float viewRange;
+    public float spread;
 
     public float turnSpeed;
     public float fireAngle;
@@ -89,7 +90,6 @@ public class DefensePod : MonoBehaviour
     {
         float angleX = Vector3.SignedAngle(arms.forward, p - arms.position, arms.right);
         if (angleX > 90) angleX = 180 - angleX;
-        print(angleX);
 
         return angleX >= xLimit.x && angleX <= xLimit.y && Vector3.Distance(p, arms.position) <= viewRange;
     }

@@ -13,6 +13,8 @@ public class AttackDrone : DefensePod
     public float hoverHeight;
     private float curHeight;
 
+    public float orbitLead;
+
     public Transform player;
     private Rigidbody rb;
 
@@ -36,13 +38,16 @@ public class AttackDrone : DefensePod
         {
             Orbit(target.transform.position);
 
-            Vector3 dir = target.CentrePoint() - arms.position;
-            float angleTo = Vector3.Angle(arms.forward, dir);
+            Vector3 dir = target.CentrePoint() - transform.position;
+            float angleTo = Vector3.Angle(transform.forward, dir);
             if (angleTo > fireAngle / 3)
             {
-                Vector3 targetRot = new Vector3(Mathf.Clamp(transform.eulerAngles.x + Vector3.SignedAngle(transform.forward, dir, transform.right), xLimit.x, xLimit.y) + Vector3.SignedAngle(transform.forward, dir, Vector3.up), transform.eulerAngles.z);
-                transform.eulerAngles = Vector3.Lerp(head.eulerAngles, targetRot, turnSpeed * Time.deltaTime);
-                //arms.eulerAngles = Vector3.Lerp(arms.eulerAngles, new Vector3(Mathf.Clamp(arms.eulerAngles.x + Vector3.SignedAngle(arms.forward, dir, arms.right), xLimit.x, xLimit.y), arms.eulerAngles.y, arms.eulerAngles.z), turnSpeed * Time.deltaTime);
+                float y = Vector3.SignedAngle(transform.forward, dir, Vector3.up);
+                float x = Vector3.Angle(dir, new Vector3(dir.x, 0, dir.z)) * (transform.position.y > target.CentrePoint().y ? -1 : 1);
+                float lx = transform.localEulerAngles.x > 180? transform.localEulerAngles.x - 360: transform.localEulerAngles.x;
+                float px = lx - x * (Math.Abs(x) > Math.Abs(lx) ? -1 : 1);
+
+                transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0) + new Vector3(-px, y + y*orbitLead) * turnSpeed * Time.deltaTime;
             }
 
             if (timeToFire <= 0 && angleTo <= fireAngle)
@@ -75,7 +80,6 @@ public class AttackDrone : DefensePod
         {
             Vector3 right = Vector3.Cross(to, Vector3.up).normalized;
             rb.AddForce(right * (Vector3.Dot(rb.velocity, right) > 0 ? 1 : -1) * oSpeed * 10 * Time.deltaTime, ForceMode.Force);
-            print("orbiting");
         }
     }
 }
