@@ -41,14 +41,16 @@ public class ChunkHandler : MonoBehaviour
         for(int x = 0; x < mapGenerator.mapSize; x++)
             for(int y = 0; y < mapGenerator.mapSize; y++)
             {
-                if(pos.x - renderDistance < x && pos.x + renderDistance > x && pos.y - renderDistance < y && pos.y + renderDistance > y)
+                int id = x * mapGenerator.mapSize + y;
+                if (pos.x - renderDistance < x && pos.x + renderDistance > x && pos.y - renderDistance < y && pos.y + renderDistance > y)
                 {
-                    //activate chunk
+                    if (!mapDisplay.chunks[id].gameObject.activeSelf) mapDisplay.chunks[id].gameObject.SetActive(true);
                 }
                 else
                 {
-                    //deactivate chunk
+                    if (mapDisplay.chunks[id].gameObject.activeSelf) mapDisplay.chunks[id].gameObject.SetActive(false);
                 }
+                mapDisplay.chunks[id].gameObject.GetComponent<FoliageGenerator>().enabled = pos.x - grassDistance < x && pos.x + grassDistance > x && pos.y - grassDistance < y && pos.y + grassDistance > y;
             }
     }
 }

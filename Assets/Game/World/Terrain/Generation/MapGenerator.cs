@@ -51,9 +51,6 @@ public class MapGenerator : MonoBehaviour {
     public void GenerateMap() {
         MapDisplay display = FindObjectOfType<MapDisplay>();
 
-        foliage.grassPositions = new List<List<Vector3>>();
-        foliage.batches = new List<List<List<Matrix4x4>>>();
-
         for(int x = 0; x < mapSize; x++)
             for(int y = 0; y < mapSize; y++)
             {
@@ -69,12 +66,19 @@ public class MapGenerator : MonoBehaviour {
         {
             Vector2 chunkPos = new Vector2(chunk.gameObject.transform.GetSiblingIndex() % mapSize, chunk.gameObject.transform.GetSiblingIndex() / mapSize);
             FoliageGenerator f = CopyComponent(foliage, chunk.gameObject);
+            f.grassPositions = new List<List<Vector3>>();
+            f.batches = new List<List<List<Matrix4x4>>>();
             f.GenerateGrass(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
             f.GenerateTrees(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve, chunkPos);
             f.GenerateRocks(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
+            f.GenerateMatrices();
+            
+            //-----Foliage displcement is really unoptimized rn-----
+            //FoliageDisplacementHandler d = CopyComponent(GetComponent<FoliageDisplacementHandler>(), chunk.gameObject);
+            //d.foliage = f;
+            //d.Start();
         }
-        foliage.GenerateMatrices();
-
+        //foliage.GenerateMatrices();
     }
 
     public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve)

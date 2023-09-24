@@ -16,11 +16,12 @@ public class Explosion : MonoBehaviour
 
         Collider[] cols = Physics.OverlapSphere(transform.position, radius, mask);
 
-        FindObjectOfType<FoliageDisplacementHandler>().Impact(transform.position, radius);
-
         foreach (Collider col in cols)
         {
             if (origin != null && col.transform.IsChildOf(origin)) continue;
+
+            FoliageDisplacementHandler d = col.GetComponentInParent<FoliageDisplacementHandler>();
+            if(d != null) d.Impact(transform.position, radius);
 
             //m = 1 - d^(1/falloff), d = distance/radius
             float m = GetFalloff(Vector3.Distance(transform.position, col.transform.position), radius, falloff);

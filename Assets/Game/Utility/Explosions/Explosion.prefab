@@ -244,7 +244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mask:
     serializedVersion: 2
-    m_Bits: 201
+    m_Bits: 713
   debugGizmo: {fileID: 4944921059511887261}
 --- !u!82 &399175275749930097
 AudioSource:

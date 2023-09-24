@@ -58,7 +58,7 @@ public class MapDisplay : MonoBehaviour {
     {
         public MeshData data;
         public GameObject gameObject;
-
+ 
         public TerrainChunk(MeshData m, GameObject g)
         {
             data = m;

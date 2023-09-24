@@ -13,7 +13,8 @@ public class FoliageDisplacementHandler : MonoBehaviour
 
     public PlayerMovement player;
 
-    private void Start()
+
+    public void Start()
     {
         displacement = new Texture2D(resolution, resolution, TextureFormat.ARGB32, false);
         for(int x = 0; x < resolution; x++)
@@ -22,7 +23,6 @@ public class FoliageDisplacementHandler : MonoBehaviour
                 displacement.SetPixel(x, y, new Color(0, 0, 0));
             }
 
-        Impact(transform.position, 2);
         foliage.grassDisplacementMap = displacement;
     }
 

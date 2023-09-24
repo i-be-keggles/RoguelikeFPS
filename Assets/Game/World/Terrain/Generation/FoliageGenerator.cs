@@ -25,6 +25,7 @@ public class FoliageGenerator : MonoBehaviour
     public float rockDensity;
 
     [Space]
+    [SerializeField]
     public List<List<Vector3>> grassPositions = new List<List<Vector3>>();
 
     public List<List<List<Matrix4x4>>> batches = new List<List<List<Matrix4x4>>>();
@@ -114,8 +115,6 @@ public class FoliageGenerator : MonoBehaviour
                     }
                 }
         }
-
-        RenderGrassBatches();
     }
 
     public void GenerateTrees(Transform chunk, float heightMultiplier, AnimationCurve heightCurve, Vector2 chunkPos)
@@ -218,7 +217,6 @@ public class FoliageGenerator : MonoBehaviour
         {
             //Vector2 treeNoisePos = new Vector2(position.x - (transform.position.x - map.chunkSize / 2), position.z - (transform.position.z - map.chunkSize / 2)) / map.chunkSize * (treeDensity * map.chunkSize / 10);
             Vector2 treeNoisePos = new Vector2(position.x - (chunk.position.x - map.chunkSize / 2), position.z - (chunk.position.z - map.chunkSize / 2)) / map.chunkSize * treeNoiseMap.GetLength(0);
-            print(treeNoisePos + " in bounds (" + treeNoiseMap.GetLength(0) + ", " + treeNoiseMap.GetLength(1) + ")");
             spawnChance = foliage.SlopeProbability(angle) * treeNoiseMap[(int)treeNoisePos.x, (int)treeNoisePos.y];
         }
         

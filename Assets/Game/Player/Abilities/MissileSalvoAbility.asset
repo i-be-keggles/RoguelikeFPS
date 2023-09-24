@@ -30,4 +30,4 @@ MonoBehaviour:
   lockRange: 100
   lockMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 577
