@@ -9,6 +9,7 @@ public class CrystalExtractor : MonoBehaviour
 
     private OrbitalDrop orbitalDrop;
     private Interactable interactable;
+    public LayerMask mask;
 
     private void Start()
     {
@@ -19,7 +20,7 @@ public class CrystalExtractor : MonoBehaviour
 
     public void OnLanded(object sender, EventArgs e)
     {
-        Collider[] cols = Physics.OverlapSphere(transform.position, range);
+        Collider[] cols = Physics.OverlapSphere(transform.position, range, mask);
         foreach(Collider col in cols)
         {
             CrystalDeposit c = col.GetComponentInParent<CrystalDeposit>();

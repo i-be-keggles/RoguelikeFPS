@@ -240,6 +240,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 5
+  mask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!114 &-6159582044893620560
 MonoBehaviour:
   m_ObjectHideFlags: 0

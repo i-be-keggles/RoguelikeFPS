@@ -20,10 +20,11 @@ public class LevelGenerator : MonoBehaviour
 
     public void Generate()
     {
+        POIs = new List<GameObject>();
         if(instances != null) for(int i = 0; i < instances.Count; i++) if (instances[i] != null) for (int j = 0; j < instances[i].Count; j++) if(instances[i][j] != null) DestroyImmediate(instances[i][j]);
         instances = new List<List<GameObject>>();
 
-        float worldSize = map.mapSize * map.chunkSize / 2f;
+        float worldSize = map.mapSize * map.chunkSize;
         for (int i = 0; i < objectPrefabs.Count; i++)
         {
             instances.Add(new List<GameObject>());
@@ -36,7 +37,7 @@ public class LevelGenerator : MonoBehaviour
             while(spawned < goal && attempts < goal * 10)
             {
                 attempts++;
-                Vector3 pos = transform.position + new Vector3(UnityEngine.Random.Range(-worldSize, worldSize), map.meshHeightMultiplier * 2, UnityEngine.Random.Range(-worldSize, worldSize));
+                Vector3 pos = transform.position + new Vector3(UnityEngine.Random.Range(-worldSize, worldSize) - map.chunkSize/2f, map.meshHeightMultiplier * 2, UnityEngine.Random.Range(-worldSize, worldSize) - map.chunkSize / 2f);
                 RaycastHit hit;
                 if(Physics.Raycast(pos, -Vector3.up, out hit, map.meshHeightMultiplier * 10, terrainMask))
                 {
@@ -61,7 +62,7 @@ public class LevelGenerator : MonoBehaviour
     {
         public string name;
         public int instances;
-        public float instancesVariation;
+        [Range(0,1)] public float instancesVariation;
         public GameObject prefab;
         public float space;
         [Range(0,90)] public float angleCutoff;
