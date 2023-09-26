@@ -29,6 +29,10 @@ public class SupplyCrate : MonoBehaviour
     private void OnInteracted(object sender, EventArgs e)
     {
         if (crystal > 0) scoreManager.AddCrystal(crystal);
+
+        Animator anim = GetComponent<Animator>();
+        if (anim != null) anim.enabled = true;
+
         Spawn();
         Destroy(GetComponent<Interactable>());
     }
