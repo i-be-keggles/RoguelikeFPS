@@ -32,7 +32,7 @@ public class WeaponRecoilHandler : MonoBehaviour
     {
         if (targetRot == Vector3.zero) targetRot = camHolder.localEulerAngles;
 
-        heat = 1f/weapon.fireRate;
+        heat = 1f/weapon.fireRate * weapon.recoilHeatMultiplier;
         targetRot += new Vector3(-weapon.recoilV * (1f + Random.Range(-recoilVariation, recoilVariation)), weapon.recoilH * (1f + Random.Range(-recoilVariation, recoilVariation)) * (Random.value > 0.5f? 1 : -1), 0);
     }
 

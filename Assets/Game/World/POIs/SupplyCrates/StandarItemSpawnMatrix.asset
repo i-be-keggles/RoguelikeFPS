@@ -19,3 +19,6 @@ MonoBehaviour:
   - prefab: {fileID: 8534150822745692306, guid: 6d0c6e5233edf0f46953747ff50a0b62, type: 3}
     spawnRatio: 15
     type: 0
+  - prefab: {fileID: 8191220384628419456, guid: cd909ba31725a604b8b32881f4bab140, type: 3}
+    spawnRatio: 7
+    type: 0

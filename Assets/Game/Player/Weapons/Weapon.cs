@@ -31,6 +31,7 @@ public class Weapon : MonoBehaviour
 
     public float recoilV;
     public float recoilH;
+    [Range(0.2f, 2f)]public float recoilHeatMultiplier = 1;
 
     [Space]
     public Transform muzzleFlashPoint;

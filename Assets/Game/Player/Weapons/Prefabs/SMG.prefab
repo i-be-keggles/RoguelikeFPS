@@ -383,7 +383,8 @@ MonoBehaviour:
   reloading: 0
   anim: {fileID: 6129107481177610189}
   recoilV: 1
-  recoilH: 1
+  recoilH: 0.2
+  recoilHeatMultiplier: 1
   muzzleFlashPoint: {fileID: 9066321703891861522}
   muzzleFlash: {fileID: 2791568626359921022, guid: 6283d6fc50d5d8649aa85ad8719c2bf8, type: 3}
   hitFX: {fileID: 8046975824046428721, guid: f5be76de59225034d9422613296d91ad, type: 3}
