@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using System;
 using System.Linq;
+using Unity.AI.Navigation;
 
 public class MapGenerator : MonoBehaviour {
 
@@ -79,6 +80,7 @@ public class MapGenerator : MonoBehaviour {
             //d.Start();
         }
         //foliage.GenerateMatrices();
+        GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve)
