@@ -15,13 +15,14 @@ public class Explosion : MonoBehaviour
         debugGizmo.localScale *= radius;
 
         Collider[] cols = Physics.OverlapSphere(transform.position, radius, mask);
+        List<Rigidbody> rbs = new List<Rigidbody>();
 
         foreach (Collider col in cols)
         {
             if (origin != null && col.transform.IsChildOf(origin)) continue;
 
-            FoliageDisplacementHandler d = col.GetComponentInParent<FoliageDisplacementHandler>();
-            if(d != null) d.Impact(transform.position, radius);
+            //FoliageDisplacementHandler d = col.GetComponentInParent<FoliageDisplacementHandler>();
+            //if(d != null) d.Impact(transform.position, radius);
 
             //m = 1 - d^(1/falloff), d = distance/radius
             float m = GetFalloff(Vector3.Distance(transform.position, col.transform.position), radius, falloff);
@@ -35,7 +36,11 @@ public class Explosion : MonoBehaviour
             if(enemy != null) enemy.TakeDamage((int)(damage * m));
 
             Rigidbody rb = col.transform.GetComponentInParent<Rigidbody>();
-            if(rb != null) rb.AddForce((col.transform.position - transform.position).normalized * m * force, ForceMode.Impulse);
+            if(rb != null && !rbs.Contains(rb))
+            {
+                rb.AddForce((col.transform.position - transform.position).normalized * m * force, ForceMode.Impulse);
+                rbs.Add(rb);
+            }
         }
         Destroy (gameObject, 3f);
     }
