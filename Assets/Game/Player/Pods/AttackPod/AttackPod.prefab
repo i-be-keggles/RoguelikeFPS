@@ -54,6 +54,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 513
   landSound: {fileID: 8300000, guid: bebc5917b0440e34c891a4a0354878fc, type: 3}
+  dirtImpact: {fileID: 4436408250110050743, guid: 3f59220635cfae447a74aae948dd9656, type: 3}
 --- !u!82 &2031631545627858512
 AudioSource:
   m_ObjectHideFlags: 0
@@ -246,7 +247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f39db4038dbe0884aa2406ce38390a74, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.033
+      value: 0.021
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f39db4038dbe0884aa2406ce38390a74, type: 3}
       propertyPath: m_LocalPosition.z
@@ -339,7 +340,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4205506088101434768, guid: 65d9dc42c9f6f9a41be629386d29d819, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.472
+      value: 1.526
       objectReference: {fileID: 0}
     - target: {fileID: 4205506088101434768, guid: 65d9dc42c9f6f9a41be629386d29d819, type: 3}
       propertyPath: m_LocalPosition.z

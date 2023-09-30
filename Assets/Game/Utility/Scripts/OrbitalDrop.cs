@@ -11,12 +11,17 @@ public class OrbitalDrop : MonoBehaviour
     public LayerMask mask;
     public AudioClip landSound;
 
+    public GameObject dirtImpact;
+    private Vector3 dirtRot;
+
     private void Awake()
     {
         RaycastHit hit;
         if (Physics.Raycast(transform.position - Vector3.up*3f, -Vector3.up, out hit, mask))
         {
             targetHeight = hit.point.y;
+            if (hit.collider.gameObject.layer != 9) dirtImpact = null;
+            else dirtRot = hit.normal;
         }
         else targetHeight = transform.position.y - speed * 20f;
     }
@@ -36,6 +41,7 @@ public class OrbitalDrop : MonoBehaviour
             source.loop = false;
             source.Play();
             this.enabled = false;
+            if (dirtImpact != null) Instantiate(dirtImpact, transform.position, Quaternion.LookRotation(dirtRot), transform);
         }
     }
 
