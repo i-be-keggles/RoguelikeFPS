@@ -17,7 +17,7 @@ MonoBehaviour:
   densityRadius: 0.1
   slopeCutoff: 18.3
   slopeAversion: 0
-  material: {fileID: 2100000, guid: 5f91669f0ee3d314aa057eb54b4a6d71, type: 2}
+  material: {fileID: 2100000, guid: 44bbf77252ebc194894cea54f52be331, type: 2}
   baseRotation: {x: -90, y: 0, z: 0}
   baseOffset: {x: 0, y: 0, z: 0}
   clusterSize: 0
