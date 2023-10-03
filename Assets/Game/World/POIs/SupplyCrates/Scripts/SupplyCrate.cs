@@ -30,7 +30,7 @@ public class SupplyCrate : MonoBehaviour
     {
         if (crystal > 0) scoreManager.AddCrystal(crystal);
 
-        Animator anim = GetComponent<Animator>();
+        Animator anim = GetComponentInChildren<Animator>();
         if (anim != null) anim.enabled = true;
 
         Spawn();
