@@ -83,7 +83,7 @@ public class Weapon : MonoBehaviour
 
         timeToFire = 1f / fireRate;
         curAmmo--;
-        Destroy(Instantiate(muzzleFlash, muzzleFlashPoint), 1.5f);
+        Destroy(Instantiate(muzzleFlash, muzzleFlashPoint.position, muzzleFlashPoint.rotation, muzzleFlashPoint), 1.5f);
         //playSound;
         anim.SetTrigger("Shoot");
         weaponHandler.ui.UpdateAmmoText(curAmmo, totalAmmo);
