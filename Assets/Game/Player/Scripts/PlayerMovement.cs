@@ -40,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (grounded && velocity.y < 0) velocity.y = -2f;
 
+        if (moveDir.magnitude >= sprintSpeed) moveDir = moveDir.normalized * sprintSpeed;
+
         cc.Move(moveDir * Time.deltaTime);
 
         if (grounded && Input.GetButtonDown("Jump"))

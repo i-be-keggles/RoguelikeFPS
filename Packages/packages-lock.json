@@ -151,6 +151,15 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.postprocessing": {
+      "version": "3.2.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.physics": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.profiling.core": {
       "version": "1.0.2",
       "depth": 1,
@@ -190,29 +199,15 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       }
     },
-    "com.unity.render-pipelines.high-definition": {
+    "com.unity.render-pipelines.universal": {
       "version": "12.1.7",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.mathematics": "1.2.4",
-        "com.unity.burst": "1.6.0",
-        "com.unity.modules.video": "1.0.0",
-        "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.imageconversion": "1.0.0",
-        "com.unity.modules.terrain": "1.0.0",
+        "com.unity.mathematics": "1.2.1",
+        "com.unity.burst": "1.5.0",
         "com.unity.render-pipelines.core": "12.1.7",
-        "com.unity.shadergraph": "12.1.7",
-        "com.unity.visualeffectgraph": "12.1.7",
-        "com.unity.render-pipelines.high-definition-config": "12.1.7"
-      }
-    },
-    "com.unity.render-pipelines.high-definition-config": {
-      "version": "12.1.7",
-      "depth": 1,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.render-pipelines.core": "12.1.7"
+        "com.unity.shadergraph": "12.1.7"
       }
     },
     "com.unity.roslyn": {
@@ -322,7 +317,7 @@
     },
     "com.unity.visualeffectgraph": {
       "version": "12.1.7",
-      "depth": 1,
+      "depth": 0,
       "source": "builtin",
       "dependencies": {
         "com.unity.shadergraph": "12.1.7",
