@@ -11,6 +11,8 @@ public class OrbitalDrop : MonoBehaviour
     public LayerMask mask;
     public AudioClip landSound;
 
+    public GameObject trailParticles;
+    public GameObject impactParticles;
     public GameObject dirtImpact;
     private Vector3 dirtRot;
 
@@ -42,6 +44,8 @@ public class OrbitalDrop : MonoBehaviour
             source.Play();
             this.enabled = false;
             if (dirtImpact != null) Instantiate(dirtImpact, transform.position, Quaternion.LookRotation(dirtRot), transform);
+            if (impactParticles != null) Destroy(Instantiate(impactParticles, transform.position, transform.rotation), 5f);
+            if (trailParticles != null) Destroy(trailParticles, 4f);
         }
     }
 

@@ -164,6 +164,7 @@ Transform:
   m_Children:
   - {fileID: 6542591290736545338}
   - {fileID: 1450846183012111089}
+  - {fileID: 7093225242137356446}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -185,6 +186,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 513
   landSound: {fileID: 8300000, guid: bebc5917b0440e34c891a4a0354878fc, type: 3}
+  trailParticles: {fileID: 5139635057125106471}
+  impactParticles: {fileID: 6022318871360650736, guid: 25faaa8541476eb49a20e1f2076d4e9f, type: 3}
+  dirtImpact: {fileID: 0}
 --- !u!82 &7059794639482107152
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4921,3 +4925,70 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &2918071766448973801
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6531930749850641196}
+    m_Modifications:
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.639
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8010975843287270606, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+      propertyPath: m_Name
+      value: PodTrailEffect
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+--- !u!1 &5139635057125106471 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8010975843287270606, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+  m_PrefabInstance: {fileID: 2918071766448973801}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7093225242137356446 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5336519307174596471, guid: e24b91d4db12c1b46bf631338be613a3, type: 3}
+  m_PrefabInstance: {fileID: 2918071766448973801}
+  m_PrefabAsset: {fileID: 0}

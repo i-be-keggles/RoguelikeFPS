@@ -7,15 +7,24 @@ public class SurveyPod : MonoBehaviour
 {
     public GameObject marker;
     public float range;
-    public Transform pointer;
+    public Animator anim;
+    private Interactable interactable;
 
     private void Start()
     {
-        GetComponent<OrbitalDrop>().landed += Scan;
+        interactable = GetComponent<Interactable>();
+        interactable.interactedWith += Scan;
+
+        anim = GetComponentInChildren<Animator>();
+        anim.enabled = false;
     }
 
     private void Scan(object sender, EventArgs e)
     {
+        anim.enabled = true;
+        interactable.promptText = "Already scanned.";
+        interactable.promptOnly = true;
+
         LevelGenerator lg = GetComponentInParent<LevelGenerator>();
         if (lg == null) throw new Exception("Level generator not found.");
         List<GameObject> POIs = lg.POIs;
@@ -26,20 +35,5 @@ public class SurveyPod : MonoBehaviour
                 POIs.RemoveAt(r--);
 
         marker = Instantiate(marker, POIs[UnityEngine.Random.Range(0, POIs.Count)].transform.position, Quaternion.identity, transform);
-
-        StartCoroutine(Point());
-    }
-
-    private void Update()
-    {
-        if(range == -1)
-            pointer.rotation = Quaternion.RotateTowards(Quaternion.Euler(pointer.forward), Quaternion.Euler(marker.transform.position - pointer.position), Time.deltaTime);
-    }
-
-    private IEnumerator Point()
-    {
-        range = -1;
-        yield return new WaitForSeconds(10f);
-        range = 0;
     }
 }
