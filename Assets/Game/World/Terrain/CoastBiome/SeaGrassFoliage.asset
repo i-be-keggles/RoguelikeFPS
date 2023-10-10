@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18cfa3f2199b2d84894fe625897dbeda, type: 3}
-  m_Name: BasicGrassFoliage
+  m_Name: SeaGrassFoliage
   m_EditorClassIdentifier: 
-  name: Basic Grass
-  density: 1
-  densityRadius: 0.1
-  slopeCutoff: 18.3
+  name: Sea Grass
+  density: 0.595
+  densityRadius: 1
+  slopeCutoff: 49
   slopeAversion: 0
-  maxHeight: 100000
-  minHeight: 0
-  material: {fileID: 2100000, guid: 44bbf77252ebc194894cea54f52be331, type: 2}
+  maxHeight: 3.7
+  minHeight: 3.2
+  material: {fileID: 2100000, guid: 105154e4212c2f140bba3085769a4db9, type: 2}
   baseRotation: {x: -90, y: 0, z: 0}
   baseOffset: {x: 0, y: 0, z: 0}
-  clusterSize: 0
-  clusterDensity: 0
-  clusterVariance: 0
+  clusterSize: 2
+  clusterDensity: 4
+  clusterVariance: 1
   mesh: {fileID: 4579454407841743219, guid: a5c9439725b7b9745abb13deb6393656, type: 3}
   spawnPass: 0

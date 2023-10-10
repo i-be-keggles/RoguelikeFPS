@@ -211,13 +211,13 @@ public class FoliageGenerator : MonoBehaviour
     public bool TryPlaceFoliage(Foliage foliage, Vector3 position, Vector3 normal, int plantIndex, Transform chunk, bool selfDensity=true, bool othersDensity=true)
     {
         float angle = Vector3.Angle(normal, Vector3.up);
-        float spawnChance = foliage.SlopeProbability(angle) * (selfDensity ? foliage.density : 1) * (othersDensity ? (1 - Math.Clamp(GetDensityAtPosition(position).r, 0, 1)) : 1);
+        float spawnChance = foliage.PointProbability(position.y - transform.position.y, angle) * (selfDensity ? foliage.density : 1) * (othersDensity ? (1 - Math.Clamp(GetDensityAtPosition(position).r, 0, 1)) : 1);
 
         if (foliage.GetID() == 1)
         {
             //Vector2 treeNoisePos = new Vector2(position.x - (transform.position.x - map.chunkSize / 2), position.z - (transform.position.z - map.chunkSize / 2)) / map.chunkSize * (treeDensity * map.chunkSize / 10);
             Vector2 treeNoisePos = new Vector2(position.x - (chunk.position.x - map.chunkSize / 2), position.z - (chunk.position.z - map.chunkSize / 2)) / map.chunkSize * treeNoiseMap.GetLength(0);
-            spawnChance = foliage.SlopeProbability(angle) * treeNoiseMap[(int)treeNoisePos.x, (int)treeNoisePos.y];
+            spawnChance = foliage.PointProbability(position.y - transform.position.y, angle) * treeNoiseMap[(int)treeNoisePos.x, (int)treeNoisePos.y];
         }
         
         if ((foliage.GetID() != 1? UnityEngine.Random.Range(0f, 1f) : 1 - foliage.density) < spawnChance)

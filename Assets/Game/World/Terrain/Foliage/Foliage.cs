@@ -9,8 +9,11 @@ public abstract class Foliage : ScriptableObject
     [Range(0,1)] public float density;
     public float densityRadius;
 
-    [Range(0,90)] public float slopeCutoff;
+    [Range(0,90)] public float slopeCutoff = 90;
     [Range(0, 1)] public float slopeAversion;
+
+    [Min(0)] public float maxHeight = 100000;
+    [Min(0)] public float minHeight;
 
     [Space]
     public Material material;
@@ -24,9 +27,9 @@ public abstract class Foliage : ScriptableObject
     public float clusterVariance;
 
     [Tooltip("Calculates probability of plant spawning at given steepness.")]
-    public float SlopeProbability(float angle)
+    public float PointProbability(float height, float angle)
     {
-        if (angle >= slopeCutoff) return 0;
+        if (angle >= slopeCutoff || height > maxHeight || height < minHeight) return 0;
         else return 1 - slopeAversion * (angle / slopeCutoff);
     }
 

@@ -17,11 +17,13 @@ MonoBehaviour:
   densityRadius: 0.1
   slopeCutoff: 51.4
   slopeAversion: 0
+  maxHeight: 100000
+  minHeight: 0
   material: {fileID: 2100000, guid: 798419c9e06d7e14294336ef56a9adda, type: 2}
   baseRotation: {x: 0, y: 0, z: 0}
   baseOffset: {x: 0, y: 0.1, z: 0}
-  mesh: {fileID: -462981019419857548, guid: ca4e5cc9cb603ca44a13fedb8611f9b7, type: 3}
-  spawnPass: 0
   clusterSize: 3
   clusterDensity: 10
   clusterVariance: 1
+  mesh: {fileID: -462981019419857548, guid: ca4e5cc9cb603ca44a13fedb8611f9b7, type: 3}
+  spawnPass: 0

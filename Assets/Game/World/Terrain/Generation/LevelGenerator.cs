@@ -41,7 +41,8 @@ public class LevelGenerator : MonoBehaviour
                 RaycastHit hit;
                 if(Physics.Raycast(pos, -Vector3.up, out hit, map.meshHeightMultiplier * 10, terrainMask))
                 {
-                    if(Vector3.Angle(Vector3.up, hit.normal) <= obj.angleCutoff && Physics.OverlapSphere(hit.point, obj.space, ~(terrainMask)).Length == 0)
+                    float h = hit.point.y - transform.position.y;
+                    if(h <= obj.maxHeight && h >= obj.minHeight && Vector3.Angle(Vector3.up, hit.normal) <= obj.angleCutoff && Physics.OverlapSphere(hit.point, obj.space, ~(terrainMask)).Length == 0)
                     {
                         GameObject go = Instantiate(obj.prefab, hit.point, Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0f, 360f), 0)), hit.transform);
                         instances[i].Add(go);
@@ -66,9 +67,12 @@ public class LevelGenerator : MonoBehaviour
         public GameObject prefab;
         public float space;
         [Range(0,90)] public float angleCutoff;
+        public float maxHeight;
+        public float minHeight;
+
         public bool poi;
 
-        public LevelObject (string n, int i, float s, GameObject g, float r, float a, bool p)
+        public LevelObject (string n, int i, float s, GameObject g, float r, float a, bool p, float mn, float mx = 100000f)
         {
             name = n;
             instances = i;
@@ -76,6 +80,8 @@ public class LevelGenerator : MonoBehaviour
             prefab = g;
             space = r;
             angleCutoff = a;
+            maxHeight = mx;
+            minHeight = mn;
             poi = p;
         }
     }

@@ -17,6 +17,8 @@ MonoBehaviour:
   densityRadius: 1
   slopeCutoff: 90
   slopeAversion: 0
+  maxHeight: 100000
+  minHeight: 0
   material: {fileID: 0}
   baseRotation: {x: 0, y: 0, z: 0}
   baseOffset: {x: 0, y: 0, z: 0}
