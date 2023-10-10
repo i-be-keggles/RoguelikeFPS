@@ -9,14 +9,13 @@ public class MapDisplay : MonoBehaviour {
     [SerializeField]
 	public List<TerrainChunk> chunks;
 	public Material material;
-	public Material noiseMaterial;
 
     public MapGenerator generator;
     public FoliageGenerator foliage;
 
     public void DrawTexture(Texture2D texture, int n)
     {
-        chunks[n].gameObject.GetComponent<MeshRenderer>().material = noiseMaterial;
+        //chunks[n].gameObject.GetComponent<MeshRenderer>().material = noiseMaterial;
         chunks[n].gameObject.GetComponent<MeshRenderer>().material.mainTexture = texture;
     }
 

@@ -9,21 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18cfa3f2199b2d84894fe625897dbeda, type: 3}
-  m_Name: BasicGrassFoliage
+  m_Script: {fileID: 11500000, guid: 150769e45d27940498c4c70bcc1a7f45, type: 3}
+  m_Name: Mushroom
   m_EditorClassIdentifier: 
-  name: Basic Grass
-  density: 1
-  densityRadius: 0.1
+  name: Mushroom
+  density: 0.527
+  densityRadius: 5
   slopeCutoff: 30
   slopeAversion: 0
   maxHeight: 100000
   minHeight: 0
-  material: {fileID: 2100000, guid: 44bbf77252ebc194894cea54f52be331, type: 2}
-  baseRotation: {x: -90, y: 0, z: 0}
+  material: {fileID: 0}
+  baseRotation: {x: 0, y: 0, z: 0}
   baseOffset: {x: 0, y: 0, z: 0}
   clusterSize: 0
   clusterDensity: 0
   clusterVariance: 0
-  mesh: {fileID: 4579454407841743219, guid: a5c9439725b7b9745abb13deb6393656, type: 3}
-  spawnPass: 0
+  mesh:
+  - {fileID: 6714498951136390141, guid: a2c3c2e6e23978f429468d5e1bff2d29, type: 3}

@@ -203,14 +203,14 @@ Material:
     - _ForceDisplacementMultiplier: 0.7
     - _ForceDisplacementOffset: 0.52
     - _Frequency: 4
-    - _Gradient_Offset: 0.52
+    - _Gradient_Offset: 0.19
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
     - _HeightDensity: 1
     - _HeightMapParametrization: 0
     - _HeightMax: 1
     - _HeightMin: -1
-    - _HeightMultiplier: 1
+    - _HeightMultiplier: 2
     - _HeightOffset: 0
     - _HeightPoMAmplitude: 2
     - _HeightTessAmplitude: 2
@@ -291,8 +291,8 @@ Material:
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Colour: {r: 0.043137237, g: 0.36862746, b: 0, a: 1}
-    - _ColourA: {r: 0.48515025, g: 0.509434, b: 0.016820943, a: 1}
-    - _ColourB: {r: 0.6037736, g: 0.10029652, b: 0.025062274, a: 1}
+    - _ColourA: {r: 0.6603774, g: 0.13626835, b: 0, a: 1}
+    - _ColourB: {r: 0.18867922, g: 0.08630559, b: 0.070309706, a: 1}
     - _DiffusionProfileAsset: {r: 2.2888926e+38, g: 1.2389358e-26, b: 7.69327e-37, a: 0.00018220427}
     - _Displacement: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}

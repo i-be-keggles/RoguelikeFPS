@@ -278,8 +278,8 @@ Material:
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Colour: {r: 0.043137237, g: 0.36862746, b: 0, a: 1}
-    - _ColourA: {r: 0.17754602, g: 0.2924528, b: 0.05380029, a: 1}
-    - _ColourB: {r: 0.051987145, g: 0.13207549, b: 0, a: 1}
+    - _ColourA: {r: 0.2012282, g: 0.25065354, b: 0.3584906, a: 1}
+    - _ColourB: {r: 0.1062989, g: 0.05762727, b: 0.3301887, a: 1}
     - _DiffusionProfileAsset: {r: 2.2888926e+38, g: 1.2389358e-26, b: 7.69327e-37, a: 0.00018220427}
     - _Displacement: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}

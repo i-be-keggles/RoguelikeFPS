@@ -8,9 +8,6 @@ using Unity.AI.Navigation;
 
 public class MapGenerator : MonoBehaviour {
 
-	public enum DrawMode {NoiseMap, ColourMap, Mesh};
-	public DrawMode drawMode;
-
     [Min(10)] public int chunkSize;
     [Min(1)] public int mapSize;
     public float noiseScale;
@@ -57,10 +54,7 @@ public class MapGenerator : MonoBehaviour {
             {
                 float[,] noiseMap = Noise.GenerateNoiseMap(chunkSize, chunkSize, seed, noiseScale, octaves, persistance, lacunarity, offset + new Vector2(x * (chunkSize -1), y * (chunkSize -1)));
 
-                if (drawMode == DrawMode.Mesh)
-                    display.DrawMesh(GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), new Vector3(x * (chunkSize -1), 0, y * (chunkSize -1)), new int2(x * mapSize + y, mapSize * mapSize), noiseMap);
-                else
-                    display.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap), x * mapSize + y);
+                display.DrawMesh(GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), new Vector3(x * (chunkSize -1), 0, y * (chunkSize -1)), new int2(x * mapSize + y, mapSize * mapSize), noiseMap);
             }
         level.Generate();
         foreach(MapDisplay.TerrainChunk chunk in display.chunks)

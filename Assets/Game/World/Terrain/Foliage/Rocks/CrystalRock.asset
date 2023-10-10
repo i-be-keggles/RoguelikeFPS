@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 150769e45d27940498c4c70bcc1a7f45, type: 3}
-  m_Name: RockFoliage
+  m_Name: CrystalRock
   m_EditorClassIdentifier: 
-  name: Rock
-  density: 0.826
+  name: Rock Crystal 1
+  density: 1
   densityRadius: 2
-  slopeCutoff: 66.5
+  slopeCutoff: 45
   slopeAversion: 0
   maxHeight: 100000
   minHeight: 0
@@ -26,4 +26,6 @@ MonoBehaviour:
   clusterDensity: 0
   clusterVariance: 0
   mesh:
-  - {fileID: 9121190443775880006, guid: e84fbd396dc0f5e41832311857858815, type: 3}
+  - {fileID: 7713170200054758513, guid: fe33fe385c7e3e444a1df79747601f43, type: 3}
+  - {fileID: 4990466397194939692, guid: 2fc2ffa2263ab4d48bcef3e565a061a3, type: 3}
+  - {fileID: 6390741890111595525, guid: 88d691a8b296d444686810f4ccd18b13, type: 3}

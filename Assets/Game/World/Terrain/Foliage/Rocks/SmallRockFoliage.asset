@@ -25,4 +25,5 @@ MonoBehaviour:
   clusterSize: 0
   clusterDensity: 0
   clusterVariance: 0
-  mesh: {fileID: 2568330264808438931, guid: 904f40231a6bd5b4b87b457c97949569, type: 3}
+  mesh:
+  - {fileID: 2568330264808438931, guid: 904f40231a6bd5b4b87b457c97949569, type: 3}
