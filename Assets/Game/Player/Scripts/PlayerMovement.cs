@@ -22,8 +22,11 @@ public class PlayerMovement : MonoBehaviour
 
     public bool grounded;
 
+    public bool recieveInput;
+
     void Start()
     {
+        recieveInput = true;
         if(cc == null) cc = GetComponent<CharacterController>();
     }
 
@@ -31,25 +34,32 @@ public class PlayerMovement : MonoBehaviour
     {
         grounded = Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundMask);
 
+        Vector2 input = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (input.magnitude > 1) input.Normalize();
+
+        if(recieveInput)
         if (grounded)
         {
-            moveDir = cc.transform.right * Input.GetAxis("Horizontal") + cc.transform.forward * Input.GetAxis("Vertical");
+            moveDir = cc.transform.right * input.x + cc.transform.forward * input.y;
             moveDir *= Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
         }
-        else moveDir += (cc.transform.right * Input.GetAxis("Horizontal") + cc.transform.forward * Input.GetAxis("Vertical")) * airSpeed * Time.deltaTime;
+        else moveDir += (cc.transform.right * input.x + cc.transform.forward * input.y) * airSpeed * Time.deltaTime;
 
         if (grounded && velocity.y < 0) velocity.y = -2f;
 
-        if (moveDir.magnitude >= sprintSpeed) moveDir = moveDir.normalized * sprintSpeed;
-
         cc.Move(moveDir * Time.deltaTime);
 
-        if (grounded && Input.GetButtonDown("Jump"))
+        if (grounded && Input.GetButtonDown("Jump") && recieveInput)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
         velocity.y += gravity * Time.deltaTime;
         cc.Move(velocity * Time.deltaTime);
+    }
+
+    public void SetForce(Vector3 force)
+    {
+        moveDir = force;
     }
 }
