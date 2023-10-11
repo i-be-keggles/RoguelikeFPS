@@ -66,7 +66,7 @@ public class MapGenerator : MonoBehaviour {
         for(int i = 0; i < display.chunks.Count; i++)
         {
             PreloadChunk(i);
-            if(!playing) LoadChunk(i);
+            if(!playing || true) LoadChunk(i);
         }
         //foliage.GenerateMatrices();
         GetComponent<NavMeshSurface>().BuildNavMesh();
@@ -131,6 +131,42 @@ public class MapGenerator : MonoBehaviour {
 
         return meshData;
 
+    }
+
+    public float HeightAtPosition(int chunkId, Vector3 position)
+    {
+        MapDisplay.TerrainChunk chunk = display.chunks[chunkId];
+        Vector3 cPos = chunk.gameObject.transform.position;
+        Vector2 pos = new Vector2(position.x - (cPos.x + chunkSize / 2), position.z - (cPos.z + chunkSize / 2)) / chunkSize * chunk.height.GetLength(0);
+
+        int x = Mathf.FloorToInt(pos.x);
+        int y = Mathf.FloorToInt(pos.y);
+        float height = chunk.height[x, y];
+
+        return height * meshHeightMultiplier * meshHeightCurve.Evaluate(height);
+    }
+
+    public float SlopeAtPosition(int chunkId, Vector3 position)
+    {
+        MapDisplay.TerrainChunk chunk = display.chunks[chunkId];
+        Vector3 cPos = chunk.gameObject.transform.position;
+        Vector2 pos = new Vector2(position.x - (cPos.x - chunkSize / 2), position.z - (cPos.z - chunkSize / 2)) / chunkSize * chunk.height.GetLength(0);
+
+        int x = Mathf.FloorToInt(pos.x);
+        int y = Mathf.FloorToInt(pos.y);
+        float height = chunk.height[x, y];
+
+        // Compute the differentials by stepping over 1 in both directions.
+        int l = chunk.height.GetLength(0);
+        float dx = chunk.height[x + (x+1 < l? 1 : -1), y] - height;
+        float dy = chunk.height[x, y + (y + 1 < l ? 1 : -1)] - height;
+
+        // The "steepness" is the magnitude of the gradient vector
+        // For a faster but not as accurate computation, you can just use abs(dx) + abs(dy)
+        float slope = Mathf.Abs(dx) + Mathf.Abs(dy);
+        //print(slope);
+        return slope * meshHeightMultiplier * meshHeightCurve.Evaluate(height);
+        //return Mathf.Sqrt(dx * dx + dy * dy);
     }
 }
 

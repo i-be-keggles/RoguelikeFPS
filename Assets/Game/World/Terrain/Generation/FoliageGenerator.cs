@@ -46,6 +46,21 @@ public class FoliageGenerator : MonoBehaviour
         spawnedTrees = new List<GameObject>();
     }
 
+    private void OnDrawGizmos()
+    {
+        int id = transform.GetSiblingIndex();
+        for (int x = 0; x < map.chunkSize; x++)
+        {
+            for (int y = 0; y < map.chunkSize; y++)
+            {
+                Vector3 pos = transform.position + new Vector3(x, 0, y) - new Vector3(map.chunkSize, 0, map.chunkSize)/2f;
+                pos.y = map.HeightAtPosition(id, pos);
+                Gizmos.color = new Color(255, 255, 255) * map.SlopeAtPosition(id, pos);
+                Gizmos.DrawSphere(pos, 1f);
+            }
+        }
+    }
+
     private void Update()
     {
         RenderGrassBatches();
@@ -109,6 +124,8 @@ public class FoliageGenerator : MonoBehaviour
                     float ay = UnityEngine.Random.Range(y - displacement, y + displacement);
 
                     Vector3 offset = new Vector3(-map.chunkSize / 2f, 0, map.chunkSize / 2f);
+                        //TryPlaceFoliage(plants[i], chunk.position + offset + new Vector3(ax * map.chunkSize / plantDensity, heightMultiplier * 2, -ay * map.chunkSize / plantDensity), Vector3.up, i, chunk);
+
                     RaycastHit hit;
                     if(Physics.Raycast(chunk.position + offset + new Vector3(ax * map.chunkSize / plantDensity, heightMultiplier * 2, -ay * map.chunkSize / plantDensity), -Vector3.up, out hit, heightMultiplier*5, terrainMask)){
                         if(hit.transform == chunk) TryPlaceFoliage(plants[i], hit.point, hit.normal, i, chunk);
@@ -210,7 +227,9 @@ public class FoliageGenerator : MonoBehaviour
 
     public bool TryPlaceFoliage(Foliage foliage, Vector3 position, Vector3 normal, int plantIndex, Transform chunk, bool selfDensity=true, bool othersDensity=true)
     {
-        float angle = Vector3.Angle(normal, Vector3.up);
+        //float angle = Vector3.Angle(normal, Vector3.up);
+        float angle = 90 * map.SlopeAtPosition(transform.GetSiblingIndex(), position);
+
         float spawnChance = foliage.PointProbability(position.y - transform.position.y, angle) * (selfDensity ? foliage.density : 1) * (othersDensity ? (1 - Math.Clamp(GetDensityAtPosition(position).r, 0, 1)) : 1);
 
         if (foliage.GetID() == 1)

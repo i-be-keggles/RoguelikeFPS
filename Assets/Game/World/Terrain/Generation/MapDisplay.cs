@@ -48,7 +48,7 @@ public class MapDisplay : MonoBehaviour {
             go.AddComponent<MeshCollider>().sharedMesh = mesh;
             go.AddComponent<MeshRenderer>().material = material;
 
-            chunks.Add(new TerrainChunk(meshData, go));
+            chunks.Add(new TerrainChunk(meshData, go, height));
         }
     }
 
@@ -58,12 +58,16 @@ public class MapDisplay : MonoBehaviour {
         public MeshData data;
         public GameObject gameObject;
 
+        public float[,] height;
+
         public bool loaded;
 
-        public TerrainChunk(MeshData m, GameObject g)
+        public TerrainChunk(MeshData m, GameObject g, float[,] h)
         {
             data = m;
             gameObject = g;
+
+            height = h;
 
             loaded = false;
         }

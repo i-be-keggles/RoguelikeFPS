@@ -17,6 +17,7 @@ MonoBehaviour:
   cooldown: 1
   charges: 1
   twoStage: 0
-  length: 0.5
-  speed: 4
-  vertForce: 0
+  length: 0.2
+  speed: 30
+  vertForce: 1
+  easeOut: 3
