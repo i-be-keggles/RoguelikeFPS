@@ -6,9 +6,11 @@ using UnityEngine;
 
 public class EnemySpawning : MonoBehaviour
 {
+    public int spawnPointAmount;
+
     [SerializeField] public SpawnRatio[] spawnRatios;
 
-    public Transform[] spawnPoints; //procedurally generated --> turn into Vector3s
+    public List<Transform> spawnPoints; //procedurally generated --> turn into Vector3s
 
     public float spawnInterval; //in seconds
     public float intervalVariation; //in seconds
@@ -132,7 +134,7 @@ public class EnemySpawning : MonoBehaviour
         return null;
     }
 
-    public Vector3? GetRandomSpawnPoint(Transform[] spawnPoints)
+    public Vector3? GetRandomSpawnPoint(List<Transform> spawnPoints)
     {
         List<Vector3> points = new List<Vector3>();
         foreach(Transform p in spawnPoints)

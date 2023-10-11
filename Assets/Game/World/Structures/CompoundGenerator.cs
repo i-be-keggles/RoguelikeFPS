@@ -24,6 +24,8 @@ public class CompoundGenerator : MonoBehaviour
     private List<CompoundStructure> connectors;
     private List<CompoundStructure> hubs;
 
+    public float scale = 0.5f;
+
 
     public void Start()
     {
@@ -124,6 +126,8 @@ public class CompoundGenerator : MonoBehaviour
                 hub.transform.eulerAngles = Quaternion.LookRotation(p_connectors[i].transform.position - transform.position).eulerAngles + new Vector3(0,+90,0);
             }
         }
+
+        transform.localScale *= scale;
     }
 
     public CompoundStructure GetHub(int connector)

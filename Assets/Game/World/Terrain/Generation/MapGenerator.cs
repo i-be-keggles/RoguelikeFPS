@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using System;
 using System.Linq;
 using Unity.AI.Navigation;
+using System.Linq.Expressions;
 
 public class MapGenerator : MonoBehaviour {
 
@@ -28,9 +29,15 @@ public class MapGenerator : MonoBehaviour {
     public FoliageGenerator foliage;
     public LevelGenerator level;
 
+    public MapDisplay display;
+    
+    public bool generateGeometryOnPlay;
+    private bool playing;
 
     private void Start()
     {
+        playing = true;
+        display = GetComponent<MapDisplay>();
         GenerateMap();
     }
 
@@ -47,7 +54,6 @@ public class MapGenerator : MonoBehaviour {
     }
 
     public void GenerateMap() {
-        MapDisplay display = FindObjectOfType<MapDisplay>();
 
         for(int x = 0; x < mapSize; x++)
             for(int y = 0; y < mapSize; y++)
@@ -57,24 +63,42 @@ public class MapGenerator : MonoBehaviour {
                 display.DrawMesh(GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), new Vector3(x * (chunkSize -1), 0, y * (chunkSize -1)), new int2(x * mapSize + y, mapSize * mapSize), noiseMap);
             }
         level.Generate();
-        foreach(MapDisplay.TerrainChunk chunk in display.chunks)
+        for(int i = 0; i < display.chunks.Count; i++)
         {
-            Vector2 chunkPos = new Vector2(chunk.gameObject.transform.GetSiblingIndex() % mapSize, chunk.gameObject.transform.GetSiblingIndex() / mapSize);
-            FoliageGenerator f = CopyComponent(foliage, chunk.gameObject);
-            f.grassPositions = new List<List<Vector3>>();
-            f.batches = new List<List<List<Matrix4x4>>>();
-            f.GenerateGrass(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
-            f.GenerateTrees(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve, chunkPos);
-            f.GenerateRocks(chunk.gameObject.transform, meshHeightMultiplier, meshHeightCurve);
-            f.GenerateMatrices();
-            
-            //-----Foliage displcement is really unoptimized rn-----
-            //FoliageDisplacementHandler d = CopyComponent(GetComponent<FoliageDisplacementHandler>(), chunk.gameObject);
-            //d.foliage = f;
-            //d.Start();
+            PreloadChunk(i);
+            if(!playing) LoadChunk(i);
         }
         //foliage.GenerateMatrices();
         GetComponent<NavMeshSurface>().BuildNavMesh();
+    }
+
+    public void PreloadChunk(int chunkId)
+    {
+        Transform chunk = display.chunks[chunkId].gameObject.transform;
+        Vector2 chunkPos = new Vector2(chunk.gameObject.transform.GetSiblingIndex() % mapSize, chunk.GetSiblingIndex() / mapSize);
+        FoliageGenerator f = CopyComponent(foliage, chunk.gameObject);
+        f.grassPositions = new List<List<Vector3>>();
+        f.batches = new List<List<List<Matrix4x4>>>();
+    }
+
+    public void LoadChunk(int chunkId)
+    {
+        Transform chunk = display.chunks[chunkId].gameObject.transform;
+        Vector2 chunkPos = new Vector2(chunk.gameObject.transform.GetSiblingIndex() % mapSize, chunk.GetSiblingIndex() / mapSize);
+        FoliageGenerator f = chunk.GetComponent<FoliageGenerator>();
+        f.GenerateGrass(chunk, meshHeightMultiplier, meshHeightCurve);
+        f.GenerateTrees(chunk, meshHeightMultiplier, meshHeightCurve, chunkPos);
+        f.GenerateRocks(chunk, meshHeightMultiplier, meshHeightCurve);
+        f.GenerateMatrices();
+
+        //-----Foliage displcement is really unoptimized rn-----
+        //FoliageDisplacementHandler d = CopyComponent(GetComponent<FoliageDisplacementHandler>(), chunk.gameObject);
+        //d.foliage = f;
+        //d.Start();
+
+        MapDisplay.TerrainChunk c = display.chunks[chunkId];
+        c.loaded = true;
+        display.chunks[chunkId] = c;
     }
 
     public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve)

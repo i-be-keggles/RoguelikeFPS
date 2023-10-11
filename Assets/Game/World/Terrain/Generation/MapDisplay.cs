@@ -57,11 +57,15 @@ public class MapDisplay : MonoBehaviour {
     {
         public MeshData data;
         public GameObject gameObject;
- 
+
+        public bool loaded;
+
         public TerrainChunk(MeshData m, GameObject g)
         {
             data = m;
             gameObject = g;
+
+            loaded = false;
         }
     }
 

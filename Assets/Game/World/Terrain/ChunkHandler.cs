@@ -24,7 +24,6 @@ public class ChunkHandler : MonoBehaviour
         if(pos != newPos)
         {
             pos = newPos;
-            print("Updating for chunk " + pos);
             UpdateChunks();
         }
     }
@@ -45,12 +44,13 @@ public class ChunkHandler : MonoBehaviour
                 if (pos.x - renderDistance < x && pos.x + renderDistance > x && pos.y - renderDistance < y && pos.y + renderDistance > y)
                 {
                     if (!mapDisplay.chunks[id].gameObject.activeSelf) mapDisplay.chunks[id].gameObject.SetActive(true);
+                    if (!mapDisplay.chunks[id].loaded) mapGenerator.LoadChunk(id);
+                    mapDisplay.chunks[id].gameObject.GetComponent<FoliageGenerator>().enabled = pos.x - grassDistance < x && pos.x + grassDistance > x && pos.y - grassDistance < y && pos.y + grassDistance > y;
                 }
                 else
                 {
                     if (mapDisplay.chunks[id].gameObject.activeSelf) mapDisplay.chunks[id].gameObject.SetActive(false);
                 }
-                mapDisplay.chunks[id].gameObject.GetComponent<FoliageGenerator>().enabled = pos.x - grassDistance < x && pos.x + grassDistance > x && pos.y - grassDistance < y && pos.y + grassDistance > y;
             }
     }
 }

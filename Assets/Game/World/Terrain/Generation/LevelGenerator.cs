@@ -12,6 +12,8 @@ public class LevelGenerator : MonoBehaviour
 
     public List<GameObject> POIs;
 
+    public EnemySpawning spawnManager;
+
 
     private void Start()
     {
@@ -22,9 +24,33 @@ public class LevelGenerator : MonoBehaviour
     {
         POIs = new List<GameObject>();
         if(instances != null) for(int i = 0; i < instances.Count; i++) if (instances[i] != null) for (int j = 0; j < instances[i].Count; j++) if(instances[i][j] != null) DestroyImmediate(instances[i][j]);
+        if(spawnManager.spawnPoints != null) foreach(Transform t in spawnManager.spawnPoints) DestroyImmediate(t.gameObject);
         instances = new List<List<GameObject>>();
+        spawnManager.spawnPoints = new List<Transform>();
 
         float worldSize = map.mapSize * map.chunkSize;
+
+        for (int i = 0; i < spawnManager.spawnPointAmount; i++)
+        {
+            bool spawned = false;
+            while (!spawned)
+            {
+                Vector3 pos = transform.position + new Vector3(UnityEngine.Random.Range(-worldSize, worldSize) - map.chunkSize / 2f, map.meshHeightMultiplier * 2, UnityEngine.Random.Range(-worldSize, worldSize) - map.chunkSize / 2f);
+                RaycastHit hit;
+                if (Physics.Raycast(pos, -Vector3.up, out hit, map.meshHeightMultiplier * 10, terrainMask))
+                {
+                    if (Vector3.Angle(Vector3.up, hit.normal) <= 45f && Physics.OverlapSphere(hit.point, 2, ~(terrainMask)).Length == 0)
+                    {
+                        GameObject go = new GameObject("Spawn point " + i);
+                        go.transform.parent = spawnManager.transform.GetChild(0);
+                        go.transform.position = hit.point;
+                        spawned = true;
+                        spawnManager.spawnPoints.Add(go.transform);
+                    }
+                }
+            }
+        }
+
         for (int i = 0; i < objectPrefabs.Count; i++)
         {
             instances.Add(new List<GameObject>());
