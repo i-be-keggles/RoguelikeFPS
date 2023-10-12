@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Flowers
   density: 0.123
   densityRadius: 0.1
-  slopeCutoff: 51.4
+  slopeCutoff: 20
   slopeAversion: 0
   maxHeight: 100000
   minHeight: 0

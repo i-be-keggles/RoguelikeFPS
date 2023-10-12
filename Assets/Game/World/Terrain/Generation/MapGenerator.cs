@@ -75,16 +75,16 @@ public class MapGenerator : MonoBehaviour {
     public void PreloadChunk(int chunkId)
     {
         Transform chunk = display.chunks[chunkId].gameObject.transform;
-        Vector2 chunkPos = new Vector2(chunk.gameObject.transform.GetSiblingIndex() % mapSize, chunk.GetSiblingIndex() / mapSize);
         FoliageGenerator f = CopyComponent(foliage, chunk.gameObject);
         f.grassPositions = new List<List<Vector3>>();
         f.batches = new List<List<List<Matrix4x4>>>();
     }
 
-    public void LoadChunk(int chunkId)
+    public IEnumerator LoadChunk(int chunkId)
     {
         Transform chunk = display.chunks[chunkId].gameObject.transform;
-        Vector2 chunkPos = new Vector2(chunk.gameObject.transform.GetSiblingIndex() % mapSize, chunk.GetSiblingIndex() / mapSize);
+
+        Vector2 chunkPos = new Vector2(chunk.GetSiblingIndex() % mapSize, chunk.GetSiblingIndex() / mapSize);
         FoliageGenerator f = chunk.GetComponent<FoliageGenerator>();
         f.GenerateGrass(chunk, meshHeightMultiplier, meshHeightCurve);
         f.GenerateTrees(chunk, meshHeightMultiplier, meshHeightCurve, chunkPos);
@@ -99,6 +99,8 @@ public class MapGenerator : MonoBehaviour {
         MapDisplay.TerrainChunk c = display.chunks[chunkId];
         c.loaded = true;
         display.chunks[chunkId] = c;
+
+        yield return null;
     }
 
     public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve)
@@ -133,15 +135,31 @@ public class MapGenerator : MonoBehaviour {
 
     }
 
-    public float HeightAtPosition(int chunkId, Vector3 position)
+    public Vector2 ChunkCoordsAtPosition(int chunkId, Vector3 position)
     {
         MapDisplay.TerrainChunk chunk = display.chunks[chunkId];
         Vector3 cPos = chunk.gameObject.transform.position;
-        Vector2 pos = new Vector2(position.x - (cPos.x + chunkSize / 2), position.z - (cPos.z + chunkSize / 2)) / chunkSize * chunk.height.GetLength(0);
+        if (chunk.height == null) return Vector2.zero;
+        int l = chunk.height.GetLength(0);
+        return new Vector2(position.x - (cPos.x - chunkSize / 2), (cPos.z + chunkSize / 2) - position.z) / chunkSize * l;
+    }
 
-        int x = Mathf.FloorToInt(pos.x);
-        int y = Mathf.FloorToInt(pos.y);
+    public float HeightAtPosition(int chunkId, Vector3 position)
+    {
+        MapDisplay.TerrainChunk chunk = display.chunks[chunkId];
+        if (chunk.height == null) return 0;
+        int l = chunk.height.GetLength(0);
+        Vector2 pos = ChunkCoordsAtPosition(chunkId, position);
+
+
+        int x = Mathf.FloorToInt(Math.Clamp(pos.x, 0, l-1));
+        int y = Mathf.FloorToInt(Math.Clamp(pos.y, 0, l-1));
+
         float height = chunk.height[x, y];
+        float dx = (pos.x - Mathf.Floor(pos.x)) * (chunk.height[Math.Clamp(x+1,0, l-1), y] - height);
+        float dy = (pos.y - Mathf.Floor(pos.y)) * (chunk.height[x, Math.Clamp(y + 1, 0, l - 1)] - height);
+        
+        height += (dx + dy)/2f;
 
         return height * meshHeightMultiplier * meshHeightCurve.Evaluate(height);
     }
@@ -149,21 +167,23 @@ public class MapGenerator : MonoBehaviour {
     public float SlopeAtPosition(int chunkId, Vector3 position)
     {
         MapDisplay.TerrainChunk chunk = display.chunks[chunkId];
-        Vector3 cPos = chunk.gameObject.transform.position;
-        Vector2 pos = new Vector2(position.x - (cPos.x - chunkSize / 2), position.z - (cPos.z - chunkSize / 2)) / chunkSize * chunk.height.GetLength(0);
+        if (chunk.height == null) return 0;
+        Vector2 pos = ChunkCoordsAtPosition(chunkId, position);
 
-        int x = Mathf.FloorToInt(pos.x);
-        int y = Mathf.FloorToInt(pos.y);
+        int l = chunk.height.GetLength(0);
+
+        int x = Mathf.FloorToInt(Math.Clamp(pos.x, 0, l-1));
+        int y = Mathf.FloorToInt(Math.Clamp(pos.y, 0, l-1));
         float height = chunk.height[x, y];
 
         // Compute the differentials by stepping over 1 in both directions.
-        int l = chunk.height.GetLength(0);
         float dx = chunk.height[x + (x+1 < l? 1 : -1), y] - height;
         float dy = chunk.height[x, y + (y + 1 < l ? 1 : -1)] - height;
 
         // The "steepness" is the magnitude of the gradient vector
         // For a faster but not as accurate computation, you can just use abs(dx) + abs(dy)
         float slope = Mathf.Abs(dx) + Mathf.Abs(dy);
+
         //print(slope);
         return slope * meshHeightMultiplier * meshHeightCurve.Evaluate(height);
         //return Mathf.Sqrt(dx * dx + dy * dy);

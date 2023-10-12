@@ -16,7 +16,7 @@ MonoBehaviour:
   density: 1
   densityRadius: 0.1
   slopeCutoff: 30
-  slopeAversion: 0
+  slopeAversion: 0.125
   maxHeight: 100000
   minHeight: 0
   material: {fileID: 2100000, guid: 44bbf77252ebc194894cea54f52be331, type: 2}

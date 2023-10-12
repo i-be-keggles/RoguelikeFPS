@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
+using System;
+using UnityEngine.UIElements;
 
 public class ChunkHandler : MonoBehaviour
 {
@@ -11,6 +14,12 @@ public class ChunkHandler : MonoBehaviour
     private MapDisplay mapDisplay;
     private MapGenerator mapGenerator;
     public Vector2Int pos;
+
+
+    private void Awake()
+    {
+        UnityThread.initUnityThread();
+    }
 
     private void Start()
     {
@@ -44,7 +53,14 @@ public class ChunkHandler : MonoBehaviour
                 if (pos.x - renderDistance < x && pos.x + renderDistance > x && pos.y - renderDistance < y && pos.y + renderDistance > y)
                 {
                     if (!mapDisplay.chunks[id].gameObject.activeSelf) mapDisplay.chunks[id].gameObject.SetActive(true);
-                    if (!mapDisplay.chunks[id].loaded) mapGenerator.LoadChunk(id);
+                    if (!mapDisplay.chunks[id].loaded)
+                    {
+                        UnityThread.executeCoroutine(mapGenerator.LoadChunk(id));
+
+                        //Thread chunkThread = new Thread(() => mapGenerator.LoadChunk(id));
+                        //chunkThread.Start();
+                        //mapGenerator.LoadChunk(id);
+                    }
                     mapDisplay.chunks[id].gameObject.GetComponent<FoliageGenerator>().enabled = pos.x - grassDistance < x && pos.x + grassDistance > x && pos.y - grassDistance < y && pos.y + grassDistance > y;
                 }
                 else
