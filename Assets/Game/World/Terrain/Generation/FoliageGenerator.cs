@@ -289,13 +289,13 @@ public class FoliageGenerator : MonoBehaviour
         for(int i = 0; i < plants.Length; i++)
         foreach(var batch in batches[i])
         {
-            for(int j = 0; j < plants[0].mesh.subMeshCount; j++)
+            for(int j = 0; j < plants[0].mesh.GetComponent<Mesh>().subMeshCount; j++)
             {
                 MaterialPropertyBlock block = new MaterialPropertyBlock();
                 //block.SetVector("_ParentPos", transform.position);
                 //block.SetFloat("_ParentSize", map.chunkSize);
                 //block.SetTexture("_DisplacementMap", grassDisplacementMap);
-                Graphics.DrawMeshInstanced(plants[i].mesh, j, plants[i].material, batch, block, UnityEngine.Rendering.ShadowCastingMode.Off, false);
+                Graphics.DrawMeshInstanced(plants[i].mesh.GetComponent<Mesh>(), j, plants[i].material, batch, block, UnityEngine.Rendering.ShadowCastingMode.Off, false);
             }
         }
     }

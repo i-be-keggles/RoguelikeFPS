@@ -3,7 +3,7 @@ using System.Collections;
 
 public static class Noise {
 
-	public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset) {
+	public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, AnimationCurve curve = null) {
 		float[,] noiseMap = new float[mapWidth,mapHeight];
 
         float amplitude = 1;
@@ -47,7 +47,7 @@ public static class Noise {
 					frequency *= lacunarity;
 				}
 
-				noiseMap [x, y] = noiseHeight;
+				noiseMap [x, y] = noiseHeight * (curve == null? 1 : curve.Evaluate(noiseHeight));
 			}
 		}
 

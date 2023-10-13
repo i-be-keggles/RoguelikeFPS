@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WheatFoliage
   m_EditorClassIdentifier: 
   name: Wheat
-  density: 0.161
+  density: 0.051
   densityRadius: 0.1
   slopeCutoff: 12.6
   slopeAversion: 0
@@ -25,5 +25,5 @@ MonoBehaviour:
   clusterSize: 0
   clusterDensity: 0
   clusterVariance: 0
-  mesh: {fileID: 4579454407841743219, guid: a5c9439725b7b9745abb13deb6393656, type: 3}
+  mesh: {fileID: 8322724239515195823, guid: 2685327854b74c54fa309a60c87b3996, type: 3}
   spawnPass: 0

@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Basic Grass
   density: 1
   densityRadius: 0.1
-  slopeCutoff: 30
+  slopeCutoff: 23.2
   slopeAversion: 0.125
   maxHeight: 100000
   minHeight: 0
@@ -25,5 +25,5 @@ MonoBehaviour:
   clusterSize: 0
   clusterDensity: 0
   clusterVariance: 0
-  mesh: {fileID: 4579454407841743219, guid: a5c9439725b7b9745abb13deb6393656, type: 3}
+  mesh: {fileID: 1950277453939485288, guid: a1cfd1f2714807041ad932b5b361c516, type: 3}
   spawnPass: 0
