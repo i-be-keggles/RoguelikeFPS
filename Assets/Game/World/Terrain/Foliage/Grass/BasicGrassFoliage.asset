@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Basic Grass
   density: 1
   densityRadius: 0.1
-  slopeCutoff: 23.2
+  slopeCutoff: 30
   slopeAversion: 0.125
   maxHeight: 100000
   minHeight: 0

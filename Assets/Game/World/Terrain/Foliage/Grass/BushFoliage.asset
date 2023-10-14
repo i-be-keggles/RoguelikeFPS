@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BushFoliage
   m_EditorClassIdentifier: 
   name: Bush
-  density: 0.17
+  density: 0.001
   densityRadius: 0.2
   slopeCutoff: 50.5
   slopeAversion: 0
@@ -25,5 +25,5 @@ MonoBehaviour:
   clusterSize: 1
   clusterDensity: 3
   clusterVariance: 1
-  mesh: {fileID: 4579454407841743219, guid: 8e927a0c558d96544befd4e3085c3094, type: 3}
+  mesh: {fileID: 5239867019527772826, guid: eb2cd9e58df04514eb0867186c8a621c, type: 3}
   spawnPass: 0
