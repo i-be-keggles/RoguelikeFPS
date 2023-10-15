@@ -294,9 +294,9 @@ Material:
     - _UVEmissive: 0
     - _UseEmissiveIntensity: 0
     - _UseShadowThreshold: 0
-    - _WindDensity: 2
+    - _WindDensity: 0.25
     - _WindDisplacement: 0.3
-    - _WindFrequency: 0.1
+    - _WindFrequency: 1.5
     - _WindOverride: 0.05
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 3

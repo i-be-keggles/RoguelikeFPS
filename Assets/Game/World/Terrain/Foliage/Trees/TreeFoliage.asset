@@ -15,9 +15,9 @@ MonoBehaviour:
   name: Tree
   density: 1
   densityRadius: 1
-  slopeCutoff: 90
+  slopeCutoff: 30
   slopeAversion: 0
-  maxHeight: 100000
+  maxHeight: 0.738
   minHeight: 0
   material: {fileID: 0}
   baseRotation: {x: 0, y: 0, z: 0}

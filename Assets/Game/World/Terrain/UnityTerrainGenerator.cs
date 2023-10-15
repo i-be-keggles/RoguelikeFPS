@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
+using UnityEngine.TerrainUtils;
 
 public class UnityTerrainGenerator : MonoBehaviour
 {
@@ -26,7 +27,11 @@ public class UnityTerrainGenerator : MonoBehaviour
     public int plantDensity;
 
     public List<TreeFoliage> trees;
-    public int treeDensity;
+    public float treeDensity;
+    private List<GameObject> spawnedTrees;
+    public float treeDisplacement;
+    public float treeNoiseScale;
+    public float treeNoiseCutoff;
 
     private void Start()
     {
@@ -88,9 +93,11 @@ public class UnityTerrainGenerator : MonoBehaviour
         }
     }
 
-
     public void GenerateTrees()
     {
+        foreach (GameObject tree in spawnedTrees) if(tree != null) DestroyImmediate(tree);
+        spawnedTrees = new List<GameObject>();
+
         TreePrototype[] treePrototypes = new TreePrototype[trees.Count];
         for (int i = 0; i < trees.Count; i++)
         {
@@ -100,37 +107,38 @@ public class UnityTerrainGenerator : MonoBehaviour
         }
         terrain.terrainData.treePrototypes = treePrototypes;
 
-        int size = terrain.terrainData.heightmapResolution;
+        float treesPerAxis = treeDensity * terrain.terrainData.size.x / 10f;
 
-        float[,] noiseMap = Noise.GenerateNoiseMap(size, size, seed, noiseScale, octaves, persistance, lacunarity, offset, meshHeightCurve);
+        float[,] noiseMap = Noise.GenerateNoiseMap((int)treesPerAxis, (int)treesPerAxis, seed, treeNoiseScale, 3, 0.2f, 1.5f, offset);
 
-        TreeInstance[] instances = new TreeInstance[0];
-        terrain.terrainData.SetTreeInstances(instances, false);
         for (int i = 0; i < trees.Count; i++)
         {
-            for (float y = 0; y < 50; y++)
-                for (float x = 0; x < 50; x++)
+            for (int x = 0; x < treesPerAxis; x++)
+            {
+                for (int y = 0; y < treesPerAxis; y++)
                 {
-                    if (true || UnityEngine.Random.Range(0f, 1f) <= trees[i].density * treeDensity)
-                    {
-                        TreeInstance tree = new TreeInstance();
+                    float ax = UnityEngine.Random.Range(x - treeDisplacement, x + treeDisplacement);
+                    float ay = UnityEngine.Random.Range(y - treeDisplacement, y + treeDisplacement);
 
-                        //Vector3 pos = transform.position + new Vector3(s * (x / size), 0, s * (y / size));
-                        Vector3 pos = new Vector3(x / (float)size, 0, y / (float)size);
-                        print(pos);
-                        tree.position = pos;
-                        tree.heightScale = UnityEngine.Random.Range(0.9f, 1.1f);
-                        tree.widthScale = 1f;
-                        tree.color = UnityEngine.Color.white;
-                        tree.lightmapColor = UnityEngine.Color.white;
-                        tree.prototypeIndex = 0;
-                        //terrain.AddTreeInstance(tree);
-                        instances.Append(tree);
-                        //terrain.Flush();
+                    //in range of 0-1 (% of total terrain size)
+                    Vector3 pos = new Vector3(ax / treesPerAxis, 0, ay / treesPerAxis);
+
+                    if (pos.x < 0 || pos.x > 1 || pos.z < 0 || pos.z > 1) continue;
+
+                    float h = terrain.SampleHeight(pos * terrain.terrainData.size.x + transform.position);
+
+                    float angle = Vector3.Angle(terrain.terrainData.GetInterpolatedNormal(pos.x, pos.z), Vector3.up);
+                    if (h / terrain.terrainData.size.y <= trees[i].maxHeight && treeNoiseCutoff <= noiseMap[(int)(pos.x*treesPerAxis), (int)(pos.z * treesPerAxis)] && angle <= trees[i].slopeCutoff)
+                    {
+                        //convert to worldspace
+                        pos = pos * terrain.terrainData.size.x + transform.position;
+                        pos.y = h + transform.position.y;
+                        GameObject go = Instantiate(trees[i].mesh, pos, Quaternion.Euler(0, UnityEngine.Random.Range(0f, 360f), 0), transform);
+                        spawnedTrees.Add(go);
                     }
                 }
+            }
         }
-        terrain.terrainData.SetTreeInstances(instances, true);
     }
 
     public Vector3 PosFromDetailIndex(int x, int y)

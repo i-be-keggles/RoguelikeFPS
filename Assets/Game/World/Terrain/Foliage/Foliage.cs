@@ -12,8 +12,8 @@ public abstract class Foliage : ScriptableObject
     [Range(0,90)] public float slopeCutoff = 90;
     [Range(0, 1)] public float slopeAversion;
 
-    [Min(0)] public float maxHeight = 100000;
-    [Min(0)] public float minHeight;
+    [Range(0,1)] public float maxHeight = 1;
+    [Range(0, 1)] public float minHeight;
 
     [Space]
     public Material material;
