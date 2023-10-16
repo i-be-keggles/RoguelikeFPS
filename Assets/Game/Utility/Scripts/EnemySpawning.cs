@@ -152,6 +152,16 @@ public class EnemySpawning : MonoBehaviour
         Debug.LogWarning("Spawning failed. No available spawn points in proper range of player.");
         return null;
     }
+
+    private void OnDrawGizmos()
+    {
+        return;
+        if(spawnPoints != null)
+        foreach(Transform t in spawnPoints)
+        {
+            Gizmos.DrawSphere(t.position, maxRange);
+        }
+    }
 }
 
 public struct Swarm

@@ -32,7 +32,7 @@ public class SurveyPod : MonoBehaviour
         int r = 0;
         for(int i = 0; i < POIs.Count - r; i++)
             if (Vector3.Distance(POIs[i - r].transform.position, transform.position) > range)
-                POIs.RemoveAt(r--);
+                POIs.RemoveAt(r++);
 
         marker = Instantiate(marker, POIs[UnityEngine.Random.Range(0, POIs.Count)].transform.position, Quaternion.identity, transform);
     }

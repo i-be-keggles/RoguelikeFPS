@@ -1,9 +1,14 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
+using Unity.Burst.CompilerServices;
 
 public class LevelGenerator : MonoBehaviour
-{
+{    
+    public Terrain terrain;
+    public EnemySpawning spawnManager;
+
     public List<LevelObject> objectPrefabs;
     public List<List<GameObject>> instances;
     public MapGenerator map;
@@ -11,8 +16,6 @@ public class LevelGenerator : MonoBehaviour
     public LayerMask terrainMask;
 
     public List<GameObject> POIs;
-
-    public EnemySpawning spawnManager;
 
 
     private void Start()
@@ -28,25 +31,32 @@ public class LevelGenerator : MonoBehaviour
         instances = new List<List<GameObject>>();
         spawnManager.spawnPoints = new List<Transform>();
 
-        float worldSize = map.mapSize * map.chunkSize;
+        float worldSize = terrain.terrainData.size.x;
 
-        for (int i = 0; i < spawnManager.spawnPointAmount; i++)
+        for (int x = 0; x < spawnManager.spawnPointAmount; x++)
         {
-            bool spawned = false;
-            while (!spawned)
+            for (int y = 0; y < spawnManager.spawnPointAmount; y++)
             {
-                Vector3 pos = transform.position + new Vector3(UnityEngine.Random.Range(-worldSize, worldSize) - map.chunkSize / 2f, map.meshHeightMultiplier * 2, UnityEngine.Random.Range(-worldSize, worldSize) - map.chunkSize / 2f);
-                RaycastHit hit;
-                if (Physics.Raycast(pos, -Vector3.up, out hit, map.meshHeightMultiplier * 10, terrainMask))
+                float ax = UnityEngine.Random.Range(x - 1, x + 1);
+                float ay = UnityEngine.Random.Range(y - 1, y + 1);
+
+                //in range of 0-1 (% of total terrain size)
+                Vector3 pos = new Vector3(ax / spawnManager.spawnPointAmount, 0, ay / spawnManager.spawnPointAmount);
+
+                if (pos.x < 0 || pos.x > 1 || pos.z < 0 || pos.z > 1) continue;
+
+                float h = terrain.SampleHeight(pos * terrain.terrainData.size.x + transform.position);
+
+                float angle = Vector3.Angle(terrain.terrainData.GetInterpolatedNormal(pos.x, pos.z), Vector3.up);
+                if (angle <= 45f)
                 {
-                    if (Vector3.Angle(Vector3.up, hit.normal) <= 45f && Physics.OverlapSphere(hit.point, 2, ~(terrainMask)).Length == 0)
-                    {
-                        GameObject go = new GameObject("Spawn point " + i);
-                        go.transform.parent = spawnManager.transform.GetChild(0);
-                        go.transform.position = hit.point;
-                        spawned = true;
-                        spawnManager.spawnPoints.Add(go.transform);
-                    }
+                    //convert to worldspace
+                    pos = pos * terrain.terrainData.size.x + transform.position;
+                    pos.y = h + transform.position.y;
+                    GameObject go = new GameObject("Spawn point " + (x* spawnManager.spawnPointAmount + y));
+                    go.transform.parent = spawnManager.transform.GetChild(0);
+                    go.transform.position = pos;
+                    spawnManager.spawnPoints.Add(go.transform);
                 }
             }
         }
@@ -63,14 +73,14 @@ public class LevelGenerator : MonoBehaviour
             while(spawned < goal && attempts < goal * 10)
             {
                 attempts++;
-                Vector3 pos = transform.position + new Vector3(UnityEngine.Random.Range(-worldSize, worldSize) - map.chunkSize/2f, map.meshHeightMultiplier * 2, UnityEngine.Random.Range(-worldSize, worldSize) - map.chunkSize / 2f);
+                Vector3 pos = transform.position + new Vector3(UnityEngine.Random.Range(0, worldSize), terrain.terrainData.size.y * 2, UnityEngine.Random.Range(0, worldSize));
                 RaycastHit hit;
-                if(Physics.Raycast(pos, -Vector3.up, out hit, map.meshHeightMultiplier * 10, terrainMask))
+                if(Physics.Raycast(pos, -Vector3.up, out hit, terrain.terrainData.size.y * 3, terrainMask))
                 {
                     float h = hit.point.y - transform.position.y;
                     if(h <= obj.maxHeight && h >= obj.minHeight && Vector3.Angle(Vector3.up, hit.normal) <= obj.angleCutoff && Physics.OverlapSphere(hit.point, obj.space, ~(terrainMask)).Length == 0)
                     {
-                        GameObject go = Instantiate(obj.prefab, hit.point, Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0f, 360f), 0)), hit.transform);
+                        GameObject go = Instantiate(obj.prefab, hit.point, Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0f, 360f), 0)), transform);
                         instances[i].Add(go);
                         spawned++;
                         if (obj.poi) POIs.Add(go);

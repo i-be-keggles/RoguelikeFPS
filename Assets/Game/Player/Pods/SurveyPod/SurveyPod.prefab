@@ -222,7 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   marker: {fileID: 4138781080876411229, guid: c5c2cac6df2ea2d4c971539226d1a24f, type: 3}
-  range: 100
+  range: 200
   anim: {fileID: 0}
 --- !u!114 &2941948652119725908
 MonoBehaviour:

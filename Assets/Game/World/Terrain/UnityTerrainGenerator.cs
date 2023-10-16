@@ -6,6 +6,7 @@ using System.Linq;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.TerrainUtils;
+using Unity.AI.Navigation;
 
 public class UnityTerrainGenerator : MonoBehaviour
 {
@@ -22,10 +23,14 @@ public class UnityTerrainGenerator : MonoBehaviour
     public int seed;
     public Vector2 offset;
 
+    public bool buildNavMeshOnPlay;
+    private bool playing = false;
 
+    [Space]
     public List<PlantFoliage> plants;
     public int plantDensity;
 
+    [Space]
     public List<TreeFoliage> trees;
     public float treeDensity;
     private List<GameObject> spawnedTrees;
@@ -33,8 +38,15 @@ public class UnityTerrainGenerator : MonoBehaviour
     public float treeNoiseScale;
     public float treeNoiseCutoff;
 
+    [Space]
+    public List<RockFoliage> rocks;
+    public float rockDensity;
+    private List<GameObject> spawnedRocks;
+    public float rockDisplacement;
+
     private void Start()
     {
+        playing = true;
         terrain = GetComponent<Terrain>();
         terrain.drawTreesAndFoliage = true;
         GenerateMap();
@@ -52,9 +64,15 @@ public class UnityTerrainGenerator : MonoBehaviour
         float[,] noiseMap = Noise.GenerateNoiseMap(size, size, seed, noiseScale, octaves, persistance, lacunarity, offset + new Vector2(x * (size - 1), y * (size - 1)), meshHeightCurve);
         terrain.terrainData.SetHeights(0, 0, noiseMap);
 
+        for(int i = transform.childCount - 1; i >= 0; i--) DestroyImmediate(transform.GetChild(i).gameObject);
+
         GeneratePlants();
         GenerateTrees();
+        GenerateRocks();
         terrain.Flush();
+
+        GetComponent<LevelGenerator>().Generate();
+        if(!playing || buildNavMeshOnPlay) GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     public int[,] GenerateDetailMap(PlantFoliage plant)
@@ -95,7 +113,7 @@ public class UnityTerrainGenerator : MonoBehaviour
 
     public void GenerateTrees()
     {
-        foreach (GameObject tree in spawnedTrees) if(tree != null) DestroyImmediate(tree);
+        //if(spawnedTrees != null)foreach (GameObject tree in spawnedTrees) if(tree != null) DestroyImmediate(tree);
         spawnedTrees = new List<GameObject>();
 
         TreePrototype[] treePrototypes = new TreePrototype[trees.Count];
@@ -135,6 +153,55 @@ public class UnityTerrainGenerator : MonoBehaviour
                         pos.y = h + transform.position.y;
                         GameObject go = Instantiate(trees[i].mesh, pos, Quaternion.Euler(0, UnityEngine.Random.Range(0f, 360f), 0), transform);
                         spawnedTrees.Add(go);
+                    }
+                }
+            }
+        }
+    }
+
+    public void GenerateRocks()
+    {
+        //if (spawnedRocks != null) foreach (GameObject rock in spawnedRocks) if (rock != null) DestroyImmediate(rock);
+        spawnedRocks = new List<GameObject>();
+
+        TreePrototype[] treePrototypes = terrain.terrainData.treePrototypes;
+        for (int i = 0; i < rocks.Count; i++)
+        {
+            for(int j = 0; j < rocks[i].mesh.Length; j++)
+            {
+                TreePrototype p = new TreePrototype();
+                p.prefab = rocks[i].mesh[j];
+                treePrototypes.Append(p);
+            }
+        }
+        terrain.terrainData.treePrototypes = treePrototypes;
+
+        float rocksPerAxis = rockDensity * terrain.terrainData.size.x / 10f;
+
+        for (int i = 0; i < rocks.Count; i++)
+        {
+            for (int x = 0; x < rocksPerAxis; x++)
+            {
+                for (int y = 0; y < rocksPerAxis; y++)
+                {
+                    float ax = UnityEngine.Random.Range(x - rockDisplacement, x + rockDisplacement);
+                    float ay = UnityEngine.Random.Range(y - rockDisplacement, y + rockDisplacement);
+
+                    //in range of 0-1 (% of total terrain size)
+                    Vector3 pos = new Vector3(ax / rocksPerAxis, 0, ay / rocksPerAxis);
+
+                    if (pos.x < 0 || pos.x > 1 || pos.z < 0 || pos.z > 1) continue;
+
+                    float h = terrain.SampleHeight(pos * terrain.terrainData.size.x + transform.position);
+
+                    float angle = Vector3.Angle(terrain.terrainData.GetInterpolatedNormal(pos.x, pos.z), Vector3.up);
+                    if (h / terrain.terrainData.size.y <= rocks[i].maxHeight && angle <= rocks[i].slopeCutoff)
+                    {
+                        //convert to worldspace
+                        pos = pos * terrain.terrainData.size.x + transform.position;
+                        pos.y = h + transform.position.y;
+                        GameObject go = Instantiate(rocks[i].GetPrefab(), pos, Quaternion.Euler(0, UnityEngine.Random.Range(0f, 360f), 0), transform);
+                        spawnedRocks.Add(go);
                     }
                 }
             }

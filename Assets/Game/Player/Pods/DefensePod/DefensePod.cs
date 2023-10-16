@@ -21,7 +21,7 @@ public class DefensePod : MonoBehaviour
 
     public Transform head;
     public Transform arms;
-    public Transform pointer;
+    public Transform barrellEnd;
 
     public Enemy target;
 
@@ -98,9 +98,9 @@ public class DefensePod : MonoBehaviour
     protected void Fire()
     {
         ammo--;
-        timeToFire += 1 / fireRate;
+        timeToFire = 1 / fireRate;
         Vector3 s = Random.insideUnitSphere * spread / 100;
-        GameObject go = Instantiate(tracer, arms.position + arms.forward * 1.5f, arms.rotation);
+        GameObject go = Instantiate(tracer, barrellEnd == null? arms.position + arms.forward * 1.5f : barrellEnd.position, arms.rotation);
         go.transform.forward += s;
         Destroy(go, 2f);
 
