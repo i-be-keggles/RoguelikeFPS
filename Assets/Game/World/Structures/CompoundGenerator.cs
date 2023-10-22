@@ -25,7 +25,7 @@ public class CompoundGenerator : MonoBehaviour
     private List<CompoundStructure> hubs;
 
     public float scale = 0.5f;
-
+    public float yOffset = 5f;
 
     public void Start()
     {
@@ -36,6 +36,8 @@ public class CompoundGenerator : MonoBehaviour
         foreach (GameObject g in g_hubs) m_hubs.Add(g.GetComponent<CompoundStructure>());
 
         Generate();
+        transform.localScale *= scale;
+        transform.position += new Vector3(0, yOffset, 0);
     }
 
     public void Generate()
@@ -126,8 +128,6 @@ public class CompoundGenerator : MonoBehaviour
                 hub.transform.eulerAngles = Quaternion.LookRotation(p_connectors[i].transform.position - transform.position).eulerAngles + new Vector3(0,+90,0);
             }
         }
-
-        transform.localScale *= scale;
     }
 
     public CompoundStructure GetHub(int connector)

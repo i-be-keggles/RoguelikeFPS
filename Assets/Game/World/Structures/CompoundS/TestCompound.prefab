@@ -53,7 +53,6 @@ MonoBehaviour:
   g_connectors:
   - {fileID: 409605670291960871, guid: 8c129941fedddad49bba462c8e491c4d, type: 3}
   - {fileID: 6236152024520247341, guid: 3ba6a99fab8c18240aeccc28f263c61b, type: 3}
-  - {fileID: 6010643046007495610, guid: 2a05070226df50d46ad766279612b4bb, type: 3}
   g_hubs:
   - {fileID: 854714099215291801, guid: c42d0bd4ce262da4aa3799d07790f08d, type: 3}
   - {fileID: 8527682974514711769, guid: 460bf275ca8a76e48bd6a317a44ff15a, type: 3}
