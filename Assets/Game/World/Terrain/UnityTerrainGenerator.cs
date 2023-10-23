@@ -64,7 +64,9 @@ public class UnityTerrainGenerator : MonoBehaviour
         float[,] noiseMap = Noise.GenerateNoiseMap(size, size, seed, noiseScale, octaves, persistance, lacunarity, offset + new Vector2(x * (size - 1), y * (size - 1)), meshHeightCurve);
         terrain.terrainData.SetHeights(0, 0, noiseMap);
 
-        for(int i = transform.childCount - 1; i >= 0; i--) DestroyImmediate(transform.GetChild(i).gameObject);
+        FlattenArea(100f, transform.position + new Vector3(500f, 50f, 500f));
+
+        for (int i = transform.childCount - 1; i >= 0; i--) DestroyImmediate(transform.GetChild(i).gameObject);
 
         GeneratePlants();
         GenerateTrees();
@@ -73,6 +75,7 @@ public class UnityTerrainGenerator : MonoBehaviour
 
         GetComponent<LevelGenerator>().Generate();
         if(!playing || buildNavMeshOnPlay) GetComponent<NavMeshSurface>().BuildNavMesh();
+
     }
 
     public int[,] GenerateDetailMap(PlantFoliage plant)
@@ -215,5 +218,20 @@ public class UnityTerrainGenerator : MonoBehaviour
         Vector3 pos = transform.position + new Vector3(s * (x / d), 0, s * (y / d));
         pos.y = terrain.SampleHeight(pos);
         return pos;
+    }
+
+    public void FlattenArea(float radius, Vector3 pos)
+    {
+        float pixelRadius = radius * terrain.terrainData.heightmapResolution / terrain.terrainData.size.x;
+        int pixelSize = Mathf.RoundToInt(pixelRadius * 1.3f);
+        Vector2 pixelPoint = new Vector2(pos.x, pos.z) * terrain.terrainData.heightmapResolution / terrain.terrainData.size.x;
+        int sx = Mathf.RoundToInt(pixelPoint.x - pixelSize);
+        int sy = Mathf.RoundToInt(pixelPoint.y - pixelSize);
+        print(string.Format("{0:f}, {0:f} - {0:f}", sx, sy, pixelSize));
+        float[,] heights = HeightmapUtil.NormaliseToHeight(terrain.terrainData.GetHeights(sx, sy, pixelSize * 2, pixelSize * 2), pixelPoint, (pos.y - transform.position.y) / terrain.terrainData.size.y, pixelRadius);
+        terrain.terrainData.SetHeights(sx, sy, heights);
+        //print(heights);
+
+        terrain.Flush();
     }
 }
