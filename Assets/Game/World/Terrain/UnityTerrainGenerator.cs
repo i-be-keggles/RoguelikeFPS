@@ -64,16 +64,17 @@ public class UnityTerrainGenerator : MonoBehaviour
         float[,] noiseMap = Noise.GenerateNoiseMap(size, size, seed, noiseScale, octaves, persistance, lacunarity, offset + new Vector2(x * (size - 1), y * (size - 1)), meshHeightCurve);
         terrain.terrainData.SetHeights(0, 0, noiseMap);
 
-        FlattenArea(100f, transform.position + new Vector3(500f, 50f, 500f));
+        //FlattenArea(100f, transform.position + new Vector3(500f, 80f, 500f), true);
 
         for (int i = transform.childCount - 1; i >= 0; i--) DestroyImmediate(transform.GetChild(i).gameObject);
+
+        GetComponent<LevelGenerator>().Generate();
 
         GeneratePlants();
         GenerateTrees();
         GenerateRocks();
         terrain.Flush();
 
-        GetComponent<LevelGenerator>().Generate();
         if(!playing || buildNavMeshOnPlay) GetComponent<NavMeshSurface>().BuildNavMesh();
 
     }
@@ -220,17 +221,16 @@ public class UnityTerrainGenerator : MonoBehaviour
         return pos;
     }
 
-    public void FlattenArea(float radius, Vector3 pos)
+    public void FlattenArea(float radius, Vector3 pos, bool local = false)
     {
+        if(!local) pos -= transform.position;
         float pixelRadius = radius * terrain.terrainData.heightmapResolution / terrain.terrainData.size.x;
         int pixelSize = Mathf.RoundToInt(pixelRadius * 1.3f);
         Vector2 pixelPoint = new Vector2(pos.x, pos.z) * terrain.terrainData.heightmapResolution / terrain.terrainData.size.x;
-        int sx = Mathf.RoundToInt(pixelPoint.x - pixelSize);
-        int sy = Mathf.RoundToInt(pixelPoint.y - pixelSize);
-        print(string.Format("{0:f}, {0:f} - {0:f}", sx, sy, pixelSize));
-        float[,] heights = HeightmapUtil.NormaliseToHeight(terrain.terrainData.GetHeights(sx, sy, pixelSize * 2, pixelSize * 2), pixelPoint, (pos.y - transform.position.y) / terrain.terrainData.size.y, pixelRadius);
+        int sx = Math.Clamp(Mathf.RoundToInt(pixelPoint.x - pixelSize), 0, terrain.terrainData.heightmapResolution-1);
+        int sy = Math.Clamp(Mathf.RoundToInt(pixelPoint.y - pixelSize), 0, terrain.terrainData.heightmapResolution-1);
+        float[,] heights = HeightmapUtil.NormaliseToHeight(terrain.terrainData.GetHeights(sx, sy, pixelSize * 2, pixelSize * 2), pixelPoint, pos.y / terrain.terrainData.size.y, pixelRadius);
         terrain.terrainData.SetHeights(sx, sy, heights);
-        //print(heights);
 
         terrain.Flush();
     }

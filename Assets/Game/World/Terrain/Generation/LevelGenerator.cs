@@ -7,6 +7,7 @@ using Unity.Burst.CompilerServices;
 public class LevelGenerator : MonoBehaviour
 {    
     public Terrain terrain;
+    public UnityTerrainGenerator gen;
     public EnemySpawning spawnManager;
 
     public List<LevelObject> objectPrefabs;
@@ -83,7 +84,12 @@ public class LevelGenerator : MonoBehaviour
                         GameObject go = Instantiate(obj.prefab, hit.point, Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0f, 360f), 0)), transform);
                         instances[i].Add(go);
                         spawned++;
+                        
                         if (obj.poi) POIs.Add(go);
+                        if (obj.flattenRadius != 0) gen.FlattenArea(obj.flattenRadius, hit.point);
+                        
+                        CompoundGenerator g = go.GetComponent<CompoundGenerator>();
+                        if (g != null) g.Init();
                     }
                 }
             }
@@ -107,8 +113,9 @@ public class LevelGenerator : MonoBehaviour
         public float minHeight;
 
         public bool poi;
+        public float flattenRadius;
 
-        public LevelObject (string n, int i, float s, GameObject g, float r, float a, bool p, float mn, float mx = 100000f)
+        public LevelObject (string n, int i, float s, GameObject g, float r, float a, bool p, float mn, float mx = 100000f, float fr = 0f)
         {
             name = n;
             instances = i;
@@ -119,6 +126,7 @@ public class LevelGenerator : MonoBehaviour
             maxHeight = mx;
             minHeight = mn;
             poi = p;
+            flattenRadius = fr;
         }
     }
 }

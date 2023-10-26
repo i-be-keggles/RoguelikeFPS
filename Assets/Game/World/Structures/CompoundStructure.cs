@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+[ExecuteInEditMode]
 public class CompoundStructure : MonoBehaviour
 {
     public enum CompoundStructureType { hub, connector }

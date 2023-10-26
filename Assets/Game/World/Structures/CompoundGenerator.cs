@@ -27,8 +27,12 @@ public class CompoundGenerator : MonoBehaviour
     public float scale = 0.5f;
     public float yOffset = 5f;
 
-    public void Start()
+    private UnityTerrainGenerator terrainGen;
+
+    public void Init()
     {
+        terrainGen = GetComponentInParent<UnityTerrainGenerator>();
+
         m_connectors = new List<CompoundStructure>();
         foreach (GameObject g in g_connectors) m_connectors.Add(g.GetComponent<CompoundStructure>());
 
@@ -36,14 +40,12 @@ public class CompoundGenerator : MonoBehaviour
         foreach (GameObject g in g_hubs) m_hubs.Add(g.GetComponent<CompoundStructure>());
 
         Generate();
-        transform.localScale *= scale;
-        transform.position += new Vector3(0, yOffset, 0);
     }
 
     public void Generate()
     {
-        List<CompoundStructure> p_hubs = null;
-        List<CompoundStructure> p_connectors = null;
+        List<CompoundStructure> p_hubs;
+        List<CompoundStructure> p_connectors;
         hubs = new List<CompoundStructure>();
         connectors = new List<CompoundStructure>();
         int n = -1;
@@ -128,6 +130,13 @@ public class CompoundGenerator : MonoBehaviour
                 hub.transform.eulerAngles = Quaternion.LookRotation(p_connectors[i].transform.position - transform.position).eulerAngles + new Vector3(0,+90,0);
             }
         }
+
+        transform.localScale *= scale;
+        transform.position += new Vector3(0, yOffset, 0);
+
+        //flatten terrain
+        foreach (CompoundStructure h in hubs)
+            terrainGen.FlattenArea(h.size * hubSizeIncrement * scale * 1.25f, h.transform.position - new Vector3(0, yOffset/2, 0));
     }
 
     public CompoundStructure GetHub(int connector)

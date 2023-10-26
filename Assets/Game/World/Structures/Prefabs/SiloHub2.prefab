@@ -58,7 +58,10 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 45}
   - {x: -38.97123, y: 0, z: -22.49985}
   - {x: 38.97123, y: 0, z: -22.49985}
-  connectedStructures: []
+  connectedStructures:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &2041350827012302467
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +474,7 @@ PrefabInstance:
     - target: {fileID: 8089062573417005363, guid: 68d1c9ccb6741de469fd8458469995d4, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: f5c789cfe54e77a4aa3248bf06154887, type: 2}
+      objectReference: {fileID: 2100000, guid: a55aa399c6b95364b90f8dbd0573754e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68d1c9ccb6741de469fd8458469995d4, type: 3}
 --- !u!1 &1043172089651313510 stripped
