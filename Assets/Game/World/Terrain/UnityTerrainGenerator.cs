@@ -227,8 +227,8 @@ public class UnityTerrainGenerator : MonoBehaviour
         float pixelRadius = radius * terrain.terrainData.heightmapResolution / terrain.terrainData.size.x;
         int pixelSize = Mathf.RoundToInt(pixelRadius * 1.3f);
         Vector2 pixelPoint = new Vector2(pos.x, pos.z) * terrain.terrainData.heightmapResolution / terrain.terrainData.size.x;
-        int sx = Math.Clamp(Mathf.RoundToInt(pixelPoint.x - pixelSize), 0, terrain.terrainData.heightmapResolution-1);
-        int sy = Math.Clamp(Mathf.RoundToInt(pixelPoint.y - pixelSize), 0, terrain.terrainData.heightmapResolution-1);
+        int sx = Math.Clamp(Mathf.RoundToInt(pixelPoint.x - pixelSize), 0, terrain.terrainData.heightmapResolution-2); //-2 because resolution = texSize+1
+        int sy = Math.Clamp(Mathf.RoundToInt(pixelPoint.y - pixelSize), 0, terrain.terrainData.heightmapResolution-2);
         float[,] heights = HeightmapUtil.NormaliseToHeight(terrain.terrainData.GetHeights(sx, sy, pixelSize * 2, pixelSize * 2), pixelPoint, pos.y / terrain.terrainData.size.y, pixelRadius);
         terrain.terrainData.SetHeights(sx, sy, heights);
 

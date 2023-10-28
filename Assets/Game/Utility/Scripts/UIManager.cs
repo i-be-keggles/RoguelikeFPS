@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 
 public class UIManager : MonoBehaviour
 {
+    private RectTransform rect;
+    private Camera cam;
     public MouseLook mouseLook;
 
     [Space]
@@ -24,10 +26,16 @@ public class UIManager : MonoBehaviour
     public DropPodHandler podHandler;
     private RectTransform[] segments;
 
+    [Space]
+    public RectTransform marker;
+    public Vector3 markerPos;
+    public Transform markerFollowTemp;
 
     private void Start()
     {
         InitPodSelector();
+        rect = GetComponent<RectTransform>();
+        cam = Camera.main;
     }
 
     public void UpdateAmmoText(int cur, int tot)
@@ -99,6 +107,10 @@ public class UIManager : MonoBehaviour
             int selected = Mathf.FloorToInt(segments.Length * angle / 360f);
             if(selected != podHandler.selectedPod) OnSelectUpdate(selected);
         }
+
+        markerPos = markerFollowTemp.position;
+        marker.position = Camera.main.WorldToScreenPoint(markerPos);
+        marker.gameObject.SetActive(Vector3.Dot(markerPos - cam.transform.position, cam.transform.forward) > 0);
     }
 
     public void OnSelectUpdate(int index)
