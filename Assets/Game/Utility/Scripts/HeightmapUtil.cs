@@ -21,4 +21,29 @@ public static class HeightmapUtil
             }
         return map;
     }
+
+    //height as worldspace
+    public static float HeightVariation(float[,] map, float height = 1)
+    {
+        float n = 0;
+
+        float u = 0;
+        for(int x = 0; x < map.GetLength(0); x++)
+            for(int y = 0; y < map.GetLength(1); y++)
+            {
+                u += map[x, y];
+                n++;
+            }
+        u /= n;
+
+        float s = 0;
+        for (int x = 0; x < map.GetLength(0); x++)
+            for (int y = 0; y < map.GetLength(1); y++)
+            {
+                s += Mathf.Pow(map[x, y] - u, 2);
+            }
+        s = Mathf.Sqrt(s / n);
+
+        return s * height;
+    }
 }

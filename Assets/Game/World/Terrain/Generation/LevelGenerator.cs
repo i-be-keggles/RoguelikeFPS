@@ -71,7 +71,7 @@ public class LevelGenerator : MonoBehaviour
             int spawned = 0;
             int attempts = 0;
 
-            while(spawned < goal && attempts < goal * 10)
+            while(spawned < goal && attempts < goal * 30)
             {
                 attempts++;
                 Vector3 pos = transform.position + new Vector3(UnityEngine.Random.Range(0, worldSize), terrain.terrainData.size.y * 2, UnityEngine.Random.Range(0, worldSize));
@@ -79,7 +79,13 @@ public class LevelGenerator : MonoBehaviour
                 if(Physics.Raycast(pos, -Vector3.up, out hit, terrain.terrainData.size.y * 3, terrainMask))
                 {
                     float h = hit.point.y - transform.position.y;
-                    if(h <= obj.maxHeight && h >= obj.minHeight && Vector3.Angle(Vector3.up, hit.normal) <= obj.angleCutoff && Physics.OverlapSphere(hit.point, obj.space, ~(terrainMask)).Length == 0)
+
+                    bool validAngle = Vector3.Angle(Vector3.up, hit.normal) <= obj.angleCutoff;
+                    if(obj.slopeVarArea > 0)
+                    {
+                        validAngle = gen.HeightVariationAtPoint(hit.point, obj.slopeVarArea) < obj.slopeVarCutoff;
+                    }
+                    if (h <= obj.maxHeight && h >= obj.minHeight && validAngle && Physics.OverlapSphere(hit.point, obj.space, ~(terrainMask)).Length == 0)
                     {
                         GameObject go = Instantiate(obj.prefab, hit.point, Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0f, 360f), 0)), transform);
                         instances[i].Add(go);
@@ -109,13 +115,15 @@ public class LevelGenerator : MonoBehaviour
         public GameObject prefab;
         public float space;
         [Range(0,90)] public float angleCutoff;
+        public float slopeVarArea;
+        public float slopeVarCutoff;
         public float maxHeight;
         public float minHeight;
 
         public bool poi;
         public float flattenRadius;
 
-        public LevelObject (string n, int i, float s, GameObject g, float r, float a, bool p, float mn, float mx = 100000f, float fr = 0f)
+        public LevelObject (string n, int i, float s, GameObject g, float r, float a, bool p, float mn, float mx = 100000f, float va = 2f, float vc = 0.5f, float fr = 0f)
         {
             name = n;
             instances = i;
@@ -123,6 +131,8 @@ public class LevelGenerator : MonoBehaviour
             prefab = g;
             space = r;
             angleCutoff = a;
+            slopeVarArea = va;
+            slopeVarCutoff = vc;
             maxHeight = mx;
             minHeight = mn;
             poi = p;

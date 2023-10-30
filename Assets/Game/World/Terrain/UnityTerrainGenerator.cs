@@ -227,11 +227,46 @@ public class UnityTerrainGenerator : MonoBehaviour
         float pixelRadius = radius * terrain.terrainData.heightmapResolution / terrain.terrainData.size.x;
         int pixelSize = Mathf.RoundToInt(pixelRadius * 1.3f);
         Vector2 pixelPoint = new Vector2(pos.x, pos.z) * terrain.terrainData.heightmapResolution / terrain.terrainData.size.x;
-        int sx = Math.Clamp(Mathf.RoundToInt(pixelPoint.x - pixelSize), 0, terrain.terrainData.heightmapResolution-2); //-2 because resolution = texSize+1
-        int sy = Math.Clamp(Mathf.RoundToInt(pixelPoint.y - pixelSize), 0, terrain.terrainData.heightmapResolution-2);
+        int sx = Math.Clamp(Mathf.RoundToInt(pixelPoint.x - pixelSize), 0, terrain.terrainData.heightmapResolution-3); //-3 because resolution = texSize+1 
+        int sy = Math.Clamp(Mathf.RoundToInt(pixelPoint.y - pixelSize), 0, terrain.terrainData.heightmapResolution-3);
         float[,] heights = HeightmapUtil.NormaliseToHeight(terrain.terrainData.GetHeights(sx, sy, pixelSize * 2, pixelSize * 2), pixelPoint, pos.y / terrain.terrainData.size.y, pixelRadius);
         terrain.terrainData.SetHeights(sx, sy, heights);
 
         terrain.Flush();
+    }
+
+    public float HeightVariationAtPoint(Vector3 pos, float radius, bool local = false)
+    {
+        if (!local) pos -= transform.position;
+        int pixelRadius = Mathf.RoundToInt(radius * terrain.terrainData.heightmapResolution / terrain.terrainData.size.x);
+        Vector2 pixelPoint = new Vector2(pos.x, pos.z) * terrain.terrainData.heightmapResolution / terrain.terrainData.size.x;
+        int sx = Math.Clamp(Mathf.RoundToInt(pixelPoint.x - pixelRadius), 0, terrain.terrainData.heightmapResolution - 2); //-3 because resolution = texSize+1 & inclusive
+        int sy = Math.Clamp(Mathf.RoundToInt(pixelPoint.y - pixelRadius), 0, terrain.terrainData.heightmapResolution - 2);
+        
+        int r = pixelRadius * 2;
+        int rx = Math.Min(r, terrain.terrainData.heightmapResolution - sx);
+        int ry = Math.Min(r, terrain.terrainData.heightmapResolution - sy);
+        float s = HeightmapUtil.HeightVariation(terrain.terrainData.GetHeights(sx, sy, rx, ry), terrain.terrainData.size.y);
+
+        return s;
+    }
+
+    public void OnDrawGizmos()
+    {
+        return;
+        float s = 2f;
+        float d = 1f/10f;
+        float c = 0.5f;
+
+        d *= terrain.terrainData.size.x;
+
+        for(int x = 0; x < d; x++)
+            for(int y = 0; y < d; y++)
+            {
+                Vector3 worldPos = new Vector3(x * terrain.terrainData.size.x/d, 0, y * terrain.terrainData.size.x / d);
+                worldPos.y = terrain.terrainData.GetHeight((int)(terrain.terrainData.heightmapResolution * (x / d)), (int)(terrain.terrainData.heightmapResolution * (y / d)));
+                Gizmos.color = HeightVariationAtPoint(worldPos, s, true) > c ? UnityEngine.Color.red : UnityEngine.Color.green;
+                Gizmos.DrawWireSphere(worldPos + transform.position, s/2);
+            }
     }
 }
