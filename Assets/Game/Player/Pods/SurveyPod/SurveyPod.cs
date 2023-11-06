@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class SurveyPod : MonoBehaviour
 {
-    public GameObject marker;
     public float range;
     public Animator anim;
     private Interactable interactable;
@@ -34,6 +33,6 @@ public class SurveyPod : MonoBehaviour
             if (Vector3.Distance(POIs[i - r].transform.position, transform.position) > range)
                 POIs.RemoveAt(r++);
 
-        marker = Instantiate(marker, POIs[UnityEngine.Random.Range(0, POIs.Count)].transform.position, Quaternion.identity, transform);
+        FindObjectOfType<UIManager>().AddHUDMarker(POIs[UnityEngine.Random.Range(0, POIs.Count)].transform.position, HUDMarker.DisplayType.HideOnApproach);
     }
 }
