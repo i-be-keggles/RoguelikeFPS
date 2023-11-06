@@ -43,11 +43,22 @@ public class DefensePod : MonoBehaviour
         {
             Vector3 dir = target.CentrePoint() - arms.position;
             float angleTo = Vector3.Angle(arms.forward, dir);
-            if (angleTo > fireAngle / 3)
+
+            float ay = Vector3.SignedAngle(head.forward, dir, Vector3.up);
+            float ax = Vector3.SignedAngle(arms.forward, dir, arms.right);
+            float df = 3;
+
+            if (Mathf.Abs(ay) > fireAngle / df) head.eulerAngles = Vector3.Lerp(head.eulerAngles, new Vector3(head.eulerAngles.x, head.eulerAngles.y + ay, head.eulerAngles.z), turnSpeed * Time.deltaTime);
+            if (Mathf.Abs(ax) > fireAngle / df) arms.localEulerAngles = new Vector3(Mathf.Lerp(arms.localEulerAngles.x, arms.localEulerAngles.x + ax, turnSpeed * Time.deltaTime), 0, 0);
+            
+            //clamp
+            if (arms.localEulerAngles.x > -xLimit.x && arms.localEulerAngles.x < 180)
             {
-                head.eulerAngles = Vector3.Lerp(head.eulerAngles, new Vector3(head.eulerAngles.x, head.eulerAngles.y + Vector3.SignedAngle(head.forward, dir, Vector3.up), head.eulerAngles.z), turnSpeed * Time.deltaTime);
-                arms.eulerAngles += new Vector3(Vector3.SignedAngle(arms.forward, dir, arms.right), 0) * turnSpeed * Time.deltaTime;
-                arms.eulerAngles = new Vector3(Mathf.Clamp(arms.eulerAngles.x, xLimit.x, xLimit.y), head.eulerAngles.y, 0);
+                arms.localEulerAngles = new Vector3(-xLimit.x, 0, 0);
+            }
+            else if (arms.localEulerAngles.x < 360 - xLimit.y && arms.localEulerAngles.x > 180)
+            {
+                arms.localEulerAngles = new Vector3(360 - xLimit.y, 0, 0);
             }
 
             if (timeToFire <= 0 && angleTo <= fireAngle)
