@@ -62,4 +62,6 @@ MonoBehaviour:
   - {fileID: 8212342957786760671, guid: b2f73685601157d4b9af430b52f8d868, type: 3}
   - {fileID: 9145510644717783032, guid: af018414080d0444caa9573dc5275c61, type: 3}
   - {fileID: 6743141082320935748, guid: 11f47d3b5fff60748aca8b4d16f15baa, type: 3}
+  - {fileID: 4122784515815909415, guid: 28304ff41df54b34e8e1e98558a845e5, type: 3}
   scale: 0.5
+  yOffset: 5
