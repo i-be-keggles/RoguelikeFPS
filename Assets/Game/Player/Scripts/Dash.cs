@@ -22,6 +22,8 @@ public class Dash : PlayerAbility
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
+        Vector3 prevDir = move.GetForce();
+
         Vector3 dir = x == 0 && z == 0? handler.cam.forward : Vector3.zero;
         dir += x * handler.transform.right;
         dir += z * (z > 0? handler.cam.forward : handler.transform.forward);
@@ -32,8 +34,13 @@ public class Dash : PlayerAbility
         move.groundMask = LayerMask.NameToLayer("");
         move.SetForce(dir.normalized * speed);
         yield return new WaitForSeconds(length * 0.9f);
-        move.SetForce(dir.normalized * easeOut);
-        yield return new WaitForSeconds(length * 0.1f);
+        if (prevDir.magnitude < easeOut)
+        {
+            move.SetForce(dir.normalized * easeOut);
+            yield return new WaitForSeconds(length * 0.1f);
+        }
+        else move.SetForce(dir.normalized * prevDir.magnitude);
+
         move.groundMask = mask;
         move.recieveInput = true;
 

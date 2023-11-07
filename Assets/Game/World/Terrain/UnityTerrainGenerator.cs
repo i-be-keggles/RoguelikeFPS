@@ -44,12 +44,15 @@ public class UnityTerrainGenerator : MonoBehaviour
     private List<GameObject> spawnedRocks;
     public float rockDisplacement;
 
+    [Space]
+    public bool generateOnPlay = false;
+
     private void Start()
     {
         playing = true;
         terrain = GetComponent<Terrain>();
         terrain.drawTreesAndFoliage = true;
-        GenerateMap();
+        if (generateOnPlay) GenerateMap();
         TerrainCollider col = GetComponent<TerrainCollider>();
         col.enabled = false;
         col.enabled = true;

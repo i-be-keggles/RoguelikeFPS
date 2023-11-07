@@ -31,9 +31,9 @@ public class OrbitalDrop : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (transform.position.y > targetHeight)
+        if (transform.position.y - targetHeight > 0.01f)
         {
-            transform.position = transform.position - new Vector3(0, Math.Min(transform.position.y - targetHeight, speed * Time.fixedDeltaTime), 0);
+            transform.position = transform.position - new Vector3(0, Math.Min(transform.position.y - targetHeight, speed * Time.fixedDeltaTime) - 0.01f, 0);
         }
         else
         {

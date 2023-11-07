@@ -4,11 +4,62 @@ ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
   - first:
-      74: -8945691123924629249
-    second: Armature|Idle
+      74: -8603125016824881586
+    second: Cylinder|ArmatureAction
   - first:
-      74: 350305167346618395
-    second: Armature|Strike
+      74: -2968226768543046261
+    second: Cylinder.001|ArmatureAction
+  - first:
+      74: -1878513069939696574
+    second: Cube.001|ArmatureAction
+  - first:
+      74: 2231081583221290275
+    second: Cylinder.004|ArmatureAction
+  - first:
+      74: -8749295680153128687
+    second: Cylinder.006|ArmatureAction
+  - first:
+      74: 3175680660805386817
+    second: Cylinder.007|ArmatureAction
+  - first:
+      74: 4781951162920444690
+    second: Armature|ArmatureAction
+  - first:
+      74: -1422011007694221501
+    second: Armature|ArmatureAction.001
+  - first:
+      74: -8679692734433319335
+    second: Cylinder.005|ArmatureAction
+  - first:
+      74: 4099150624325510848
+    second: Cylinder.012|ArmatureAction
+  - first:
+      74: -2150710594903249322
+    second: Cylinder.015|ArmatureAction
+  - first:
+      74: 6042028414790048682
+    second: Cube.020|ArmatureAction
+  - first:
+      74: -7471216552548122674
+    second: Cylinder.021|ArmatureAction
+  - first:
+      74: 6468402391181610031
+    second: Cylinder.026|ArmatureAction
+  - first:
+      74: 7452278466229665279
+    second: Cylinder.027|ArmatureAction
+  - first:
+      74: -8673149537513457010
+    second: Cylinder.028|ArmatureAction
+  - first:
+      74: -2950868101014969414
+    second: Cylinder.032|ArmatureAction
+  - first:
+      74: -4637266781093988935
+    second: Cylinder.017|ArmatureAction
+  - first:
+      74: -7079976576830515084
+    second: Cylinder.018|ArmatureAction
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -20,7 +71,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
-    removeConstantScaleCurves: 0
+    removeConstantScaleCurves: 1
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -28,7 +79,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    importAnimatedCustomProperties: 1
+    importAnimatedCustomProperties: 0
     importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5

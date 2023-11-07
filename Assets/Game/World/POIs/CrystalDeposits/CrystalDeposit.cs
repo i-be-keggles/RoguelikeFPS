@@ -109,6 +109,6 @@ public class CrystalDeposit : MonoBehaviour
     {
         interactable = e;
         interactable.interactedWith += HandlePhaseChange;
-        anim = e.GetComponent<Animator>();
+        anim = e.GetComponentInChildren<Animator>();
     }
 }

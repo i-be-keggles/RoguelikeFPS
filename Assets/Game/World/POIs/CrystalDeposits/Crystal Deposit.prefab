@@ -52,7 +52,7 @@ MonoBehaviour:
   maxValue: 400
   curValue: 400
   damageValueMultiplier: 1
-  extractionTime: 15
+  extractionTime: 30
   strikeInterval: 3
   initialScoreValue: 100
   phase: 0

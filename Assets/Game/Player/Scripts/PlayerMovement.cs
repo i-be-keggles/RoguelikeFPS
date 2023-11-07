@@ -62,4 +62,9 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDir = force;
     }
+
+    public Vector3 GetForce()
+    {
+        return moveDir;
+    }
 }
