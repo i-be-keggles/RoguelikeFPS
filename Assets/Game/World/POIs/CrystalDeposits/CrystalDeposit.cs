@@ -82,7 +82,7 @@ public class CrystalDeposit : MonoBehaviour
         OrbitalDrop pod = extractor.GetComponent<OrbitalDrop>();
         pod.PromptHeight(transform.position.y);
         pod.landed += HandlePhaseChange;
-        anim = pod.GetComponent<Animator>();
+        anim = pod.GetComponentInChildren<Animator>();
     }
 
     private void StartExtraction()
