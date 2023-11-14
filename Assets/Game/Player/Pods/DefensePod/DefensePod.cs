@@ -64,7 +64,6 @@ public class DefensePod : MonoBehaviour
             if (timeToFire <= 0 && angleTo <= fireAngle)
             {
                 Fire();
-                print("Firing");
             }
         }
     }

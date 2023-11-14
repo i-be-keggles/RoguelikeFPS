@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public static float gravity = -9.81f;
     private Vector3 velocity = Vector3.zero;
     private Vector3 moveDir = Vector3.zero;
+    private Vector2 moveInput = Vector2.zero;
 
     public Transform groundCheck;
     public float groundCheckDistance = 0.2f;
@@ -24,26 +26,38 @@ public class PlayerMovement : MonoBehaviour
 
     public bool recieveInput;
 
+    PlayerInput playerInput;
+    
+
     void Start()
     {
         recieveInput = true;
         if(cc == null) cc = GetComponent<CharacterController>();
+        playerInput = GetComponent<PlayerInput>();
+
+        //playerInput.actions["move"].Enable();
+    }
+
+    public void OnMove(InputValue value)
+    {
+        moveInput = value.Get<Vector2>();
+        print("moving at: " + moveInput);
     }
 
     void Update()
     {
         grounded = Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundMask);
 
-        Vector2 input = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        if (input.magnitude > 1) input.Normalize();
+        moveInput = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (moveInput.magnitude > 1) moveInput.Normalize();
 
         if(recieveInput)
         if (grounded)
         {
-            moveDir = cc.transform.right * input.x + cc.transform.forward * input.y;
+            moveDir = cc.transform.right * moveInput.x + cc.transform.forward * moveInput.y;
             moveDir *= Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
         }
-        else moveDir += (cc.transform.right * input.x + cc.transform.forward * input.y) * airSpeed * Time.deltaTime;
+        else moveDir += (cc.transform.right * moveInput.x + cc.transform.forward * moveInput.y) * airSpeed * Time.deltaTime;
 
         if (grounded && velocity.y < 0) velocity.y = -2f;
 
