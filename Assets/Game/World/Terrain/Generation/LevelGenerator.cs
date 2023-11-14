@@ -74,7 +74,9 @@ public class LevelGenerator : MonoBehaviour
             while(spawned < goal && attempts < goal * 30)
             {
                 attempts++;
-                Vector3 pos = transform.position + new Vector3(UnityEngine.Random.Range(0, worldSize), terrain.terrainData.size.y * 2, UnityEngine.Random.Range(0, worldSize));
+                float rx = UnityEngine.Random.Range(worldSize * (1 - obj.mapBorder), worldSize * obj.mapBorder);
+                float ry = UnityEngine.Random.Range(worldSize * (1 - obj.mapBorder), worldSize * obj.mapBorder);
+                Vector3 pos = transform.position + new Vector3(rx, terrain.terrainData.size.y * 2, ry);
                 RaycastHit hit;
                 if(Physics.Raycast(pos, -Vector3.up, out hit, terrain.terrainData.size.y * 3, terrainMask))
                 {
@@ -92,7 +94,6 @@ public class LevelGenerator : MonoBehaviour
                         spawned++;
                         
                         if (obj.poi) POIs.Add(go);
-                        if (obj.flattenRadius != 0) gen.FlattenArea(obj.flattenRadius, hit.point);
                         
                         CompoundGenerator g = go.GetComponent<CompoundGenerator>();
                         if (g != null) g.Init();
@@ -121,9 +122,9 @@ public class LevelGenerator : MonoBehaviour
         public float minHeight;
 
         public bool poi;
-        public float flattenRadius;
+        [Range(0, 1)] public float mapBorder;
 
-        public LevelObject (string n, int i, float s, GameObject g, float r, float a, bool p, float mn, float mx = 100000f, float va = 2f, float vc = 0.5f, float fr = 0f)
+        public LevelObject (string n, int i, float s, GameObject g, float r, float a, bool p, float mn, float mx = 100000f, float va = 2f, float vc = 0.5f, float mb = 1f)
         {
             name = n;
             instances = i;
@@ -136,7 +137,7 @@ public class LevelGenerator : MonoBehaviour
             maxHeight = mx;
             minHeight = mn;
             poi = p;
-            flattenRadius = fr;
+            mapBorder = mb;
         }
     }
 }

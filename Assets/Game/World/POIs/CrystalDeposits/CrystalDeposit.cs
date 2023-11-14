@@ -6,7 +6,6 @@ public class CrystalDeposit : MonoBehaviour
 {
     private Interactable interactable;
 
-    public GameObject extractorPrefab;
     public GameObject extractor;
 
     public float dropTime;
@@ -73,16 +72,6 @@ public class CrystalDeposit : MonoBehaviour
         }
 
         phase++;
-    }
-
-    private void CallPod()
-    {
-        extractor = Instantiate(extractorPrefab, transform.position + new Vector3(0, extractorPrefab.GetComponent<OrbitalDrop>().speed * dropTime, 0), Quaternion.identity);
-        extractor.transform.SetParent(transform);
-        OrbitalDrop pod = extractor.GetComponent<OrbitalDrop>();
-        pod.PromptHeight(transform.position.y);
-        pod.landed += HandlePhaseChange;
-        anim = pod.GetComponentInChildren<Animator>();
     }
 
     private void StartExtraction()

@@ -91,7 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldPos: {x: 0, y: 0, z: 0}
   type: 0
-  distanceCutoff: 10
+  distanceCutoff: 50
   distanceToPlayer: 0
   manager: {fileID: 0}
   cam: {fileID: 0}

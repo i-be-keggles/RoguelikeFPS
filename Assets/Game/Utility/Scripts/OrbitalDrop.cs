@@ -33,11 +33,12 @@ public class OrbitalDrop : MonoBehaviour
     {
         if (transform.position.y - targetHeight > 0.01f)
         {
-            transform.position = transform.position - new Vector3(0, Math.Min(transform.position.y - targetHeight, speed * Time.fixedDeltaTime) - 0.01f, 0);
+            transform.position = transform.position - new Vector3(0, speed * Time.fixedDeltaTime, 0);
         }
         else
         {
             landed?.Invoke(this, EventArgs.Empty);
+            transform.position = new Vector3(transform.position.x, targetHeight, transform.position.z);
             AudioSource source = GetComponent<AudioSource>();
             source.clip = landSound;
             source.loop = false;
@@ -47,11 +48,6 @@ public class OrbitalDrop : MonoBehaviour
             if (impactParticles != null) Destroy(Instantiate(impactParticles, transform.position, transform.rotation), 5f);
             if (trailParticles != null) Destroy(trailParticles, 4f);
         }
-    }
-
-    public void PromptHeight(float height)
-    {
-        if(Math.Abs(height - targetHeight) > 2) targetHeight = height;
     }
 
     public float HeightFromTime(float time)
