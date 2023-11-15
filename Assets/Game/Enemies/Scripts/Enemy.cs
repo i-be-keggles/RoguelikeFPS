@@ -41,7 +41,9 @@ public class Enemy : MonoBehaviour
 
     public EventHandler died;
 
-    [Space]
+    [Header("FX")]
+    public ParticleSystem stunParticles;
+
     [Header("References")]
     protected NavMeshAgent agent;
 
@@ -51,6 +53,7 @@ public class Enemy : MonoBehaviour
     public LayerMask sightMask;
 
     private Coroutine loseSight;
+    private Coroutine stun;
     public ScoreManager scoreManager;
 
 
@@ -74,6 +77,12 @@ public class Enemy : MonoBehaviour
     protected void Update()
     {
         if (player == null) return; //TODO: remove when properly passed (see start method)
+
+        if (enemyState == EnemyState.stunned)
+        {
+            print("Stunned!");
+            return;
+        }
 
         if (timeToAttack > 0) timeToAttack -= Time.deltaTime;
 
@@ -167,11 +176,27 @@ public class Enemy : MonoBehaviour
         float s = 0.5f + ((float)health / (float)maxHealth)/2f;
         transform.localScale = scale * s;
 
-        moveLocation = player.transform.position;
+        if (!canSeePlayer) moveLocation = player.transform.position;
 
         EvaluateTarget();
 
         if (health <= 0) Die();
+    }
+
+    public void Stun(float time)
+    {
+        if (enemyState == EnemyState.stunned) StopCoroutine(stun);
+        stunParticles.Play();
+        enemyState = EnemyState.stunned;
+        target = null;
+        stun = StartCoroutine(WaitForStun(time));
+    }
+
+    private IEnumerator WaitForStun(float t)
+    {
+        yield return new WaitForSeconds(t);
+        stunParticles.Stop();
+        OnLoseTarget(this, EventArgs.Empty);
     }
 
     public EnemyTarget EvaluateTarget()

@@ -23,9 +23,10 @@ MonoBehaviour:
   missileTurnSpeed: 2
   fireInterval: 0.1
   radius: 3
-  damage: 60
+  damage: 30
   force: 30
   falloff: 0.5
+  stunTime: 2
   locked: 0
   lockRange: 100
   lockMask:

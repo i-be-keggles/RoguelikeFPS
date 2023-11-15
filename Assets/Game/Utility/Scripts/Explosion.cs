@@ -10,7 +10,7 @@ public class Explosion : MonoBehaviour
     public Transform debugGizmo;//just for gizmo/balance purpose
 
     //falloff controls degree of function should be btwn 0 and 1. 0 = no damage reduction vs range, 1 = linear damage reduction vs distance
-    public void Init (float radius, float damage, float force, Transform origin, float falloff = 0.5f)
+    public void Init (float radius, float damage, float force, Transform origin, float falloff = 0.5f, float stunTime = 0f)
     {
         debugGizmo.localScale *= radius;
 
@@ -33,7 +33,11 @@ public class Explosion : MonoBehaviour
             if (player != null) player.TakeDamage(this, (int)(damage * m));
 
             Enemy enemy = col.transform.GetComponentInParent<Enemy>();
-            if(enemy != null) enemy.TakeDamage((int)(damage * m));
+            if(enemy != null)
+            {
+                enemy.TakeDamage((int)(damage * m));
+                if(stunTime > 0) enemy.Stun(stunTime);
+            }
 
             Rigidbody rb = col.transform.GetComponentInParent<Rigidbody>();
             if(rb != null && !rbs.Contains(rb))

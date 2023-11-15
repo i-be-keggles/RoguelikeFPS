@@ -21,7 +21,7 @@ public class Missile : MonoBehaviour
     public LayerMask mask;
 
     [Space]
-    float radius, damage, force, falloff;
+    float radius, damage, force, falloff, stunTime;
 
     private void Start()
     {
@@ -32,7 +32,7 @@ public class Missile : MonoBehaviour
         transform.localEulerAngles += new Vector3(Random.Range(-spread, spread), Random.Range(-spread, spread));
     }
 
-    public void Init(Vector3? t, float s, float ts, float _radius, float _damage, float _force, float _falloff)
+    public void Init(Vector3? t, float s, float ts, float _radius, float _damage, float _force, float _falloff, float st)
     {
         target = t;
         speed = s;
@@ -42,6 +42,7 @@ public class Missile : MonoBehaviour
         damage = _damage;
         force = _force;
         falloff = _falloff;
+        stunTime = st;
 
         StartCoroutine(Arm());
     }
@@ -80,7 +81,7 @@ public class Missile : MonoBehaviour
         print("boom.");
 
         Explosion e = Instantiate(explosion, transform.position, Quaternion.identity).GetComponent<Explosion>();
-        e.Init(radius, damage, force, transform, falloff);
+        e.Init(radius, damage, force, transform, falloff, stunTime);
         Destroy(e, 3f);
 
         Destroy(gameObject);

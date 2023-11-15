@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
-        print("moving at: " + moveInput);
+        //print("moving at: " + moveInput);
     }
 
     void Update()

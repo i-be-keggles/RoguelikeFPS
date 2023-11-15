@@ -20,6 +20,7 @@ public class MissileSalvo : PlayerAbility
     public float damage;
     public float force;
     public float falloff = 0.5f;
+    public float stunTime;
 
     [Space]
 
@@ -44,7 +45,7 @@ public class MissileSalvo : PlayerAbility
     {
         for (int i = 0; i < numMissiles; i++)
         {
-            Instantiate(missile, handler.cam.position, handler.cam.rotation).GetComponent<Missile>().Init(lockPosition, missileSpeed, missileTurnSpeed, radius, damage, force, falloff);
+            Instantiate(missile, handler.cam.position, handler.cam.rotation).GetComponent<Missile>().Init(lockPosition, missileSpeed, missileTurnSpeed, radius, damage, force, falloff, stunTime);
             yield return new WaitForSeconds(fireInterval);
         }
         locked = false;
