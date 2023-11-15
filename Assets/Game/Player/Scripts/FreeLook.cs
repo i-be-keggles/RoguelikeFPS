@@ -18,17 +18,17 @@ public class FreeLook : MonoBehaviour
         GetComponent<MouseLook>().enabled = false;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         input = new Vector3(Input.GetAxis("Horizontal"), Input.GetKey(KeyCode.Space)? 1 : Input.GetKey(KeyCode.LeftControl) ? -1 : 0, Input.GetAxis("Vertical"));
-        dir = Vector3.Lerp(dir, input, Time.deltaTime * accel);
+        dir = Vector3.Lerp(dir, input, Time.fixedDeltaTime * accel);
 
         aInput = new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"));
-        aDir = Vector3.Lerp(aDir, aInput, Time.deltaTime * aaccel);
+        aDir = Vector3.Lerp(aDir, aInput, Time.fixedDeltaTime * aaccel);
 
-        shiftSpeed += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime;
+        shiftSpeed += Input.GetAxis("Mouse ScrollWheel") * Time.fixedDeltaTime*10;
 
-        transform.position += transform.TransformDirection(dir) * Time.deltaTime * (Input.GetKey(KeyCode.LeftShift)? shiftSpeed : speed);
+        transform.position += transform.TransformDirection(dir) * Time.fixedDeltaTime * (Input.GetKey(KeyCode.LeftShift)? shiftSpeed : speed);
         transform.eulerAngles += aDir * lookSens;
     }
 }
