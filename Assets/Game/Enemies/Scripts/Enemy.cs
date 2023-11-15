@@ -81,6 +81,7 @@ public class Enemy : MonoBehaviour
         if (enemyState == EnemyState.stunned)
         {
             print("Stunned!");
+            agent.speed = 0;
             return;
         }
 
@@ -189,6 +190,7 @@ public class Enemy : MonoBehaviour
         stunParticles.Play();
         enemyState = EnemyState.stunned;
         target = null;
+        canSeePlayer = false;
         stun = StartCoroutine(WaitForStun(time));
     }
 
@@ -196,6 +198,7 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(t);
         stunParticles.Stop();
+        stunParticles.Clear();
         OnLoseTarget(this, EventArgs.Empty);
     }
 
