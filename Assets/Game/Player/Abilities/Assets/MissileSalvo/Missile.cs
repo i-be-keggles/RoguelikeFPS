@@ -78,10 +78,8 @@ public class Missile : MonoBehaviour
 
     public void Explode()
     {
-        print("boom.");
-
         Explosion e = Instantiate(explosion, transform.position, Quaternion.identity).GetComponent<Explosion>();
-        e.Init(radius, damage, force, transform, falloff, stunTime);
+        e.Init(radius, damage, force, transform, falloff, stunTime, 0.5f);
         Destroy(e, 3f);
 
         Destroy(gameObject);

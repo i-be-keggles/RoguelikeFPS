@@ -29,10 +29,13 @@ public class CrystalDeposit : MonoBehaviour
 
     private Animator anim;
 
+    private CameraShake shake;
+
 
     private void Start()
     {
         scoreManager = FindObjectOfType<ScoreManager>();
+        shake = scoreManager.uiManager.mouseLook.GetComponent<CameraShake>();
 
         //interactable = GetComponent<Interactable>();
         //interactable.interactedWith += HandlePhaseChange;
@@ -86,6 +89,7 @@ public class CrystalDeposit : MonoBehaviour
         TakeDamage(this, c);
         scoreManager.AddCrystal(c);
         anim.SetTrigger("Strike");
+        shake.Shake(transform.position, 10f, 0.5f, 0.5f);
     }
 
     public void TakeDamage(object sender, int damage)

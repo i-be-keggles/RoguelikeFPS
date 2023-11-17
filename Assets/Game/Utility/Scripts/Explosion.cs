@@ -10,7 +10,7 @@ public class Explosion : MonoBehaviour
     public Transform debugGizmo;//just for gizmo/balance purpose
 
     //falloff controls degree of function should be btwn 0 and 1. 0 = no damage reduction vs range, 1 = linear damage reduction vs distance
-    public void Init (float radius, float damage, float force, Transform origin, float falloff = 0.5f, float stunTime = 0f)
+    public void Init (float radius, float damage, float force, Transform origin, float falloff = 0.5f, float stunTime = 0f, float camShake = 1f)
     {
         debugGizmo.localScale *= radius;
 
@@ -44,6 +44,19 @@ public class Explosion : MonoBehaviour
             {
                 rb.AddForce((col.transform.position - transform.position).normalized * m * force, ForceMode.Impulse);
                 rbs.Add(rb);
+            }
+        }
+
+        float shakeRadius = 5;
+        cols = Physics.OverlapSphere(transform.position, radius * shakeRadius, mask);
+        foreach(Collider col in cols)
+        {
+            print(col.name);
+            CameraShake shake = col.transform.GetComponentInParent<CameraShake>();
+            if(shake != null)
+            {
+                shake.Shake(transform.position, shakeRadius, 0.5f, camShake);
+                break;
             }
         }
         Destroy (gameObject, 3f);

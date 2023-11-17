@@ -47,6 +47,16 @@ public class OrbitalDrop : MonoBehaviour
             if (dirtImpact != null) Instantiate(dirtImpact, transform.position, Quaternion.LookRotation(dirtRot), transform);
             if (impactParticles != null) Destroy(Instantiate(impactParticles, transform.position, transform.rotation), 5f);
             if (trailParticles != null) Destroy(trailParticles, 4f);
+
+            Collider[] cols = Physics.OverlapSphere(transform.position, 15f);
+            foreach(Collider col in cols)
+            {
+                CameraShake s = col.GetComponentInParent<CameraShake>();
+                if (s != null)
+                {
+                    s.Shake(transform.position, 15, 0.5f, 0.7f);
+                }
+            }
         }
     }
 

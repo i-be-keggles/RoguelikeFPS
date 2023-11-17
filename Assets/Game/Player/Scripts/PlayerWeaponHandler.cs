@@ -22,7 +22,7 @@ public class PlayerWeaponHandler : MonoBehaviour
     public UIManager ui;
 
     public WeaponRecoilHandler recoil;
-
+    public CameraShake shake;
 
     private void Start()
     {
@@ -33,6 +33,7 @@ public class PlayerWeaponHandler : MonoBehaviour
         ui = FindObjectOfType<UIManager>();
 
         recoil = GetComponent<WeaponRecoilHandler>();
+        shake = GetComponent<CameraShake>();
     }
 
     public void Update()
@@ -42,6 +43,7 @@ public class PlayerWeaponHandler : MonoBehaviour
             if (weapons[activeWeapon].semiAuto && Input.GetButtonDown("Fire1") || !weapons[activeWeapon].semiAuto && Input.GetButton("Fire1"))
             {
                 weapons[activeWeapon].Fire(this);
+                shake.Shake(0.1f, 0.05f);
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
