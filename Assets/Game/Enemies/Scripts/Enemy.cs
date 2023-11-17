@@ -80,7 +80,6 @@ public class Enemy : MonoBehaviour
 
         if (enemyState == EnemyState.stunned)
         {
-            print("Stunned!");
             agent.speed = 0;
             return;
         }

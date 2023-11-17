@@ -17,7 +17,7 @@ public class PlayerWeaponHandler : MonoBehaviour
     public float weaponThrowForce;
 
     public List<Weapon> weapons = new List<Weapon>();
-    private int activeWeapon = 0;
+    public int activeWeapon = 0;
 
     public UIManager ui;
 

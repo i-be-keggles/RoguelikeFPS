@@ -22,3 +22,9 @@ MonoBehaviour:
   - prefab: {fileID: 8191220384628419456, guid: cd909ba31725a604b8b32881f4bab140, type: 3}
     spawnRatio: 7
     type: 0
+  - prefab: {fileID: 3766913572498535892, guid: dda14c3772bc9094b97553726fc51744, type: 3}
+    spawnRatio: 10
+    type: 2
+  - prefab: {fileID: 5603740315325085583, guid: ef1b89066ca16bc4a9b4e1ae410206d6, type: 3}
+    spawnRatio: 7
+    type: 2

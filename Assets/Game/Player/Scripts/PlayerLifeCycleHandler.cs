@@ -17,6 +17,12 @@ public class PlayerLifeCycleHandler : MonoBehaviour
         GetComponent<EnemyTarget>().onTakeDamage += TakeDamage;
     }
 
+    public void Heal(int amount)
+    {
+        curHealth = Math.Min(curHealth + amount, maxHealth);
+        ui.UpdateHealthBar(curHealth);
+    }
+
     public void TakeDamage(object sender, int damage)
     {
         curHealth -= damage;
