@@ -89,7 +89,7 @@ public class CrystalDeposit : MonoBehaviour
         TakeDamage(this, c);
         scoreManager.AddCrystal(c);
         anim.SetTrigger("Strike");
-        shake.Shake(transform.position, 10f, 0.5f, 0.5f);
+        shake.Shake(transform.position, 20f, 0.2f, 0.1f);
     }
 
     public void TakeDamage(object sender, int damage)

@@ -31,9 +31,9 @@ public class CameraShake : MonoBehaviour
 				i.dTime();
             }
 
-			foreach (ShakeInstance i in instances)
+			for (int i = instances.Count-1; i >= 0; i--)
 			{
-				if (i.t < 0) instances.Remove(i);
+				if (instances[i].t < 0) instances.RemoveAt(i);
 			}
 
 			s = Mathf.Min(s, maxShake);
@@ -52,8 +52,8 @@ public class CameraShake : MonoBehaviour
     }
 	public void Shake(Vector3 pos, float radius, float time = 0.5f, float strength = 0.7f)
 	{
-		float m = Explosion.GetFalloff(Vector3.Distance(camTransform.position, pos), radius);
-		instances.Add(new ShakeInstance(time, strength * m * 2f));
+		float m = Explosion.GetFalloff(Vector3.Distance(camTransform.position, pos), radius, 0.2f);
+		instances.Add(new ShakeInstance(time, strength * m));
 	}
 
 	[System.Serializable]

@@ -204,6 +204,7 @@ Material:
     - _DisplacementLockObjectScale: 1
     - _DisplacementLockTilingScale: 1
     - _DisplacementMode: 0
+    - _Distance: 80
     - _DoubleSidedEnable: 1
     - _DoubleSidedGIMode: 2
     - _DoubleSidedNormalMode: 0
@@ -216,6 +217,7 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
+    - _Falloff: 0.5
     - _ForceDisplacementMultiplier: 0.7
     - _ForceDisplacementOffset: 0.52
     - _Frequency: 4

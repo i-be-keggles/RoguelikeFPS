@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
         rect = GetComponent<RectTransform>();
         cam = Camera.main;
 
-        AddHUDMarker(new Vector3(0, 0, 0), HUDMarker.DisplayType.AlwaysActive);
+        AddHUDMarker(new Vector3(0, 0, 0), HUDMarker.DisplayType.ShowOnApproach);
     }
 
     public void UpdateAmmoText(int cur, int tot)

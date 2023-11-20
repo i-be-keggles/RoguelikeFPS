@@ -51,7 +51,6 @@ public class Explosion : MonoBehaviour
         cols = Physics.OverlapSphere(transform.position, radius * shakeRadius, mask);
         foreach(Collider col in cols)
         {
-            print(col.name);
             CameraShake shake = col.transform.GetComponentInParent<CameraShake>();
             if(shake != null)
             {
