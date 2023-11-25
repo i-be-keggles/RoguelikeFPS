@@ -117,7 +117,11 @@ public class Weapon : MonoBehaviour
     {
         if (totalAmmo < 1)
         {
-            if (curAmmo < 1) player.DiscardWeapon();
+            if (curAmmo < 1)
+            {
+                player.DropWeapon();
+                Destroy(gameObject, 1f); ;
+            }
             StopAllCoroutines();
         }
 

@@ -43,6 +43,7 @@ public class Enemy : MonoBehaviour
 
     [Header("FX")]
     public ParticleSystem stunParticles;
+    public ParticleSystem bloodParticles;
 
     [Header("References")]
     protected NavMeshAgent agent;
@@ -172,6 +173,8 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        bloodParticles.Play();
+
         health -= damage;
         float s = 0.5f + ((float)health / (float)maxHealth)/2f;
         transform.localScale = scale * s;
