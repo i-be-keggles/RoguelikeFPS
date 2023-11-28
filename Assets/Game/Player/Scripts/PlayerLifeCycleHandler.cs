@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class PlayerLifeCycleHandler : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class PlayerLifeCycleHandler : MonoBehaviour
     public int curHealth;
 
     private UIManager ui;
+
+    public bool god = false;
 
     private void Start()
     {
@@ -36,6 +39,9 @@ public class PlayerLifeCycleHandler : MonoBehaviour
     public void Die()
     {
         print("died lol");
-        Application.Quit();
+        if (!god)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }

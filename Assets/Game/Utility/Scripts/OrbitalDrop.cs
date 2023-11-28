@@ -19,7 +19,7 @@ public class OrbitalDrop : MonoBehaviour
     private void Awake()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position - Vector3.up*3f, -Vector3.up, out hit, mask))
+        if (Physics.Raycast(transform.position - Vector3.up*3f, -Vector3.up, out hit, 5000f, mask))
         {
             targetHeight = hit.point.y;
             if (hit.collider.gameObject.layer != 9) dirtImpact = null;
