@@ -3,7 +3,7 @@ using System.Collections;
 
 public static class Noise {
 
-	public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, AnimationCurve curve = null) {
+	public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, AnimationCurve curve = null, float falloff = Mathf.Infinity) {
 		float[,] noiseMap = new float[mapWidth,mapHeight];
 
         float amplitude = 1;
@@ -54,6 +54,15 @@ public static class Noise {
 		for (int y = 0; y < mapHeight; y++) {
 			for (int x = 0; x < mapWidth; x++) {
                 noiseMap[x, y] = (noiseMap[x, y] + 1) / (2f * maxPossibleHeight / 1.75f);
+				
+				//falloff
+				float dx = Mathf.Abs(x - halfWidth)/ halfWidth;
+				float dy = Mathf.Abs(y - halfWidth)/ halfWidth;
+				float d = (1 - Mathf.Pow(dx, 2)) * (1 - Mathf.Pow(dy, 2));
+
+                noiseMap[x, y] *= 1/(1+ Mathf.Exp(falloff*(0.25f-d)));
+
+
                 //noiseMap[x, y] = 1 / (1 + Mathf.Exp(noiseMap[x, y] * 3));
             }
 		}

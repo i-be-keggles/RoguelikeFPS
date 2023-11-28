@@ -16,6 +16,7 @@ public class UnityTerrainGenerator : MonoBehaviour
     [Range(0, 1)] public float persistance;
     [Range(1, 3)] public float lacunarity;
     public float noiseScale;
+    public float falloff;
 
     public float meshHeightMultiplier;
     public AnimationCurve meshHeightCurve;
@@ -64,8 +65,9 @@ public class UnityTerrainGenerator : MonoBehaviour
         int size = terrain.terrainData.heightmapResolution;
         int x = 0; //use these later for chunks
         int y = 0;
-        float[,] noiseMap = Noise.GenerateNoiseMap(size, size, seed, noiseScale, octaves, persistance, lacunarity, offset + new Vector2(x * (size - 1), y * (size - 1)), meshHeightCurve);
+        float[,] noiseMap = Noise.GenerateNoiseMap(size, size, seed, noiseScale, octaves, persistance, lacunarity, offset + new Vector2(x * (size - 1), y * (size - 1)), meshHeightCurve, falloff);
         terrain.terrainData.SetHeights(0, 0, noiseMap);
+        DropEdges();
 
         //FlattenArea(100f, transform.position + new Vector3(500f, 80f, 500f), true);
 
@@ -78,8 +80,7 @@ public class UnityTerrainGenerator : MonoBehaviour
         GenerateRocks();
         terrain.Flush();
 
-        if(!playing || buildNavMeshOnPlay) GetComponent<NavMeshSurface>().BuildNavMesh();
-
+        //if(!playing || buildNavMeshOnPlay) GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     public int[,] GenerateDetailMap(PlantFoliage plant)
@@ -252,6 +253,19 @@ public class UnityTerrainGenerator : MonoBehaviour
         float s = HeightmapUtil.HeightVariation(terrain.terrainData.GetHeights(sx, sy, rx, ry), terrain.terrainData.size.y);
 
         return s;
+    }
+
+    public void DropEdges()
+    {
+        float[,] height = terrain.terrainData.GetHeights(0,0, terrain.terrainData.heightmapResolution, terrain.terrainData.heightmapResolution);
+        for(int i = 0; i < height.GetLength(0); i++)
+        {
+            height[0, i] = 0;
+            height[i, 0] = 0;
+            height[height.GetLength(0) - i - 1, height.GetLength(0) -1] = 0;
+            height[height.GetLength(0) -1, height.GetLength(0) - i - 1] = 0;
+        }
+        terrain.terrainData.SetHeights(0, 0, height);
     }
 
     public void OnDrawGizmos()
